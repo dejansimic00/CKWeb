@@ -1,0 +1,13 @@
+/* index.css */
+
+/* Nav */
+.nav {
+    background: #63d471;
+    position: absolute;
+    top :0;
+    left: 0;
+    width: 100px;
+    justify-content: space-between;
+    padding: 0.2rem calc((100vw - 1000px) / 2);
+    z-index: 12;
+}
