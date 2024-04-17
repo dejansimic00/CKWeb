@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import logo from "../../../assets/images/mail-inbox-app.png";
+import logo from "../../../assets/images/logo.png";
 import resident from "../../../assets/images/refugee.png";
 import archive from "../../../assets/images/archive.png";
 import dashboard from "../../../assets/images/dashboard.png";

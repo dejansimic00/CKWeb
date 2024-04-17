@@ -3,6 +3,7 @@ import NavBar from "./components/navigation/NavBar/NavBar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Dashboard from "./pages/common/Dashboard";
+import Login from "./pages/common/Login";
 import Archive from "./pages/common/Archive";
 import Residents from "./pages/user/Residents";
 
@@ -15,7 +16,8 @@ function App() {
         </div>
         <div className="ml-60 p-4">
           <Routes>
-            <Route exact path="/" element={<Dashboard />} />
+            {/** OVdje treba izmijeniti Login u Dashboard */}
+            <Route exact path="/" element={<Login />} />
             <Route path="/archive" element={<Archive />} />
             <Route path="/residents" element={<Residents />} />
           </Routes>
