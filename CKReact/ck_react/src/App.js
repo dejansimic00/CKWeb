@@ -6,24 +6,32 @@ import Dashboard from "./pages/common/Dashboard";
 import Login from "./pages/common/Login";
 import Archive from "./pages/common/Archive";
 import Residents from "./pages/user/Residents";
+import { AuthContext } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
+  const { user, login, logout, setUser } = useAuth();
+
   return (
-    <Router>
-      <div className="flex">
-        <div className="w-60 h-screen bg-gray-200 fixed left-0 top-0">
-          <NavBar />
+    <AuthContext.Provider value={{ user, setUser }}>
+      <Router>
+        <div className="flex">
+          <div className="w-60 h-screen bg-gray-200 fixed left-0 top-0">
+            <NavBar />
+          </div>
+          <div className="ml-60 p-4">
+            <Routes>
+              {/** Define the Login route first */}
+              <Route path="/" element={<Login />} />
+              {/** Define other routes */}
+              <Route path="/home" element={<Dashboard />} />
+              <Route path="/archive" element={<Archive />} />
+              <Route path="/residents" element={<Residents />} />
+            </Routes>
+          </div>
         </div>
-        <div className="ml-60 p-4">
-          <Routes>
-            {/** OVdje treba izmijeniti Login u Dashboard */}
-            <Route exact path="/" element={<Login />} />
-            <Route path="/archive" element={<Archive />} />
-            <Route path="/residents" element={<Residents />} />
-          </Routes>
-        </div>
-      </div>
-    </Router>
+      </Router>
+    </AuthContext.Provider>
   );
 }
 

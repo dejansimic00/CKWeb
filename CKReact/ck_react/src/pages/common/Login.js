@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Button from "../../components/Button/Button";
 import Logo from "../../components/Logo/Logo";
 import TextBox from "../../components/TextBox/TextBox";
+import { useAuth } from "../../hooks/useAuth";
 
 function Login() {
+  const { login } = useAuth();
+
   // State for storing input values
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -26,9 +29,15 @@ function Login() {
 
       if (response.ok) {
         // Handle successful login
+        const responseData = await response.json(); // Parse JSON response
+        const isAdmin = responseData.isAdmin; // Get isAdmin value from response
         console.log("Login successful");
         setErrorText("");
         setError(false);
+        login({
+          name: username,
+          isAdmin: isAdmin,
+        });
       } else {
         // Handle login error
         setErrorText("Neispravni podaci za prijavu");
