@@ -6,6 +6,7 @@ import Dashboard from "./pages/common/Dashboard";
 import Login from "./pages/common/Login";
 import Archive from "./pages/common/Archive";
 import Residents from "./pages/user/Residents";
+import Settings from "./pages/common/Settings";
 import { AuthContext } from "./context/AuthContext";
 import { useAuth } from "./hooks/useAuth";
 import { useState, useEffect } from "react";
@@ -23,6 +24,7 @@ function App() {
           <div className="ml-60 p-4">
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/archive" element={<Archive />} />
               <Route path="/residents" element={<Residents />} />

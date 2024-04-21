@@ -1,0 +1,9 @@
+.selected-items {
+    height: auto;
+    transition: height 0.3s ease-in-out;
+  }
+  
+  .selected-items.show {
+    height: 100px;
+
+  }

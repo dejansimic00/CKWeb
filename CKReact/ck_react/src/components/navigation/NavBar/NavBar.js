@@ -7,6 +7,7 @@ import NavButton from "../NavButton/NavButton";
 import LogOutButton from "../../LogOutButton/LogOutButton";
 import { useAuth } from "../../../hooks/useAuth";
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
+import LoggedUser from "../../LoggedUser/LoggedUser";
 
 function NavBar() {
   const [selectedPage, setSelectedPage] = useState("dashboard");
@@ -20,6 +21,10 @@ function NavBar() {
     setLoggedIn(user !== null && user !== undefined);
   }, [user]);
 
+  useEffect(() => {
+    console.log(selectedPage + " from useEfect");
+  }, [selectedPage]);
+
   const handleMouseClick = (event, selected) => {
     console.log(selected);
     setSelectedPage(selected);
@@ -29,42 +34,41 @@ function NavBar() {
     <>
       {loggedIn && (
         <nav className="flex flex-col bg-gray-200 h-screen">
-          <div className="flex items-center  p-2">
+          <div className="flex items-center p-2">
             <img src={logo} className="w-12 h-12 mr-2" alt="Logo"></img>
             <p className="font-medium text-2xl">EC</p>
           </div>
-          <div className="w-full ">
-            <NavButton
-              icon={dashboard}
-              text="Izvjestaj"
-              isActive={selectedPage === "dashboard"}
-              to="/dashboard"
-              onAction={(event) => handleMouseClick(event, "dashboard")}
-            ></NavButton>
-            <NavButton
-              icon={resident}
-              text="User"
-              isActive={selectedPage === "residents"}
-              to="/residents"
-              onAction={(event) => handleMouseClick(event, "residents")}
-            ></NavButton>
-            <NavButton
-              icon={archive}
-              text="Arhiva"
-              isActive={selectedPage === "archive"}
-              to="/archive"
-              onAction={(event) => handleMouseClick(event, "archive")}
-            ></NavButton>
-            <NavButton
-              icon={archive}
-              text="Odjavi se"
-              to="/login"
-              onAction={(event) => {
+          <div className="flex flex-col justify-between h-full">
+            <div>
+              <NavButton
+                icon={dashboard}
+                text="Izvjestaj"
+                isActive={selectedPage === "dashboard"}
+                to="/dashboard"
+                onAction={(event) => handleMouseClick(event, "dashboard")}
+              ></NavButton>
+              <NavButton
+                icon={resident}
+                text="User"
+                isActive={selectedPage === "residents"}
+                to="/residents"
+                onAction={(event) => handleMouseClick(event, "residents")}
+              ></NavButton>
+              <NavButton
+                icon={archive}
+                text="Arhiva"
+                isActive={selectedPage === "archive"}
+                to="/archive"
+                onAction={(event) => handleMouseClick(event, "archive")}
+              ></NavButton>
+            </div>
+            <LoggedUser
+              logOutAction={(event) => {
                 handleMouseClick(event, "login");
                 logout();
                 setLoggedIn(false);
               }}
-            ></NavButton>
+            ></LoggedUser>
           </div>
         </nav>
       )}
