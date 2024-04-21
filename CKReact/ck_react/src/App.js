@@ -8,9 +8,10 @@ import Archive from "./pages/common/Archive";
 import Residents from "./pages/user/Residents";
 import { AuthContext } from "./context/AuthContext";
 import { useAuth } from "./hooks/useAuth";
+import { useState, useEffect } from "react";
 
 function App() {
-  const { user, login, logout, setUser } = useAuth();
+  const { user, setUser } = useAuth();
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
@@ -21,10 +22,8 @@ function App() {
           </div>
           <div className="ml-60 p-4">
             <Routes>
-              {/** Define the Login route first */}
-              <Route path="/" element={<Login />} />
-              {/** Define other routes */}
-              <Route path="/home" element={<Dashboard />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/archive" element={<Archive />} />
               <Route path="/residents" element={<Residents />} />
             </Routes>

@@ -3,9 +3,11 @@ import Button from "../../components/Button/Button";
 import Logo from "../../components/Logo/Logo";
 import TextBox from "../../components/TextBox/TextBox";
 import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom"; // Import useHistory hook
 
 function Login() {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   // State for storing input values
   const [username, setUsername] = useState("");
@@ -29,6 +31,7 @@ function Login() {
 
       if (response.ok) {
         // Handle successful login
+        console.log("ZPVE");
         const responseData = await response.json(); // Parse JSON response
         const isAdmin = responseData.isAdmin; // Get isAdmin value from response
         console.log("Login successful");
@@ -38,6 +41,7 @@ function Login() {
           name: username,
           isAdmin: isAdmin,
         });
+        navigate("/dashboard"); // Redirect to dashboard after successful login
       } else {
         // Handle login error
         setErrorText("Neispravni podaci za prijavu");
@@ -78,7 +82,12 @@ function Login() {
         ) : (
           <div style={{ height: "20px" }}></div> // Adjust the height as needed
         )}
-        <Button width={230} text="Prijavi se" />
+        <Button
+          width={230}
+          text="Prijavi se"
+          to="/dashboard"
+          onClick={handleSubmit}
+        />
       </form>
     </div>
   );
