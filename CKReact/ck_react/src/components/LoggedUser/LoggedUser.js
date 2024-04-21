@@ -33,12 +33,8 @@ const LoggedUser = ({ logOutAction }) => {
     >
       {true && (
         <div
-          className={`self-center flex flex-col items-center  transition-all ease-in-out duration-1000
-            ${
-              !selected
-                ? "  max-h-0 overflow-hidden"
-                : "  max-h-20 overflow-visible"
-            }
+          className={`self-center overflow-hidden flex flex-col items-center  transition-all ease-in-out duration-1000
+            ${!selected ? "  max-h-0 " : "  max-h-20 "}
           `}
         >
           <Link to={"settings"}>
