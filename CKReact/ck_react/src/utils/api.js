@@ -1,0 +1,11 @@
+const BASE_URL = "http://localhost:8080";
+
+const API_URLS = {
+  // PRODUCTS: `${BASE_URL}/products`,
+  ASSIGMNENTS: `${BASE_URL}/assignments`,
+  CAMPS: `${BASE_URL}/camps`,
+
+  // Add more endpoints as needed
+};
+
+export default API_URLS;
