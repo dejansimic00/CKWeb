@@ -4,6 +4,7 @@ const API_URLS = {
   // PRODUCTS: `${BASE_URL}/products`,
   ASSIGMNENTS: `${BASE_URL}/assignments`,
   CAMPS: `${BASE_URL}/camps`,
+  EMPLOYEES: `${BASE_URL}/employees`,
 
   // Add more endpoints as needed
 };

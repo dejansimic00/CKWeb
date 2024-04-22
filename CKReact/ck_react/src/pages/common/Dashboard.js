@@ -46,13 +46,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center w-full">
       <h1>Data Table Example</h1>
-      <DataTable
-        columns={columns}
-        rows={data}
-        onSelectionModelChange={handleRowSelection} // Pass onSelectionModelChange
-      />
+      <div className="">
+        <DataTable
+          columns={columns}
+          rows={data}
+          onSelectionModelChange={handleRowSelection} // Pass onSelectionModelChange
+        />
+      </div>
     </div>
   );
 };

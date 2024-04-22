@@ -1,12 +1,21 @@
-function Button({ width, text }) {
+const Button = ({
+  minWidth = "130px",
+  text,
+  onClick,
+  plusSign = false,
+  type,
+}) => {
   return (
     <div
-      className={`rounded-[5.5rem] border-black border-2 h-12  my-5 bg-red-200 `}
-      style={{ width: width }}
+      className={`rounded-lg  h-10   flex items-center`}
+      style={{ minWidth: minWidth, background: "#ff0000" }}
     >
-      <button className="w-full h-full">{text}</button>
+      {plusSign && <span className="text-2xl leading-3 text-white">+</span>}
+      <button className="w-full  text-white" onClick={onClick} type={type}>
+        {text}
+      </button>
     </div>
   );
-}
+};
 
 export default Button;

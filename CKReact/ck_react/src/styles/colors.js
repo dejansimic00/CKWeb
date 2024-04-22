@@ -7,6 +7,7 @@ const theme = {
     nav_btn_active: "#cBcAcA",
     nav_btn: "#FAFAFA",
     nav_user_bg: "#D5D7DB",
+    modal_bg: "#D9D9D9",
     // Add more colors as needed
   },
 };

@@ -10,6 +10,11 @@ import Settings from "./pages/common/Settings";
 import { AuthContext } from "./context/AuthContext";
 import { useAuth } from "./hooks/useAuth";
 import { useState, useEffect } from "react";
+import theme from "./styles/colors";
+import AdminNavBar from "./components/navigation/NavBar/AdminNavBar";
+import Volunteer from "./pages/admin/Volunteer";
+import Notification from "./pages/admin/Notification";
+import Camp from "./pages/admin/Camp";
 
 function App() {
   const { user, setUser } = useAuth();
@@ -18,18 +23,20 @@ function App() {
     <AuthContext.Provider value={{ user, setUser }}>
       <Router>
         <div className="flex">
-          <div className="w-60 h-screen bg-gray-200 fixed left-0 top-0">
-            <NavBar />
-          </div>
-          <div className="ml-60 p-4">
+          <AdminNavBar />
+          <div className="w-full">
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/archive" element={<Archive />} />
               <Route path="/residents" element={<Residents />} />
+              <Route path="/camp" element={<Camp />} />
+              <Route path="/volunteer" element={<Volunteer />} />
+              <Route path="/notification" element={<Notification />} />
             </Routes>
           </div>
+          <div className="bg-red-100 w-96"></div>
         </div>
       </Router>
     </AuthContext.Provider>
