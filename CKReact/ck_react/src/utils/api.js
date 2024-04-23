@@ -5,6 +5,7 @@ const API_URLS = {
   ASSIGMNENTS: `${BASE_URL}/assignments`,
   CAMPS: `${BASE_URL}/camps`,
   EMPLOYEES: `${BASE_URL}/employees`,
+  COUNTRIES: `${BASE_URL}/countries`,
 
   // Add more endpoints as needed
 };

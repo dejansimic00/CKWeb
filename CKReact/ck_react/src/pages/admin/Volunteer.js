@@ -62,9 +62,10 @@ const Volunteer = () => {
     setSearchText(event.target.value);
   };
 
-  // Filter the data based on searchText
-  const filteredData = data.filter((row) =>
-    row.firstName.toLowerCase().includes(searchText.toLowerCase())
+  const filteredData = data.filter(
+    (row) =>
+      //row.firstName.toLowerCase().includes(searchText.toLowerCase())
+      row
   );
 
   const newVolonterOnClick = () => {
