@@ -11,6 +11,7 @@ import DatePicker from "../DatePicker/DatePicker";
 import { MenuItem, Select } from "@mui/material";
 import API_URLS from "../../utils/api";
 
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -20,11 +21,11 @@ const style = {
 
 const VolunteerModal = ({ open, setOpen }) => {
   const [formData, setFormData] = React.useState({
-    first_name: "",
-    last_name: "",
-    date_of_birth: "",
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
     sex: "",
-    country_id: "",
+    countryId: "",
     jmbg: "",
     username: "",
     password: "",
@@ -56,16 +57,32 @@ const VolunteerModal = ({ open, setOpen }) => {
     fetchData();
   }, []);
 
+  // ------------------------------------------------ formatiranje datuma
+
+  const formatDate = (dateString) => {
+
+    const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if necessary
+  const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if necessary
+
+  return `${year}-${month}-${day}`;
+   
+  };  
+
   // ------------------------------------------------ slanje zahtjeva
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/employees/register", {
+      
+      const response = await fetch(API_URLS.EMPLOYEES, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
+
 
       if (!response.ok) {
         throw new Error("Failed to register employee");
@@ -105,25 +122,25 @@ const VolunteerModal = ({ open, setOpen }) => {
               <Logo></Logo>
               {/** ---------------------ime---------------------------------- */}
               <Input
-                id="first_name"
+                id="firstName"
                 placeholder="ime"
-                value={formData.first_name}
+                value={formData.firstName}
                 onChange={handleChange}
               ></Input>
               {/** ---------------------prezime---------------------------------- */}
               <Input
-                id="last_name"
+                id="lastName"
                 placeholder="prezime"
-                value={formData.last_name}
+                value={formData.lastName}
                 onChange={handleChange}
               ></Input>
               {/** ---------------------datumrodjenja---------------------------------- */}
               <div className="flex flex-col w-full items-center">
                 <p className="self-start font-bold">Datum rođenja</p>
                 <DatePicker
-                  value={formData.date_of_birth} // Set the value of the DatePicker to the date_of_birth field in formData
+                  value={formData.dateOfBirth} // Set the value of the DatePicker to the dateOfBirth field in formData
                   onChange={(selectedDate) =>
-                    setFormData({ ...formData, date_of_birth: selectedDate })
+                    setFormData({ ...formData, dateOfBirth: formatDate(selectedDate) })
                   } // Pass a callback function to update date_of_birth field in formData when the date is changed
                 />
               </div>
@@ -160,7 +177,7 @@ const VolunteerModal = ({ open, setOpen }) => {
                     },
                   }}
                   onChange={(event) =>
-                    setFormData({ ...formData, country_id: event.target.value })
+                    setFormData({ ...formData, countryId: event.target.value })
                   }
                 >
                   <MenuItem key={-1} value={-1}>

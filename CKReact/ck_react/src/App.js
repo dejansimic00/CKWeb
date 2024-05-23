@@ -24,6 +24,7 @@ function App() {
       <Router>
         <div className="flex">
           <AdminNavBar />
+
           <div className="w-full">
             <Routes>
               <Route path="/login" element={<Login />} />
