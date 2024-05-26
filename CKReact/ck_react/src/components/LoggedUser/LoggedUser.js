@@ -14,7 +14,7 @@ const LoggedUser = ({ logOutAction }) => {
   const [selected, setSelected] = useState(false);
 
   useEffect(() => {
-    console.log(selected);
+    //console.log(selected);
     const userFromStorage = getItem("user");
 
     const parsedUser = userFromStorage

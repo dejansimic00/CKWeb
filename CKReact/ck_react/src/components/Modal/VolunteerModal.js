@@ -10,7 +10,7 @@ import Button from "../Button/Button";
 import DatePicker from "../DatePicker/DatePicker";
 import { MenuItem, Select } from "@mui/material";
 import API_URLS from "../../utils/api";
-
+import dayjs from "dayjs";
 
 const style = {
   position: "absolute",
@@ -19,18 +19,24 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
-const VolunteerModal = ({ open, setOpen }) => {
+const VolunteerModal = ({
+  open,
+  setOpen,
+  mode = "add",
+  volunteerData = {},
+  countries,
+}) => {
   const [formData, setFormData] = React.useState({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
-    sex: "",
-    countryId: "",
-    jmbg: "",
-    username: "",
-    password: "",
+    firstName: volunteerData?.firstName ?? "",
+    lastName: volunteerData?.lastName ?? "",
+    dateOfBirth: volunteerData?.dateOfBirth ?? "",
+    sex: volunteerData?.sex ?? "F",
+    countryId: volunteerData?.countryId ?? "",
+    jmbg: volunteerData?.jmbg ?? "",
+    username: volunteerData?.username ?? "",
+    password: volunteerData?.password ?? "",
   });
-  const [countries, setCountries] = useState(["Srbija", "Republika Srpska"]);
+  //const [countries, setCountries] = useState([]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -42,55 +48,66 @@ const VolunteerModal = ({ open, setOpen }) => {
 
   //----------------------------------------------------- dohvatanje drzava
   useEffect(() => {
-    // Simulate fetching data from the server
-    const fetchData = async () => {
-      try {
-        const url = API_URLS.COUNTRIES;
-        const response = await fetch(url);
-        const data = await response.json();
-        setCountries(data);
-      } catch (error) {
-        console.error("Error fetching countries:", error);
-      }
-    };
-
-    fetchData();
+    //console.log("FORM DATA VModal: ", formData);
+    // console.log("Volunteer DATA VModal: ", volunteerData);
   }, []);
 
-  // ------------------------------------------------ formatiranje datuma
+  /*
+  // za brisanje, datum se formatira sad iz DatePicker komponente
+  // // ------------------------------------------------ formatiranje datuma
 
-  const formatDate = (dateString) => {
+  // const formatDate = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero if necessary
+  //   const day = String(date.getDate()).padStart(2, "0"); // Add leading zero if necessary
 
-    const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if necessary
-  const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if necessary
+  //   return `${year}-${month}-${day}`;
+  // };
 
-  return `${year}-${month}-${day}`;
-   
-  };  
+  useEffect(() => {
+    console.log("srbija");
+  }, [formData]); 
+  */
 
   // ------------------------------------------------ slanje zahtjeva
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    //event.preventDefault();
+
+    const url =
+      mode === "add"
+        ? API_URLS.EMPLOYEES
+        : `${API_URLS.EMPLOYEES}/${volunteerData.id}`;
+    const method = mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
+
+    if (true) {
+      console.log(JSON.stringify(formData));
+      //return;
+    }
+
     try {
-      
-      const response = await fetch(API_URLS.EMPLOYEES, {
-        method: "POST",
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
-
       if (!response.ok) {
-        throw new Error("Failed to register employee");
+        throw new Error(
+          `Failed to ${mode === "add" ? "register" : "update"} employee`
+        );
       }
 
-      console.log("Employee registered successfully");
+      console.log(
+        `Employee ${mode === "add" ? "registered" : "updated"} successfully`
+      );
     } catch (error) {
-      console.error("Error registering employee:", error.message);
+      console.error(
+        `Error ${mode === "add" ? "registering" : "updating"} employee:`,
+        error.message
+      );
     }
   };
 
@@ -119,7 +136,7 @@ const VolunteerModal = ({ open, setOpen }) => {
                 scrollbarWidth: "none",
               }}
             >
-              <Logo></Logo>
+              <Logo />
               {/** ---------------------ime---------------------------------- */}
               <Input
                 id="firstName"
@@ -138,10 +155,12 @@ const VolunteerModal = ({ open, setOpen }) => {
               <div className="flex flex-col w-full items-center">
                 <p className="self-start font-bold">Datum rođenja</p>
                 <DatePicker
-                  value={formData.dateOfBirth} // Set the value of the DatePicker to the dateOfBirth field in formData
-                  onChange={(selectedDate) =>
-                    setFormData({ ...formData, dateOfBirth: formatDate(selectedDate) })
-                  } // Pass a callback function to update date_of_birth field in formData when the date is changed
+                  value={formData.dateOfBirth}
+                  onChange={(selectedDate) => {
+                    console.log(selectedDate);
+                    console.log(formData);
+                    setFormData({ ...formData, dateOfBirth: selectedDate });
+                  }}
                 />
               </div>
               {/** ---------------------pol---------------------------------- */}
@@ -168,7 +187,7 @@ const VolunteerModal = ({ open, setOpen }) => {
               <div className="flex flex-col w-full items-start">
                 <p className="self-start font-bold">Država</p>
                 <Select
-                  defaultValue={-1}
+                  defaultValue={formData.countryId || -1}
                   className="min-w-48"
                   sx={{
                     ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
@@ -209,9 +228,10 @@ const VolunteerModal = ({ open, setOpen }) => {
                 placeholder="lozinka"
                 value={formData.password}
                 onChange={handleChange}
+                type="password"
               ></Input>
               <Button
-                text={"Dodaj"}
+                text={mode === "add" ? "Dodaj" : "Sačuvaj"} // Change button text based on mode
                 type="submit"
                 onClick={handleSubmit} // Handle form submission
               ></Button>{" "}

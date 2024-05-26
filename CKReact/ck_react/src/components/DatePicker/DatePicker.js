@@ -5,9 +5,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker as MUI } from "@mui/x-date-pickers/DatePicker";
 import { ThemeProvider } from "styled-components";
 import { createTheme } from "@mui/material/styles";
+import dayjs from "dayjs";
 
-const DatePicker = ({ onChange }) => {
-  const [date, setDate] = useState();
+const DatePicker = ({ value, onChange }) => {
+  const [date, setDate] = useState(dayjs(value));
+
   const newTheme = createTheme({
     components: {
       MUI: {
@@ -25,22 +27,17 @@ const DatePicker = ({ onChange }) => {
     },
   });
 
-  const formatDate = (selectedDate) => {
-    return `${selectedDate.$y}-${selectedDate.$M + 1}-${selectedDate.$D}`;
+  const handleDateChange = (newDate) => {
+    setDate(newDate);
+    onChange(newDate); // Ensure the parent onChange handler is called with the new date
   };
-
-  useEffect(() => {
-    if (date) {
-      onChange(date);
-    }
-  }, [date, onChange]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ThemeProvider theme={newTheme}>
         <MUI
           sx={{
-            ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root ": {
+            ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
               borderRadius: "12px",
               border: "2px solid black",
               outline: "none",
@@ -50,12 +47,9 @@ const DatePicker = ({ onChange }) => {
             },
           }}
           className="w-full"
-          openTo="year"
-          views={["year", "month", "day"]}
+          value={date}
+          onChange={handleDateChange}
           format="DD/MM/YYYY"
-          onChange={(selectedDate) => {
-            setDate(formatDate(selectedDate)); // Update date state with formatted date
-          }}
         />
       </ThemeProvider>
     </LocalizationProvider>

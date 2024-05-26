@@ -3,9 +3,9 @@ import { useState } from "react";
 export const useLocalStorage = () => {
   const [value, setValue] = useState(null);
 
-  const setItem = (key, value) => {
-    localStorage.setItem(key, value);
-    setValue(value);
+  const setItem = (key, newValue) => {
+    localStorage.setItem(key, newValue);
+    setValue(newValue);
   };
 
   const getItem = (key) => {

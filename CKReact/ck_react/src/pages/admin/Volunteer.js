@@ -1,18 +1,26 @@
 import DataTable from "../../components/DataTable/DataTable";
 import API_URLS from "../../utils/api";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import search from "../../assets/images/search.png";
 import Logo from "../../components/Logo/Logo";
 import Button from "../../components/Button/Button";
 import VolunteerModal from "../../components/Modal/VolunteerModal";
+import editImg from "../../assets/images/edit.png";
+import deleteImg from "../../assets/images/delete.png";
+import DeleteVolunteerModal from "../../components/Modal/DeleteVolunteerModal";
 
 const Volunteer = () => {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [filterModel, setFilterModel] = useState({});
   const [newVolunteerModal, setNewVolunteerModal] = useState(false);
-
+  const [deleteVolunteerModal, setDeleteVolunteerModal] = useState(false);
+  const [editVolunteerModal, setEditVolunteerModal] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
+  const selectedRowRef = useRef(null); // Create a ref
+  const [countries, setCountries] = useState();
+  const [countryId, setCountryId] = useState();
 
   useEffect(() => {
     // Fetch data from the API
@@ -20,6 +28,13 @@ const Volunteer = () => {
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching data:", error));
+
+    fetch(API_URLS.COUNTRIES)
+      .then((response) => response.json())
+      .then((data) => setCountries(data))
+      .catch((error) =>
+        console.error("Greska pri dohvatanju drzava iz baze:", error)
+      );
 
     setColumns([
       { field: "id", headerName: "ID", width: 70 },
@@ -31,45 +46,92 @@ const Volunteer = () => {
       { field: "countryName", headerName: "Država", width: 150 },
       //{ field: "password", headerName: "Lozinka", width: 150 },
       { field: "username", headerName: "Korisničko ime", width: 150 },
-      { field: "isAdmin", headerName: "Admin", width: 100 },
+      {
+        field: "actions",
+        headerName: "Akcije",
+        width: 150,
+        renderCell: (params) => (
+          <div>
+            <button onClick={() => setDeleteVolunteerModal(true)}>
+              <img
+                src={deleteImg}
+                alt="Obrisi volontera"
+                about="Obrisi volontera"
+              ></img>
+            </button>
+            <button
+              onClick={() => {
+                handleEditClick(params.row);
+              }}
+            >
+              <img
+                src={editImg}
+                alt="Izmijeni volontera"
+                about="Izmijeni volontera"
+              ></img>
+            </button>
+          </div>
+        ),
+      },
+      //{ field: "isAdmin", headerName: "Admin", width: 100 },
     ]);
   }, []); // Empty dependency array ensures useEffect runs only once
 
   const handleRowSelection = (selected) => {
-    const selectedRow = data.find((row) => row.id === selected[0]); // Assuming row IDs are unique
-    const campId = selectedRow.id;
-
-    /*console.log(campId);
-    const res = fetch(API_URLS.CAMPS + "/" + campId)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("DATA ", data); // Log the response data
-      });
-    //  .catch((error) => console.error("Error fetching data:"));
-
-    console.log(data);
-
-    setColumns([
-      { field: "id", headerName: "ID", width: 70 },
-      { field: "name", headerName: "Ime", width: 130 },
-      { field: "capacity", headerName: "Kapacitet", width: 70 },
-      { field: "campStatusName", headerName: "Status", width: 150 },
-      { field: "placeDescription", headerName: "Opis lokacije", width: 250 },
-    ]);*/
+    const row = data.find((row) => row.id === selected[0]);
+    setSelectedRow(row);
+    selectedRowRef.current = row; // Update the ref
   };
+
+  const handleEditClick = (row) => {
+    //setSelectedRow(row, console.log("setSelectedRow Completed"));
+    setSelectedRow(row);
+    setTimeout(() => {
+      setEditVolunteerModal(true);
+    }, 1);
+  };
+
+  useEffect(() => {
+    if (selectedRow && countries.length > 0) {
+      const country = countries.find((c) => c.name === selectedRow.countryName);
+      const countryId = country ? country.id : null;
+      setCountryId(countryId);
+    }
+  }, [selectedRow, countries]);
 
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  const filteredData = data.filter(
-    (row) =>
-      //row.firstName.toLowerCase().includes(searchText.toLowerCase())
-      row
+  const handleDeleteVolunteer = async () => {
+    //console.log("bice obrisan korisnik:" + JSON.stringify(selectedRow));
+
+    try {
+      const URL = API_URLS.EMPLOYEES + "/" + selectedRow.id;
+      const response = await fetch(URL, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(response.status + " " + response.statusText);
+      }
+
+      console.log("Zaposleni uspjesno obrisan");
+    } catch (error) {
+      console.error("Greska kod brisanja korisnika:", error.message);
+    }
+  };
+
+  const filteredData = data.filter((row) =>
+    Object.values(row).some((value) =>
+      value?.toString().toLowerCase().includes(searchText.toLowerCase())
+    )
   );
 
   const newVolonterOnClick = () => {
-    console.log("Srbija");
     setNewVolunteerModal(true);
   };
 
@@ -79,7 +141,25 @@ const Volunteer = () => {
         <VolunteerModal
           open={newVolunteerModal}
           setOpen={setNewVolunteerModal}
+          countries={countries}
         ></VolunteerModal>
+      )}
+      {editVolunteerModal && (
+        <VolunteerModal
+          open={editVolunteerModal}
+          setOpen={setEditVolunteerModal}
+          mode="edit"
+          volunteerData={{ ...selectedRow, countryId }}
+          countries={countries}
+        ></VolunteerModal>
+      )}
+      {deleteVolunteerModal && (
+        <DeleteVolunteerModal
+          open={deleteVolunteerModal}
+          setOpen={setDeleteVolunteerModal}
+          handleDelete={handleDeleteVolunteer}
+          volunteerData={selectedRow}
+        ></DeleteVolunteerModal>
       )}
       <div className="">
         <div className="flex justify-between">
@@ -99,7 +179,7 @@ const Volunteer = () => {
           ></Button>
         </div>
         <DataTable
-          columns={columns}
+          columns={[...columns]}
           rows={filteredData}
           onRowSelectionModelChange={handleRowSelection}
         />

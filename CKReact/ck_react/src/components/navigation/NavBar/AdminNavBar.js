@@ -12,24 +12,29 @@ import LoggedUser from "../../LoggedUser/LoggedUser";
 import theme from "../../../styles/colors";
 
 function AdminNavBar() {
-  const [selectedPage, setSelectedPage] = useState("dashboard");
+  const [selectedPage, setSelectedPage] = useState("");
   const { user, logout } = useAuth();
   const [loggedIn, setLoggedIn] = useState(true);
-  const { getItem } = useLocalStorage();
+  const { getItem, setItem } = useLocalStorage();
+
+  useEffect(() => {
+    const sp = getItem("selectedPage");
+    if (sp) setSelectedPage(sp);
+    else {
+      setSelectedPage("dashboard");
+      setItem("selectedPage", "dashboard");
+    }
+  }, []);
 
   useEffect(() => {
     let user = getItem("user");
-    console.log(user, "ss");
+    //console.log(user, "admin nav bar use efect");
     setLoggedIn(user !== null && user !== undefined);
   }, [user]);
 
-  useEffect(() => {
-    console.log(selectedPage + " from useEfect");
-  }, [selectedPage]);
-
   const handleMouseClick = (event, selected) => {
-    console.log(selected);
     setSelectedPage(selected);
+    setItem("selectedPage", selected);
   };
 
   return (
