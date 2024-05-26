@@ -15,6 +15,7 @@ import AdminNavBar from "./components/navigation/NavBar/AdminNavBar";
 import Volunteer from "./pages/admin/Volunteer";
 import Notification from "./pages/admin/Notification";
 import Camp from "./pages/admin/Camp";
+import Place from "./pages/admin/Place";
 
 function App() {
   const { user, setUser } = useAuth();
@@ -35,6 +36,7 @@ function App() {
               <Route path="/camp" element={<Camp />} />
               <Route path="/volunteer" element={<Volunteer />} />
               <Route path="/notification" element={<Notification />} />
+              <Route path="/place" element={<Place />} />
             </Routes>
           </div>
           <div className="bg-red-100 w-96"></div>

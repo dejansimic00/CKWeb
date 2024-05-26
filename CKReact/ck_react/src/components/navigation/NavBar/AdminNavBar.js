@@ -1,6 +1,7 @@
 import { React, useState, useContext, useEffect } from "react";
 import logo from "../../../assets/images/logo.png";
 import camp from "../../../assets/images/camp.png";
+import place from "../../../assets/images/place.png"
 import userImg from "../../../assets/images/user.png";
 import archive from "../../../assets/images/archive.png";
 import dashboard from "../../../assets/images/dashboard.png";
@@ -39,7 +40,7 @@ function AdminNavBar() {
 
   return (
     <>
-      {loggedIn && (
+      {!loggedIn && (
         <nav
           className="flex flex-col  h-screen min-w-60 mr-4"
           style={{ background: theme.colors.nav_bg }}
@@ -68,10 +69,17 @@ function AdminNavBar() {
 
               <NavButton
                 icon={camp}
-                text="Kampa"
+                text="Kamp"
                 isActive={selectedPage === "camp"}
                 to="/camp"
                 onAction={(event) => handleMouseClick(event, "camp")}
+              ></NavButton>
+              <NavButton
+                icon={place}
+                text="Mjesta"
+                isActive={selectedPage === "place"}
+                to="/place"
+                onAction={(event) => handleMouseClick(event, "place")}
               ></NavButton>
               <NavButton
                 icon={archive}

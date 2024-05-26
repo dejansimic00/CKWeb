@@ -17,13 +17,12 @@ const style = {
 };
 
 const VolunteerModal = ({
-  open,
-  setOpen,
-  mode = "add",
-  campData = {},
-  statuses,
-}) => {
-  const [formData, setFormData] = React.useState({
+                          open,
+                          setOpen,
+                          mode = "add",
+                          campData = {},
+                        }) => {
+  const [formData, setFormData] = useState({
     id: campData?.id ?? "",
     name: campData?.name ?? "",
     place: campData?.place ?? "",
@@ -31,6 +30,7 @@ const VolunteerModal = ({
     capacity: campData?.capacity ?? "",
     campStatusName: campData?.campStatusName ?? "",
   });
+  const [statuses, setStatuses] = useState([]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,8 +41,21 @@ const VolunteerModal = ({
   };
 
   useEffect(() => {
-    //console.log(statuses);
-  }, [statuses]);
+    const fetchStatuses = async () => {
+      try {
+        const response = await fetch(API_URLS.CAMP_STATUSES);
+        if (!response.ok) {
+          throw new Error("Failed to fetch statuses");
+        }
+        const data = await response.json();
+        setStatuses(data);
+      } catch (error) {
+        console.error("Error fetching statuses:", error);
+      }
+    };
+
+    fetchStatuses();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -50,11 +63,6 @@ const VolunteerModal = ({
     const url =
       mode === "add" ? API_URLS.CAMPS : `${API_URLS.CAMPS}/${campData.id}`;
     const method = mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
-
-    if (true) {
-      console.log(JSON.stringify(formData));
-      return;
-    }
 
     try {
       const response = await fetch(url, {
@@ -67,22 +75,20 @@ const VolunteerModal = ({
 
       if (!response.ok) {
         throw new Error(
-          `Failed to ${mode === "add" ? "register" : "update"} employee`
+          `Failed to ${mode === "add" ? "register" : "update"} camp`
         );
       }
 
       console.log(
-        `Employee ${mode === "add" ? "registered" : "updated"} successfully`
+        `Camp ${mode === "add" ? "registered" : "updated"} successfully`
       );
     } catch (error) {
       console.error(
-        `Error ${mode === "add" ? "registering" : "updating"} employee:`,
+        `Error ${mode === "add" ? "registering" : "updating"} camp:`,
         error.message
       );
     }
   };
-
-  //--------------------------------------------------------------------
 
   return (
     <div>
@@ -100,7 +106,6 @@ const VolunteerModal = ({
                 background: theme.colors.modal_bg,
                 maxHeight: "100vh",
                 overflowY: "auto",
-
                 WebkitScrollbar: {
                   width: "0",
                 },
@@ -108,43 +113,34 @@ const VolunteerModal = ({
               }}
             >
               <Logo />
-              {/** ---------------------ime---------------------------------- */}
               <Input
                 id="name"
                 placeholder="ime"
                 value={formData.name}
                 onChange={handleChange}
-              ></Input>
-              {/** ---------------------Mjesto---------------------------------- */}
+              />
               <Input
                 id="place"
-                placeholder="mjesto"
+                placeholder="lokacija"
                 value={formData.place}
                 onChange={handleChange}
-              ></Input>
-              {/** ---------------------Lokacija---------------------------------- */}
+              />
               <Input
                 id="placeDescription"
-                placeholder="lokacija"
+                placeholder="mjesto"
                 value={formData.placeDescription}
                 onChange={handleChange}
-              ></Input>
-              {/** ---------------------Kapacitet---------------------------------- */}
+              />
               <Input
                 id="capacity"
                 placeholder="kapacitet"
                 value={formData.capacity}
                 onChange={handleChange}
-              ></Input>
-              {/** ---------------------Status---------------------------------- */}
+              />
               <div className="flex flex-col w-full items-start">
                 <p className="self-start font-bold">Status</p>
                 <Select
-                  defaultValue={
-                    statuses.find(
-                      (status) => status.name === campData.campStatusName
-                    )?.id ?? 0
-                  }
+                  value={formData.campStatusName}
                   className="min-w-48"
                   sx={{
                     ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
@@ -155,25 +151,24 @@ const VolunteerModal = ({
                   onChange={(event) => {
                     setFormData({
                       ...formData,
-                      campStatusName: event.target.name,
+                      campStatusName: event.target.value,
                     });
                   }}
                 >
-                  <MenuItem key={0} value={0}>
+                  <MenuItem key={0} value="">
                     {"Izaberi"}
                   </MenuItem>
                   {statuses.map((status) => (
-                    <MenuItem key={status.id} value={status.id}>
+                    <MenuItem key={status.id} value={status.name}>
                       {status.name}
                     </MenuItem>
                   ))}
                 </Select>
               </div>
               <Button
-                text={mode === "add" ? "Dodaj" : "Sačuvaj"} // Change button text based on mode
+                text={mode === "add" ? "Dodaj" : "Sačuvaj"}
                 type="submit"
-                onClick={handleSubmit} // Handle form submission
-              ></Button>{" "}
+              />
             </div>
           </form>
         </Box>

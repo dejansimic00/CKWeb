@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [columns, setColumns] = useState([]);
   useEffect(() => {
     // Fetch data from the API
-    fetch(API_URLS.ASSIGMNENTS)
+    fetch(API_URLS.ASSIGNMENTS)
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching data:", error));
