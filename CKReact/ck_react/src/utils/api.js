@@ -5,6 +5,7 @@ const API_URLS = {
   // PRODUCTS: `${BASE_URL}/products`,
   ASSIGMNENTS: `${BASE_URL}/assignments`,
   CAMPS: `${BASE_URL}/camps`,
+  CAMP_STATUSES: `${BASE_URL}/camp-statuses`,
   EMPLOYEES: `${BASE_URL}/employees`,
   COUNTRIES: `${BASE_URL}/countries`,
 
