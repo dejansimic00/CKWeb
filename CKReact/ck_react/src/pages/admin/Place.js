@@ -149,7 +149,7 @@ const Place = () => {
             />
           </div>
           <Button
-            text={"New Place"}
+            text={"Nova lokacija"}
             onClick={newPlaceOnClick}
             plusSign={true}
           />

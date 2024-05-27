@@ -76,7 +76,7 @@ function AdminNavBar() {
               ></NavButton>
               <NavButton
                 icon={place}
-                text="Mjesta"
+                text="Lokacije"
                 isActive={selectedPage === "place"}
                 to="/place"
                 onAction={(event) => handleMouseClick(event, "place")}
