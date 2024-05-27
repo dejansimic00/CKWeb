@@ -2,10 +2,15 @@ import DataTable from "../../components/DataTable/DataTable";
 import axios from "axios";
 import API_URLS from "../../utils/api";
 import React, { useEffect, useState } from "react";
+import CampDashboard from "../../components/CampDashboard/CampDashboard";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(!false);
+
+  const [selectedCamp, setSelectedCamp] = useState("");
+
   useEffect(() => {
     // Fetch data from the API
     fetch(API_URLS.ASSIGMNENTS)
@@ -26,7 +31,7 @@ const Dashboard = () => {
     const selectedRow = data.find((row) => row.id === selected[0]); // Assuming row IDs are unique
     const campId = selectedRow.id;
 
-    console.log(campId);
+    console.log(selectedRow);
     const res = fetch(API_URLS.CAMPS + "/" + campId)
       .then((response) => response.json())
       .then((data) => {
@@ -46,16 +51,25 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full">
-      <h1>Data Table Example</h1>
-      <div className="">
-        <DataTable
-          columns={columns}
-          rows={data}
-          onSelectionModelChange={handleRowSelection} // Pass onSelectionModelChange
-        />
-      </div>
-    </div>
+    <>
+      {isAdmin && (
+        <div className="flex flex-col items-center w-full">
+          <h1>Data Table Example</h1>
+          <div className="">
+            <DataTable
+              columns={columns}
+              rows={data}
+              onSelectionModelChange={handleRowSelection}
+            />
+          </div>
+        </div>
+      )}
+      {!isAdmin && (
+        <div>
+          <CampDashboard campName={"Summer Camp 2024"}></CampDashboard>
+        </div>
+      )}
+    </>
   );
 };
 
