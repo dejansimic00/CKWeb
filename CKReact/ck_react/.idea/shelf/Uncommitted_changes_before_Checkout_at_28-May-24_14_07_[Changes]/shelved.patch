@@ -1,0 +1,92 @@
+Index: src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import \"./App.css\";\r\nimport NavBar from \"./components/navigation/NavBar/NavBar\";\r\nimport { BrowserRouter as Router, Routes, Route } from \"react-router-dom\";\r\n\r\nimport Dashboard from \"./pages/common/Dashboard\";\r\nimport Login from \"./pages/common/Login\";\r\nimport Archive from \"./pages/common/Archive\";\r\nimport Residents from \"./pages/user/Residents\";\r\nimport Settings from \"./pages/common/Settings\";\r\nimport { AuthContext } from \"./context/AuthContext\";\r\nimport { useAuth } from \"./hooks/useAuth\";\r\nimport { useState, useEffect } from \"react\";\r\nimport theme from \"./styles/colors\";\r\nimport AdminNavBar from \"./components/navigation/NavBar/AdminNavBar\";\r\nimport Volunteer from \"./pages/admin/Volunteer\";\r\nimport Notification from \"./pages/admin/Notification\";\r\nimport Camp from \"./pages/admin/Camp\";\r\nimport Place from \"./pages/admin/Place\";\r\n\r\nfunction App() {\r\n  const { user, setUser } = useAuth();\r\n\r\n  return (\r\n    <AuthContext.Provider value={{ user, setUser }}>\r\n      <Router>\r\n        <div className=\"flex\">\r\n          <AdminNavBar />\r\n\r\n          <div className=\"w-full\">\r\n            <Routes>\r\n              <Route path=\"/login\" element={<Login />} />\r\n              <Route path=\"/settings\" element={<Settings />} />\r\n              <Route path=\"/dashboard\" element={<Dashboard />} />\r\n              <Route path=\"/archive\" element={<Archive />} />\r\n              <Route path=\"/residents\" element={<Residents />} />\r\n              <Route path=\"/camp\" element={<Camp />} />\r\n              <Route path=\"/volunteer\" element={<Volunteer />} />\r\n              <Route path=\"/notification\" element={<Notification />} />\r\n              <Route path=\"/place\" element={<Place />} />\r\n            </Routes>\r\n          </div>\r\n          <div className=\"bg-red-100 w-96\"></div>\r\n        </div>\r\n      </Router>\r\n    </AuthContext.Provider>\r\n  );\r\n}\r\n\r\nexport default App;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/App.js b/src/App.js
+--- a/src/App.js	(revision db68728d8bfd933e9d959987baa47a24f8c05509)
++++ b/src/App.js	(date 1716811285265)
+@@ -1,6 +1,5 @@
+ import "./App.css";
+-import NavBar from "./components/navigation/NavBar/NavBar";
+-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
++import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+ 
+ import Dashboard from "./pages/common/Dashboard";
+ import Login from "./pages/common/Login";
+@@ -9,38 +8,50 @@
+ import Settings from "./pages/common/Settings";
+ import { AuthContext } from "./context/AuthContext";
+ import { useAuth } from "./hooks/useAuth";
+-import { useState, useEffect } from "react";
+-import theme from "./styles/colors";
+ import AdminNavBar from "./components/navigation/NavBar/AdminNavBar";
+ import Volunteer from "./pages/admin/Volunteer";
+ import Notification from "./pages/admin/Notification";
+ import Camp from "./pages/admin/Camp";
+ import Place from "./pages/admin/Place";
++import {useEffect} from "react";
+ 
+-function App() {
+-  const { user, setUser } = useAuth();
++function MainLayout() {
++  const location = useLocation();
++
++  useEffect(() => {
++    console.log("Current path:", location.pathname);
++  }, [location.pathname]);
+ 
+   return (
+-    <AuthContext.Provider value={{ user, setUser }}>
+-      <Router>
+-        <div className="flex">
+-          <AdminNavBar />
++    <div className="flex">
++      {/* Conditionally render AdminNavBar based on the current path */}
++      {location.pathname !== "/login" && <AdminNavBar />}
+ 
+-          <div className="w-full">
+-            <Routes>
+-              <Route path="/login" element={<Login />} />
+-              <Route path="/settings" element={<Settings />} />
+-              <Route path="/dashboard" element={<Dashboard />} />
+-              <Route path="/archive" element={<Archive />} />
+-              <Route path="/residents" element={<Residents />} />
+-              <Route path="/camp" element={<Camp />} />
+-              <Route path="/volunteer" element={<Volunteer />} />
+-              <Route path="/notification" element={<Notification />} />
+-              <Route path="/place" element={<Place />} />
+-            </Routes>
+-          </div>
+-          <div className="bg-red-100 w-96"></div>
+-        </div>
++      <div className="w-full">
++        <Routes>
++          <Route path="/login" element={<Login />} />
++          <Route path="/settings" element={<Settings />} />
++          <Route path="/dashboard" element={<Dashboard />} />
++          <Route path="/archive" element={<Archive />} />
++          <Route path="/residents" element={<Residents />} />
++          <Route path="/camp" element={<Camp />} />
++          <Route path="/volunteer" element={<Volunteer />} />
++          <Route path="/notification" element={<Notification />} />
++          <Route path="/place" element={<Place />} />
++        </Routes>
++      </div>
++      <div className="bg-red-100 w-96"></div>
++    </div>
++  );
++}
++
++function App() {
++  const { user, setUser } = useAuth();
++
++  return (
++    <AuthContext.Provider value={{ user, setUser }}>
++      <Router>
++        <MainLayout />
+       </Router>
+     </AuthContext.Provider>
+   );

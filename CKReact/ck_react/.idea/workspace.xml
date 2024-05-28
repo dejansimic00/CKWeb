@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="680c0c5c-988f-4818-b3e0-4410b5ddc1a5" name="Changes" comment="Added Camp POST">
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="camp-modal-upgrade" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2fK0C5ifRKiqT6AMo2SB4n01wgF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Node.js.AdminNavBar.js.executor": "Run",
+    "Node.js.App.js.executor": "Run",
+    "Node.js.DataTable.js.executor": "Run",
+    "Node.js.DatePicker.js.executor": "Run",
+    "Node.js.Input.js.executor": "Run",
+    "Node.js.NavBar.js.executor": "Run",
+    "Node.js.api.js.executor": "Run",
+    "Node.js.base.service.js.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/Korisnik/Desktop/ps-front/CKWeb/CKReact/ck_react",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "D:\\WebStorm 2023.3.4\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="680c0c5c-988f-4818-b3e0-4410b5ddc1a5" name="Changes" comment="" />
+      <created>1713534331764</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1713534331764</updated>
+      <workItem from="1713534333645" duration="1963000" />
+      <workItem from="1713817464644" duration="5272000" />
+      <workItem from="1714037813096" duration="3867000" />
+      <workItem from="1716456619935" duration="7197000" />
+      <workItem from="1716640553378" duration="1733000" />
+      <workItem from="1716725845744" duration="13177000" />
+      <workItem from="1716754262534" duration="6943000" />
+      <workItem from="1716793745127" duration="2966000" />
+      <workItem from="1716804174234" duration="8441000" />
+      <workItem from="1716839384109" duration="731000" />
+      <workItem from="1716895370235" duration="2303000" />
+    </task>
+    <task id="LOCAL-00001" summary="Added Place operations">
+      <option name="closed" value="true" />
+      <created>1716761179754</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1716761179754</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added Camp POST">
+      <option name="closed" value="true" />
+      <created>1716797096368</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1716797096368</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Added Place operations" />
+    <MESSAGE value="Added Camp POST" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Camp POST" />
+  </component>
+</project>
