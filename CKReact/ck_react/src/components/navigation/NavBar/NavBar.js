@@ -10,21 +10,11 @@ import { useLocalStorage } from "../../../hooks/useLocalStorage";
 import LoggedUser from "../../LoggedUser/LoggedUser";
 import theme from "../../../styles/colors";
 
-function NavBar() {
+function NavBar({ user }) {
   const [selectedPage, setSelectedPage] = useState("dashboard");
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const [loggedIn, setLoggedIn] = useState(true);
   const { getItem } = useLocalStorage();
-
-  useEffect(() => {
-    let user = getItem("user");
-    console.log(user, "ss");
-    setLoggedIn(user !== null && user !== undefined);
-  }, [user]);
-
-  useEffect(() => {
-    console.log(selectedPage + " from useEfect");
-  }, [selectedPage]);
 
   const handleMouseClick = (event, selected) => {
     console.log(selected);

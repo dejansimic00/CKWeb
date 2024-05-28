@@ -64,6 +64,7 @@ const CampLineChart = ({ campName }) => {
       ]}
       width={800}
       height={400}
+      colors={["#ff0000"]}
     />
   );
 };

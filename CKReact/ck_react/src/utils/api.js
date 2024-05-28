@@ -9,6 +9,7 @@ const API_URLS = {
   EMPLOYEES: `${BASE_URL}/employees`,
   COUNTRIES: `${BASE_URL}/countries`,
   RESIDENCE_PERIOD: `${BASE_URL}/residence-periods`,
+  RESIDETNS: `${BASE_URL}/residents`,
   MUNICIPALITIES: `${BASE_URL}/municipalities`,
   PLACES: `${BASE_URL}/places`,
   // Add more endpoints as needed

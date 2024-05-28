@@ -31,10 +31,8 @@ function Login() {
 
       if (response.ok) {
         // Handle successful login
-        console.log("ZPVE");
         const responseData = await response.json(); // Parse JSON response
         const isAdmin = responseData.isAdmin; // Get isAdmin value from response
-        console.log("Login successful");
         setErrorText("");
         setError(false);
         login({
@@ -43,7 +41,6 @@ function Login() {
         });
         navigate("/dashboard"); // Redirect to dashboard after successful login
       } else {
-        // Handle login error
         setErrorText("Neispravni podaci za prijavu");
         setError(true);
       }
@@ -53,42 +50,44 @@ function Login() {
   };
 
   return (
-    <div className="border-black border-2 w-[30rem] rounded-[60px] p-16 flex flex-col items-center">
-      <Logo width={90} />
-      <form onSubmit={handleSubmit}>
-        <TextBox
-          placeholder="korisnicko ime"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <TextBox
-          placeholder="lozinka"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {/* Conditionally render an empty space if there is no error */}
-        {error ? (
-          <p
-            style={{
-              color: "red",
-              paddingLeft: "24px",
-              fontSize: "14px",
-              fontWeight: "lighter",
-              alignSelf: "start",
-            }}
-          >
-            {errorText}
-          </p>
-        ) : (
-          <div style={{ height: "20px" }}></div> // Adjust the height as needed
-        )}
-        <Button
-          width={230}
-          text="Prijavi se"
-          to="/dashboard"
-          onClick={handleSubmit}
-        />
-      </form>
+    <div className="flex items-center justify-center pt-24">
+      <div className="border-black border-2 w-[30rem] rounded-[60px] p-16 flex flex-col items-center">
+        <Logo width={90} />
+        <form onSubmit={handleSubmit}>
+          <TextBox
+            placeholder="korisnicko ime"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <TextBox
+            placeholder="lozinka"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {/* Conditionally render an empty space if there is no error */}
+          {error ? (
+            <p
+              style={{
+                color: "red",
+                paddingLeft: "24px",
+                fontSize: "14px",
+                fontWeight: "lighter",
+                alignSelf: "start",
+              }}
+            >
+              {errorText}
+            </p>
+          ) : (
+            <div style={{ height: "20px" }}></div> // Adjust the height as needed
+          )}
+          <Button
+            width={230}
+            text="Prijavi se"
+            to="/dashboard"
+            onClick={handleSubmit}
+          />
+        </form>
+      </div>
     </div>
   );
 }

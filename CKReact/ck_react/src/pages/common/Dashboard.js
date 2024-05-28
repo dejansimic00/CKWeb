@@ -1,10 +1,10 @@
 import DataTable from "../../components/DataTable/DataTable";
-import axios from "axios";
 import API_URLS from "../../utils/api";
 import React, { useEffect, useState } from "react";
 import CampDashboard from "../../components/CampDashboard/CampDashboard";
-import { width } from "@mui/system";
 import detailsImg from "../../assets/images/details.png";
+import { useAuth } from "../../hooks/useAuth";
+import { useUser } from "../../hooks/useUser";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -17,6 +17,11 @@ const Dashboard = () => {
   const [places, setPlaces] = useState([]);
 
   const [selectedCamp, setSelectedCamp] = useState("");
+
+  const { user } = useUser();
+  useEffect(() => {
+    console.log("user", user);
+  }, []);
 
   // Dohvatanje podataka iz 3 razlicite tabele u bazi i skladistenje u stanja
   useEffect(() => {
@@ -75,7 +80,7 @@ const Dashboard = () => {
   };
 
   // kombinovanje stanja iz 3 tabele, ne moze na pocetku jer neki od te 3 su prazni,
-  //moze vjv sa Promise (nije mi se dalo tako )
+  //moze vjv sa Promise (nije mi se dalo tako === ne znam tako)
   useEffect(() => {
     if (camps && places) {
       let x = camps.map((camp) => {

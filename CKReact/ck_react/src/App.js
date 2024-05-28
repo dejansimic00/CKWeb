@@ -1,5 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
 import Dashboard from "./pages/common/Dashboard";
 import Login from "./pages/common/Login";
@@ -13,14 +18,15 @@ import Volunteer from "./pages/admin/Volunteer";
 import Notification from "./pages/admin/Notification";
 import Camp from "./pages/admin/Camp";
 import Place from "./pages/admin/Place";
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 function MainLayout() {
   const location = useLocation();
 
+  /*
   useEffect(() => {
     console.log("Current path:", location.pathname);
-  }, [location.pathname]);
+  }, [location.pathname]);*/
 
   return (
     <div className="flex">
@@ -40,7 +46,6 @@ function MainLayout() {
           <Route path="/place" element={<Place />} />
         </Routes>
       </div>
-      <div className="bg-red-100 w-96"></div>
     </div>
   );
 }

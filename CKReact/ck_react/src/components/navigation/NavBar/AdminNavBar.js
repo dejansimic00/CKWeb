@@ -1,7 +1,7 @@
 import { React, useState, useContext, useEffect } from "react";
 import logo from "../../../assets/images/logo.png";
 import camp from "../../../assets/images/camp.png";
-import place from "../../../assets/images/place.png"
+import place from "../../../assets/images/place.png";
 import userImg from "../../../assets/images/user.png";
 import archive from "../../../assets/images/archive.png";
 import dashboard from "../../../assets/images/dashboard.png";
@@ -11,12 +11,14 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
 import LoggedUser from "../../LoggedUser/LoggedUser";
 import theme from "../../../styles/colors";
+import NavBar from "./NavBar";
 
 function AdminNavBar() {
   const [selectedPage, setSelectedPage] = useState("");
   const { user, logout } = useAuth();
   const [loggedIn, setLoggedIn] = useState(true);
   const { getItem, setItem } = useLocalStorage();
+  const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
     const sp = getItem("selectedPage");
@@ -28,8 +30,8 @@ function AdminNavBar() {
   }, []);
 
   useEffect(() => {
-    let user = getItem("user");
-    //console.log(user, "admin nav bar use efect");
+    let user = JSON.parse(getItem("user"));
+    setAdmin(Boolean(user.isAdmin));
     setLoggedIn(user !== null && user !== undefined);
   }, [user]);
 
@@ -40,9 +42,10 @@ function AdminNavBar() {
 
   return (
     <>
-      {!loggedIn && (
+      {loggedIn && !admin && <NavBar user={user}></NavBar>}
+      {loggedIn && admin && (
         <nav
-          className="flex flex-col  h-screen min-w-60 mr-4"
+          className="flex flex-col sticky top-0 h-screen min-w-60 mr-4"
           style={{ background: theme.colors.nav_bg }}
         >
           <div className="flex flex-col items-center p-2 mt-4">
