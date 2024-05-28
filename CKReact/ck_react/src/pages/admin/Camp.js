@@ -54,8 +54,8 @@ const Camp = () => {
             <button onClick={() => setDeleteCampModal(true)}>
               <img
                 src={deleteImg}
-                alt="Obrisi volontera"
-                about="Obrisi volontera"
+                alt="Obrisi kamp"
+                about="Obrisi kamp"
               ></img>
             </button>
             <button
@@ -65,8 +65,8 @@ const Camp = () => {
             >
               <img
                 src={editImg}
-                alt="Izmijeni volontera"
-                about="Izmijeni volontera"
+                alt="Izmijeni kamp"
+                about="Izmijeni kamp"
               ></img>
             </button>
           </div>
