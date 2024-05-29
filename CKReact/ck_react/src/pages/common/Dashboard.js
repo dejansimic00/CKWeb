@@ -5,20 +5,22 @@ import CampDashboard from "../../components/CampDashboard/CampDashboard";
 import detailsImg from "../../assets/images/details.png";
 import { useAuth } from "../../hooks/useAuth";
 import { useUser } from "../../hooks/useUser";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(!false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [showCampStatistics, setShowCampStatistics] = useState(false);
 
   const [camps, setCamps] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
   const [places, setPlaces] = useState([]);
-
+  const [assignments, setAssignments] = useState([]);
   const [selectedCamp, setSelectedCamp] = useState("");
 
   const { user } = useUser();
+  const { getItem } = useLocalStorage();
 
   // Dohvatanje podataka iz 3 razlicite tabele u bazi i skladistenje u stanja
   useEffect(() => {
@@ -43,6 +45,12 @@ const Dashboard = () => {
       })
       .catch((error) => console.error("Error fetching data:", error));
 
+    fetch(API_URLS.ASSIGNMENTS)
+      .then((response) => response.json())
+      .then((newData) => {
+        setAssignments(newData);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
     setColumns([
       { field: "id", headerName: "ID", width: 50 },
       { field: "name", headerName: "Ime", width: 250 },
@@ -71,6 +79,15 @@ const Dashboard = () => {
       },
     ]);
   }, []);
+
+  useEffect(() => {
+    console.log(user);
+    const userx = getItem("user");
+    console.log(userx);
+    console.log(assignments);
+
+    //const campT = assignments.find ( ass => ass)
+  }, [user]);
 
   const handleDetailsClick = (camp) => {
     setSelectedCamp(camp);
