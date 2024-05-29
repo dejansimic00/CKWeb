@@ -36,8 +36,6 @@ const VolunteerModal = ({
     username: volunteerData?.username ?? "",
     password: volunteerData?.password ?? "",
   });
-  //const [countries, setCountries] = useState([]);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -48,8 +46,6 @@ const VolunteerModal = ({
 
   //----------------------------------------------------- dohvatanje drzava
   useEffect(() => {
-    //console.log("FORM DATA VModal: ", formData);
-    // console.log("Volunteer DATA VModal: ", volunteerData);
   }, []);
 
   /*
@@ -207,6 +203,7 @@ const VolunteerModal = ({
                   ))}
                 </Select>
               </div>
+              
               {/** ---------------------jmbg---------------------------------- */}
               <Input
                 key={"ss"}

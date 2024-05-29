@@ -7,7 +7,9 @@ import Button from "../../components/Button/Button";
 import VolunteerModal from "../../components/Modal/VolunteerModal";
 import editImg from "../../assets/images/edit.png";
 import deleteImg from "../../assets/images/delete.png";
+import campImg from "../../assets/images/camp.png";
 import DeleteVolunteerModal from "../../components/Modal/DeleteVolunteerModal";
+import AssignmentModal from "../../components/Modal/AssignmentModal";
 
 const Volunteer = () => {
   const [data, setData] = useState([]);
@@ -16,11 +18,14 @@ const Volunteer = () => {
   const [newVolunteerModal, setNewVolunteerModal] = useState(false);
   const [deleteVolunteerModal, setDeleteVolunteerModal] = useState(false);
   const [editVolunteerModal, setEditVolunteerModal] = useState(false);
+  const [editAssignmentModal, setEditAssignmentModal] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const selectedRowRef = useRef(null); // Create a ref
   const [countries, setCountries] = useState();
   const [countryId, setCountryId] = useState();
+  const [assingments, setAssingments] = useState();
+  const [camps, setCamps] = useState([])
 
   useEffect(() => {
     // Fetch data from the API
@@ -36,6 +41,14 @@ const Volunteer = () => {
         console.error("Greska pri dohvatanju drzava iz baze:", error)
       );
 
+      fetch(API_URLS.CAMPS)
+      .then((response) => response.json())
+      .then((data) => setCamps(data))
+      .catch((error) =>
+        console.error("Greska pri dohvatanju drzava iz baze:", error)
+      );
+      
+
     setColumns([
       { field: "id", headerName: "ID", width: 70 },
       { field: "firstName", headerName: "Ime", width: 150 },
@@ -44,6 +57,7 @@ const Volunteer = () => {
       { field: "sex", headerName: "Pol", width: 90 },
       { field: "jmbg", headerName: "JMBG", width: 150 },
       { field: "countryName", headerName: "Država", width: 150 },
+      { field: "campName", headerName: "Kamp", width: 150 },
       //{ field: "password", headerName: "Lozinka", width: 150 },
       { field: "username", headerName: "Korisničko ime", width: 150 },
       {
@@ -70,6 +84,17 @@ const Volunteer = () => {
                 about="Izmijeni volontera"
               ></img>
             </button>
+            <button
+              onClick={() => {
+                handleAssignClick(params.row);
+              }}
+            >
+              <img className="w-6 h-6"
+                src={campImg}
+                alt="Izmijeni volontera"
+                about="Izmijeni volontera"
+              ></img>
+            </button>
           </div>
         ),
       },
@@ -88,6 +113,13 @@ const Volunteer = () => {
     setSelectedRow(row);
     setTimeout(() => {
       setEditVolunteerModal(true);
+    }, 1);
+  };
+
+  const handleAssignClick= (row) => {
+    setSelectedRow(row);
+    setTimeout(() => {
+      setEditAssignmentModal(true);
     }, 1);
   };
 
@@ -142,8 +174,11 @@ const Volunteer = () => {
           open={newVolunteerModal}
           setOpen={setNewVolunteerModal}
           countries={countries}
+          assingments={assingments}
         ></VolunteerModal>
+
       )}
+
       {editVolunteerModal && (
         <VolunteerModal
           open={editVolunteerModal}
@@ -151,6 +186,8 @@ const Volunteer = () => {
           mode="edit"
           volunteerData={{ ...selectedRow, countryId }}
           countries={countries}
+                    assingments={assingments}
+
         ></VolunteerModal>
       )}
       {deleteVolunteerModal && (
@@ -160,6 +197,14 @@ const Volunteer = () => {
           handleDelete={handleDeleteVolunteer}
           volunteerData={selectedRow}
         ></DeleteVolunteerModal>
+      )}
+      {editAssignmentModal&&(
+        <AssignmentModal
+          open={editAssignmentModal}
+          setOpen ={setEditAssignmentModal}
+          volunteerData={selectedRow}
+          camps = {camps}
+        > </AssignmentModal>
       )}
       <div className="">
         <div className="flex justify-between">

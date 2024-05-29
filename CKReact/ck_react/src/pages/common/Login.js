@@ -4,6 +4,7 @@ import Logo from "../../components/Logo/Logo";
 import TextBox from "../../components/TextBox/TextBox";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom"; // Import useHistory hook
+import API_URLS from "../../utils/api";
 
 function Login() {
   const { login } = useAuth();
@@ -21,7 +22,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/login", {
+      const response = await fetch(API_URLS.LOGIN, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
