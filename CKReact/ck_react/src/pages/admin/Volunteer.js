@@ -7,7 +7,7 @@ import Button from "../../components/Button/Button";
 import VolunteerModal from "../../components/Modal/VolunteerModal";
 import editImg from "../../assets/images/edit.png";
 import deleteImg from "../../assets/images/delete.png";
-import campImg from "../../assets/images/camp.png";
+import campImg from "../../assets/images/camp-red.png";
 import DeleteVolunteerModal from "../../components/Modal/DeleteVolunteerModal";
 import AssignmentModal from "../../components/Modal/AssignmentModal";
 
@@ -24,8 +24,8 @@ const Volunteer = () => {
   const selectedRowRef = useRef(null); // Create a ref
   const [countries, setCountries] = useState();
   const [countryId, setCountryId] = useState();
-  const [assingments, setAssingments] = useState();
-  const [camps, setCamps] = useState([])
+  const [assignments, setAssignments] = useState();
+  const [camps, setCamps] = useState([]);
 
   useEffect(() => {
     // Fetch data from the API
@@ -41,13 +41,19 @@ const Volunteer = () => {
         console.error("Greska pri dohvatanju drzava iz baze:", error)
       );
 
-      fetch(API_URLS.CAMPS)
+    fetch(API_URLS.CAMPS)
       .then((response) => response.json())
       .then((data) => setCamps(data))
       .catch((error) =>
         console.error("Greska pri dohvatanju drzava iz baze:", error)
       );
-      
+
+    fetch(API_URLS.ASSIGNMENTS)
+      .then((response) => response.json())
+      .then((data) => setAssignments(data))
+      .catch((error) =>
+        console.error("Greska pri dohvatanju drzava iz baze:", error)
+      );
 
     setColumns([
       { field: "id", headerName: "ID", width: 70 },
@@ -89,7 +95,8 @@ const Volunteer = () => {
                 handleAssignClick(params.row);
               }}
             >
-              <img className="w-6 h-6"
+              <img
+                className="w-6 h-6"
                 src={campImg}
                 alt="Izmijeni volontera"
                 about="Izmijeni volontera"
@@ -116,7 +123,7 @@ const Volunteer = () => {
     }, 1);
   };
 
-  const handleAssignClick= (row) => {
+  const handleAssignClick = (row) => {
     setSelectedRow(row);
     setTimeout(() => {
       setEditAssignmentModal(true);
@@ -135,6 +142,14 @@ const Volunteer = () => {
     setSearchText(event.target.value);
   };
 
+  useEffect(() => {
+    data.forEach((row) => {
+      const campNameX = assignments?.find((ass) => {
+        return ass.employeeJmbg === row.jmbg;
+      })?.campName;
+      row.campName = campNameX;
+    });
+  }, [assignments, data]);
   const handleDeleteVolunteer = async () => {
     //console.log("bice obrisan korisnik:" + JSON.stringify(selectedRow));
 
@@ -174,9 +189,8 @@ const Volunteer = () => {
           open={newVolunteerModal}
           setOpen={setNewVolunteerModal}
           countries={countries}
-          assingments={assingments}
+          assingments={assignments}
         ></VolunteerModal>
-
       )}
 
       {editVolunteerModal && (
@@ -186,8 +200,7 @@ const Volunteer = () => {
           mode="edit"
           volunteerData={{ ...selectedRow, countryId }}
           countries={countries}
-                    assingments={assingments}
-
+          assingments={assignments}
         ></VolunteerModal>
       )}
       {deleteVolunteerModal && (
@@ -198,13 +211,16 @@ const Volunteer = () => {
           volunteerData={selectedRow}
         ></DeleteVolunteerModal>
       )}
-      {editAssignmentModal&&(
+      {editAssignmentModal && (
         <AssignmentModal
           open={editAssignmentModal}
-          setOpen ={setEditAssignmentModal}
+          setOpen={setEditAssignmentModal}
           volunteerData={selectedRow}
-          camps = {camps}
-        > </AssignmentModal>
+          camps={camps}
+          assignments={assignments}
+        >
+          {" "}
+        </AssignmentModal>
       )}
       <div className="">
         <div className="flex justify-between">

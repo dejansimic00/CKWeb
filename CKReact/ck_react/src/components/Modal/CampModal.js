@@ -82,13 +82,20 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to ${mode === "add" ? "register" : "update"} camp`);
+        throw new Error(
+          `Failed to ${mode === "add" ? "register" : "update"} camp`
+        );
       }
 
-      console.log(`Camp ${mode === "add" ? "registered" : "updated"} successfully`);
+      console.log(
+        `Camp ${mode === "add" ? "registered" : "updated"} successfully`
+      );
       handleClose();
     } catch (error) {
-      console.error(`Error ${mode === "add" ? "registering" : "updating"} camp:`, error.message);
+      console.error(
+        `Error ${mode === "add" ? "registering" : "updating"} camp:`,
+        error.message
+      );
     }
   };
 
@@ -126,7 +133,9 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
                 id="placeId"
                 value={formData.placeId}
                 className="min-w-48"
-                onChange={(e) => setFormData({ ...formData, placeId: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, placeId: e.target.value })
+                }
                 sx={{
                   ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
                     border: "2px solid black",
@@ -134,9 +143,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
                   },
                 }}
               >
-                <MenuItem value="">
-                  {"Izaberi lokaciju"}
-                </MenuItem>
+                <MenuItem value="">{"Izaberi lokaciju"}</MenuItem>
                 {places.map((place) => (
                   <MenuItem key={place.id} value={place.id}>
                     {place.description}

@@ -19,9 +19,6 @@ const Dashboard = () => {
   const [selectedCamp, setSelectedCamp] = useState("");
 
   const { user } = useUser();
-  useEffect(() => {
-    console.log("user", user);
-  }, []);
 
   // Dohvatanje podataka iz 3 razlicite tabele u bazi i skladistenje u stanja
   useEffect(() => {

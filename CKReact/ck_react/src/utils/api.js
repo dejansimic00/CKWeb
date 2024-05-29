@@ -1,5 +1,5 @@
-//const BASE_URL = "http://localhost:8080";
-const BASE_URL = "http://10.99.134.62:8080";
+const BASE_URL = "http://localhost:8080";
+//const BASE_URL = "http://10.99.134.62:8080";
 
 const API_URLS = {
   // PRODUCTS: `${BASE_URL}/products`,
