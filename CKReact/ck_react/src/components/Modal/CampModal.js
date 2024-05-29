@@ -16,16 +16,15 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
-const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
+const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
   const [formData, setFormData] = useState({
     id: campData?.id ?? "",
     name: campData?.name ?? "",
-    placeId: campData?.placeId ?? "", // Store the place ID here
-    capacity: campData?.capacity ?? "",
-    campStatusId: campData?.campStatusId ?? "", // Changed to campStatusId
+    placeId: campData?.placeId ?? 0, // Store the place ID here
+    capacity: campData?.capacity ?? 0,
+    campStatusId: campData?.campStatusId ?? 0, // Changed to campStatusId
   });
   const [statuses, setStatuses] = useState([]);
-  const [places, setPlaces] = useState([]);
 
   const handleClose = () => setOpen(false);
 
@@ -33,6 +32,38 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
+
+  useEffect(() => {
+    //console.log("place", places);
+    //console.log("formData", formData);
+
+    const lokId = places?.find(
+      (place) => place.description === campData.placeDescription
+    )?.id;
+
+    console.log(lokId);
+    if (lokId) {
+      //console.log("LOKID");
+      setFormData((prevData) => ({
+        ...prevData,
+        placeId: lokId,
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
+    //console.log("formData", formData);
+  }, [formData]);
+  useEffect(() => {
+    const statusId = statuses?.find(
+      (status) => status.name === campData.campStatusName
+    )?.id;
+    if (statusId)
+      setFormData({
+        ...formData,
+        campStatusId: statusId,
+      });
+  }, [statuses]);
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -48,25 +79,11 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
       }
     };
 
-    const fetchPlaces = async () => {
-      try {
-        const response = await fetch(API_URLS.PLACES);
-        if (!response.ok) {
-          throw new Error("Failed to fetch places");
-        }
-        const data = await response.json();
-        setPlaces(data);
-      } catch (error) {
-        console.error("Error fetching places:", error);
-      }
-    };
-
     fetchStatuses();
-    fetchPlaces();
   }, []);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    //event.preventDefault();
 
     const url =
       mode === "add" ? API_URLS.CAMPS : `${API_URLS.CAMPS}/${campData.id}`;
@@ -133,9 +150,10 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
                 id="placeId"
                 value={formData.placeId}
                 className="min-w-48"
-                onChange={(e) =>
-                  setFormData({ ...formData, placeId: e.target.value })
-                }
+                onChange={(e) => {
+                  console.log(e.target);
+                  setFormData({ ...formData, placeId: e.target.value });
+                }}
                 sx={{
                   ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
                     border: "2px solid black",
@@ -143,7 +161,9 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
                   },
                 }}
               >
-                <MenuItem value="">{"Izaberi lokaciju"}</MenuItem>
+                <MenuItem key={0} value="0">
+                  {"Izaberi lokaciju"}
+                </MenuItem>
                 {places.map((place) => (
                   <MenuItem key={place.id} value={place.id}>
                     {place.description}
@@ -176,7 +196,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {} }) => {
                   })
                 }
               >
-                <MenuItem key={0} value="">
+                <MenuItem key={0} value="0">
                   {"Izaberi"}
                 </MenuItem>
                 {statuses.map((status) => (

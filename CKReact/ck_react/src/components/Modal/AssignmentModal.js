@@ -30,15 +30,15 @@ const AssignmentModal = ({
   }, []);
 
   const handleAssignClick = (e) => {
-    console.log("assignments", assignments);
-    console.log("volonterDAta", volunteerData);
+    //console.log("assignments", assignments);
+    //console.log("volonterDAta", volunteerData);
 
     const volunteerAssingmnet = assignments.find(
       (ass) => ass.employeeJmbg === volunteerData.jmbg
     );
     const newStartDate = new Date();
 
-    console.log("volASS", volunteerAssingmnet);
+    //console.log("volASS", volunteerAssingmnet);
 
     const dataForPost = {
       startDate: newStartDate,
