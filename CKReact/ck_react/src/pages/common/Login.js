@@ -5,9 +5,12 @@ import TextBox from "../../components/TextBox/TextBox";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom"; // Import useHistory hook
 import API_URLS from "../../utils/api";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 function Login() {
   const { login } = useAuth();
+  const {setItem:setItemSessionStorage} = useSessionStorage()
   const navigate = useNavigate();
 
   // State for storing input values
@@ -27,9 +30,11 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
+        
         body: JSON.stringify({ username, password }),
       });
 
+      console.log(response)
       if (response.ok) {
         // Handle successful login
         const responseData = await response.json(); // Parse JSON response
