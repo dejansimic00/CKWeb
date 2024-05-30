@@ -56,17 +56,18 @@ const DeleteCampModal = ({ open, setOpen, handleDelete, campData }) => {
               Da li ste sigurni?
             </Typography>
             <div>
-              Ime:
+              <span>Ime: </span>
               {campData.name}
             </div>
             <div>
-              Lokacija:
+              <span>Lokacija: </span>
               {campData.placeDescription}
             </div>
 
             <div className="flex space-x-4">
               <Button
                 text={"Da"}
+                type="submit"
                 onClick={handleConfirmDelete}
                 style={{ marginRight: "10px" }}
               />

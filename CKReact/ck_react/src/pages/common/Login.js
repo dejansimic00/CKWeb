@@ -68,6 +68,7 @@ function Login() {
           <TextBox
             placeholder="lozinka"
             value={password}
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
           {/* Conditionally render an empty space if there is no error */}

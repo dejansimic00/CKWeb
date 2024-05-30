@@ -20,6 +20,7 @@ const Camp = () => {
   const selectedRowRef = useRef(null); // Create a ref
   const [campStatusId, setCampStatusId] = useState();
   const [statuses, setStatuses] = useState([]);
+  const [places, setPlaces] = useState([]);
 
   useEffect(() => {
     // Fetch data from the API
@@ -38,6 +39,11 @@ const Camp = () => {
         console.error("Greska pri dohvatanju statusa kampa: ", error)
       );
 
+    fetch(API_URLS.PLACES)
+      .then((response) => response.json())
+      .then((data) => setPlaces(data))
+      .catch((error) => console.error("Greska pri dohvatanju lokacija", error));
+
     setColumns([
       { field: "id", headerName: "ID", width: 20 },
       { field: "name", headerName: "Ime", width: 200 },
@@ -52,11 +58,7 @@ const Camp = () => {
         renderCell: (params) => (
           <div>
             <button onClick={() => setDeleteCampModal(true)}>
-              <img
-                src={deleteImg}
-                alt="Obrisi kamp"
-                about="Obrisi kamp"
-              ></img>
+              <img src={deleteImg} alt="Obrisi kamp" about="Obrisi kamp"></img>
             </button>
             <button
               onClick={() => {
@@ -146,6 +148,7 @@ const Camp = () => {
           mode="edit"
           campData={{ ...selectedRow }}
           statuses={statuses}
+          places={places}
         ></CampModal>
       )}
       {deleteCampModal && (

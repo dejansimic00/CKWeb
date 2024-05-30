@@ -3,11 +3,8 @@ import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import Logo from "../Logo/Logo";
-import Input from "../../Input/Input";
 import theme from "../../styles/colors";
 import Button from "../Button/Button";
-import DatePicker from "../DatePicker/DatePicker";
 import { MenuItem, Select } from "@mui/material";
 import API_URLS from "../../utils/api";
 
@@ -21,15 +18,60 @@ const style = {
 const AssignmentModal = ({
   open,
   setOpen,
-  handleAssign,
   volunteerData,
-  camps
+  camps,
+  assignments,
 }) => {
   const handleClose = () => setOpen(false);
+  const [selectedCamp, setSelectedCamp] = new useState();
 
-  const handleAssignClick = () => {
-    handleAssign(); // Assign  the parent component's delete function
-    setOpen(false); // Close the modal
+  useEffect(() => {
+    console.log("Selected camp iz usee", selectedCamp);
+  }, []);
+
+  const handleAssignClick = (e) => {
+    //console.log("assignments", assignments);
+    //console.log("volonterDAta", volunteerData);
+
+    const volunteerAssingmnet = assignments.find(
+      (ass) => ass.employeeJmbg === volunteerData.jmbg
+    );
+    const newStartDate = new Date();
+
+    //console.log("volASS", volunteerAssingmnet);
+
+    const dataForPost = {
+      startDate: newStartDate,
+      endDate: null,
+      employeeId: volunteerData.id,
+      campId: selectedCamp.id,
+    };
+    console.log("dataForPost", dataForPost);
+    if (volunteerAssingmnet) {
+      //console.log("Assignment postoji, ide PUT");
+      fetch(API_URLS.ASSIGNMENTS + "/" + volunteerAssingmnet.id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataForPost),
+      }).then((response) => {
+        if (response.ok) console.log("Uspjesno");
+      });
+    } else {
+      // console.log("Ne postoji, ide POST");
+      fetch(API_URLS.ASSIGNMENTS, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataForPost),
+      }).then((response) => {
+        if (response.ok) console.log("Uspjesno");
+      });
+    }
+
+    //setOpen(false); // Close the modal
   };
 
   return (
@@ -61,41 +103,43 @@ const AssignmentModal = ({
               Ime:
               {volunteerData.firstName}
             </div>
-           
+
             <div>
               JMBG:
               {volunteerData.jmbg}
             </div>
             {/** ---------------------kamp---------------------------------- */}
             <div className="flex flex-col w-full items-start">
-                <p className="self-start font-bold">Kamp</p>
-                <Select
-                  defaultValue={ -1}
-                  className="min-w-48"
-                  sx={{
-                    ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
-                      border: "2px solid black",
-                      borderRadius: "12px",
-                    },
-                  }}
-                  onChange={(event) =>
-                    {
-                    //setFormData({ ...formData, countryId: event.target.value });
-                    }
-                  }
-                >
-                  <MenuItem key={-1} value={-1}>
-                    {"Izaberi"}
-                  </MenuItem>
-                  {camps.map((camp) => (
-                    <MenuItem value={camp.id}>{camp.name}</MenuItem>
-                  ))}
-                </Select>
-              </div>
+              <p className="self-start font-bold">Kamp</p>
+              <Select
+                defaultValue={-1}
+                className="min-w-48"
+                sx={{
+                  ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
+                    border: "2px solid black",
+                    borderRadius: "12px",
+                  },
+                }}
+                onChange={(event) => {
+                  //console.log(camps.find((c) => c.id == event.target.value));
+                  setSelectedCamp(
+                    camps.find((c) => c.id == event.target.value)
+                  );
+                }}
+              >
+                <MenuItem key={-1} value={-1}>
+                  {"Izaberi"}
+                </MenuItem>
+                {camps.map((camp) => (
+                  <MenuItem value={camp.id}>{camp.name}</MenuItem>
+                ))}
+              </Select>
+            </div>
             <div className="flex space-x-4">
               <Button
                 text={"Da"}
                 onClick={handleAssignClick}
+                type="submit"
                 style={{ marginRight: "10px" }}
               />
               <Button text={"Ne"} onClick={handleClose} />
