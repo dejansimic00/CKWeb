@@ -6,6 +6,7 @@ import detailsImg from "../../assets/images/details.png";
 import { useAuth } from "../../hooks/useAuth";
 import { useUser } from "../../hooks/useUser";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -18,27 +19,68 @@ const Dashboard = () => {
   const [places, setPlaces] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [selectedCamp, setSelectedCamp] = useState("");
+  const [token, setToken] = useState();
+  const [tokenReady, setTokenReady] = useState(false); 
 
   const { user } = useUser();
-  const { getItem } = useLocalStorage();
+  const { getItem } = useSessionStorage();
+
+
+   useEffect(() => {
+    const checkToken = () => {
+      const tokenFromStorage = getItem("token");
+      console.log("TEST", tokenFromStorage);
+      if (tokenFromStorage) {
+        setTokenReady(true);
+        setToken(tokenFromStorage);
+      } else {
+        setTimeout(checkToken, 1000); // Check again after 1 second
+      }
+};
+
+
+    // Call tghe function initially
+    checkToken();
+
+  }, []);
 
   // Dohvatanje podataka iz 3 razlicite tabele u bazi i skladistenje u stanja
   useEffect(() => {
-    fetch(API_URLS.CAMPS)
+
+     return;
+
+    console.log("SRBIJAAAAAAAAAAAAA", token);
+    fetch(API_URLS.CAMPS, {
+      headers:{
+          "Autorization": `Bearer ${getItem("token")}`
+      }
+    })
       .then((response) => response.json())
       .then((newData) => {
         setCamps(newData);
       })
       .catch((error) => console.error("Error fetching data:", error));
 
-    fetch(API_URLS.MUNICIPALITIES)
+    fetch(API_URLS.MUNICIPALITIES, {
+      headers:{
+        
+          "Autorization": `Bearer ${getItem("token")}`
+        
+      }
+    })
       .then((response) => response.json())
       .then((newData) => {
         setMunicipalities(newData);
       })
       .catch((error) => console.error("Error fetching data:", error));
 
-    fetch(API_URLS.PLACES)
+    fetch(API_URLS.PLACES, {
+      headers:{
+        
+          "Autorization": `Bearer ${getItem("token")}`
+        
+      }
+    })
       .then((response) => response.json())
       .then((newData) => {
         setPlaces(newData);
@@ -78,16 +120,8 @@ const Dashboard = () => {
         ),
       },
     ]);
-  }, []);
+  }, [tokenReady]);
 
-  useEffect(() => {
-    console.log(user);
-    const userx = getItem("user");
-    console.log(userx);
-    console.log(assignments);
-
-    //const campT = assignments.find ( ass => ass)
-  }, [user]);
 
   const handleDetailsClick = (camp) => {
     setSelectedCamp(camp);

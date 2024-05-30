@@ -10,7 +10,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 function Login() {
   const { login } = useAuth();
-  const {setItem:setItemSessionStorage} = useSessionStorage()
+  const {setItem} = useSessionStorage()
   const navigate = useNavigate();
 
   // State for storing input values
@@ -20,6 +20,27 @@ function Login() {
   const [errorText, setErrorText] = useState(
     "Korisnicko ime i lozinka netacni!"
   );
+
+
+  const handleSuccessfulLogin = async (response) =>{
+    // Handle successful login
+        const responseData = await response.json(); // Parse JSON response
+        setErrorText("");
+        setError(false);
+        const isAdmin = responseData.role === "ADMIN";
+        // login({
+        //   jmbg: responseData.jmbg,
+        //   name: responseData.username,
+        //   isAdmin: isAdmin,
+        //   token: responseData.token
+        // });
+
+        setItem("jmbg", responseData.jmbg)
+        setItem("name", responseData.username)
+        setItem("isAdmin", isAdmin)
+        setItem("token", responseData.token)
+        
+  }
 
   // Function to handle form submission
   const handleSubmit = async (event) => {
@@ -34,17 +55,25 @@ function Login() {
         body: JSON.stringify({ username, password }),
       });
 
-      console.log(response)
       if (response.ok) {
-        // Handle successful login
+        
+        /** Handle successful login
         const responseData = await response.json(); // Parse JSON response
-        const isAdmin = responseData.isAdmin; // Get isAdmin value from response
         setErrorText("");
         setError(false);
+        const isAdmin = responseData.role === "ADMIN";
         login({
+          jmbg: responseData.jmbg,
           name: username,
           isAdmin: isAdmin,
+          token: responseData.token
         });
+
+        setTimeout(() => {
+          
+        }, timeout);
+        */
+       handleSuccessfulLogin(response);
         navigate("/dashboard"); // Redirect to dashboard after successful login
       } else {
         setErrorText("Neispravni podaci za prijavu");
