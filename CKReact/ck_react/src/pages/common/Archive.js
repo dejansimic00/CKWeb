@@ -36,6 +36,9 @@ function Archive() {
         field: "needsHospitalisation",
         headerName: "Potrebna hospitalizacija",
         width: 200,
+        valueGetter: (params) => {
+          return params ? "Da" : "Ne";
+        },
       },
       { field: "employeeJmbg", headerName: "JMBG volontera", width: 150 },
       // {

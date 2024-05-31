@@ -22,6 +22,7 @@ const AssignmentModal = ({
   volunteerData,
   camps,
   assignments,
+  onAssignmentChange,
 }) => {
   const handleClose = () => setOpen(false);
   const [selectedCamp, setSelectedCamp] = new useState();
@@ -31,45 +32,37 @@ const AssignmentModal = ({
     console.log("Selected camp iz usee", selectedCamp);
   }, []);
 
-  const handleAssignClick = (e) => {
-    const volunteerAssingmnet = assignments.find(
-      (ass) => ass.employeeJmbg === volunteerData.jmbg
-    );
+  const handleAssignClick = async (event) => {
     const newStartDate = new Date();
 
     const dataForPost = {
       startDate: newStartDate,
-      endDate: null,
-      employeeId: volunteerData.id,
       campId: selectedCamp.id,
     };
-    if (volunteerAssingmnet) {
-      fetch(API_URLS.ASSIGNMENTS + "/" + volunteerAssingmnet.id, {
-        method: "PUT",
 
-        headers: {
-          Authorization: `Bearer ${getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataForPost),
-      }).then((response) => {
-        if (response.ok) console.log("Uspjesno");
-      });
-    } else {
-      // console.log("Ne postoji, ide POST");
-      fetch(API_URLS.ASSIGNMENTS, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataForPost),
-      }).then((response) => {
-        if (response.ok) console.log("Uspjesno");
-      });
+    try {
+      const response = await fetch(
+        API_URLS.EMPLOYEES + "/" + volunteerData.id + "/change-assignment",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataForPost),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Uspjesno");
+        onAssignmentChange(); // Call the callback function to trigger the update
+        setOpen(false);
+      } else {
+        console.error("Failed to update assignment");
+      }
+    } catch (error) {
+      console.error("Error updating assignment:", error);
     }
-
-    setOpen(false);
   };
 
   return (

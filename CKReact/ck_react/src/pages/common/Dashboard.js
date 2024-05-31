@@ -112,7 +112,8 @@ const Dashboard = () => {
       },
     ]);
 
-    setIsAdmin(getItem("isAdmin"));
+    const isAdmin = getItem("isAdmin") === "true";
+    setIsAdmin(isAdmin);
   }, []);
 
   useEffect(() => {

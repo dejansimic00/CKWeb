@@ -39,6 +39,7 @@ function Login() {
     setItem("isAdmin", isAdmin);
     setItem("token", responseData.token);
     setItem("id", responseData.id);
+    setItem("username", username);
   };
 
   // Function to handle form submission

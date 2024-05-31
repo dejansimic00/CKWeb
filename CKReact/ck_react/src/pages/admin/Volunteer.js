@@ -28,17 +28,39 @@ const Volunteer = () => {
   const [assignments, setAssignments] = useState();
   const [camps, setCamps] = useState([]);
   const { getItem } = useSessionStorage();
+  const [refreshData, setRefreshData] = useState(false);
 
   useEffect(() => {
-    // Fetch data from the API
     fetch(API_URLS.EMPLOYEES, {
       headers: {
         Authorization: `Bearer ${getItem("token")}`,
       },
     })
       .then((response) => response.json())
-      .then((data) => setData(data))
+      .then((data) => {
+        const x = data.filter((row) => row.role !== "ADMIN");
+
+        setData(x);
+      })
       .catch((error) => console.error("Error fetching data:", error));
+
+    fetch(API_URLS.ASSIGNMENTS, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const x = data.filter((row) => row.endDate === null);
+        setAssignments(x);
+      })
+      .catch((error) =>
+        console.error("Greska pri dohvatanju drzava iz baze:", error)
+      );
+  }, [refreshData]);
+
+  useEffect(() => {
+    // Fetch data from the API
 
     fetch(API_URLS.COUNTRIES, {
       headers: {
@@ -62,17 +84,6 @@ const Volunteer = () => {
         console.error("Greska pri dohvatanju drzava iz baze:", error)
       );
 
-    fetch(API_URLS.ASSIGNMENTS, {
-      headers: {
-        Authorization: `Bearer ${getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setAssignments(data))
-      .catch((error) =>
-        console.error("Greska pri dohvatanju drzava iz baze:", error)
-      );
-
     setColumns([
       { field: "id", headerName: "ID", width: 70 },
       { field: "firstName", headerName: "Ime", width: 150 },
@@ -84,6 +95,14 @@ const Volunteer = () => {
       { field: "campName", headerName: "Kamp", width: 150 },
       //{ field: "password", headerName: "Lozinka", width: 150 },
       { field: "username", headerName: "Korisničko ime", width: 150 },
+      {
+        field: "status",
+        headerName: "Status",
+        width: 150,
+        valueGetter: (params) => {
+          return params === "ACTIVE" ? "Aktivan" : "Blokiran";
+        },
+      },
       {
         field: "actions",
         headerName: "Akcije",
@@ -168,23 +187,33 @@ const Volunteer = () => {
       row.campName = campNameX;
     });
   }, [assignments, data]);
-  const handleDeleteVolunteer = async () => {
-    //console.log("bice obrisan korisnik:" + JSON.stringify(selectedRow));
+
+  const handleDeleteVolunteer = async (event) => {
+    const status = selectedRow.status === "ACTIVE" ? "BLOCKED" : "ACTIVE";
+    const body = {
+      accountStatus: status,
+    };
+
+    console.log(body);
 
     try {
-      const URL = API_URLS.EMPLOYEES + "/" + selectedRow.id;
+      const URL = API_URLS.EMPLOYEES + "/" + selectedRow.id + "/status";
       const response = await fetch(URL, {
-        method: "DELETE",
+        method: "PATCH",
         headers: {
+          Authorization: `Bearer ${getItem("token")}`,
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
         throw new Error(response.status + " " + response.statusText);
       }
 
-      console.log("Zaposleni uspjesno obrisan");
+      setRefreshData(!refreshData);
+
+      console.log("Zaposleni uspjesno deaktiviran");
     } catch (error) {
       console.error("Greska kod brisanja korisnika:", error.message);
     }
@@ -198,6 +227,26 @@ const Volunteer = () => {
 
   const newVolonterOnClick = () => {
     setNewVolunteerModal(true);
+  };
+
+  const handleAssignmentChange = () => {
+    // Re-fetch the data or update the local state here
+    const fetchUpdatedData = async () => {
+      try {
+        const response = await fetch(API_URLS.EMPLOYEES, {
+          headers: {
+            Authorization: `Bearer ${getItem("token")}`,
+          },
+        });
+        const result = await response.json();
+        setData(result);
+        setRefreshData(!refreshData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchUpdatedData();
   };
 
   return (
@@ -236,9 +285,8 @@ const Volunteer = () => {
           volunteerData={selectedRow}
           camps={camps}
           assignments={assignments}
-        >
-          {" "}
-        </AssignmentModal>
+          onAssignmentChange={handleAssignmentChange} // Pass the callback here
+        ></AssignmentModal>
       )}
       <div className="">
         <div className="flex justify-between">

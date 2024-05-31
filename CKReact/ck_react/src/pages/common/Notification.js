@@ -27,7 +27,6 @@ const Notification = () => {
               timeZone: "Europe/Belgrade",
             }),
         }));
-        console.log("FORMAT", formattedData);
         setNotifications(formattedData);
       })
       .catch((error) => console.error("Error fetching data:", error));
@@ -35,12 +34,16 @@ const Notification = () => {
 
   const handleAddNotification = () => {
     if (newNotification.trim()) {
+      // Function to add 2 hours to the current date and return ISO string
+      const addTwoHoursUsingSetHours = (date) => {
+        date.setHours(date.getHours() + 2);
+        return date.toISOString();
+      };
+
       const messageBody = {
         content: newNotification.trim(),
         employeeId: Number.parseInt(getItem("id")),
-        creationTime: new Date().toLocaleString("en-US", {
-          timeZone: "Europe/Belgrade",
-        }),
+        creationTime: addTwoHoursUsingSetHours(new Date()), // Use the function here
       };
 
       console.log(JSON.stringify(messageBody));
@@ -64,10 +67,17 @@ const Notification = () => {
     { field: "employeeUsername", headerName: "Kreirao", width: 120 },
   ];
 
+  const sortModel = [
+    {
+      field: "creationTime",
+      sort: "asc",
+    },
+  ];
+
   return (
     <div className="flex justify-between p-4">
       {/* Left Div: Add New Notification */}
-      <div className="w-1/2 p-4 border-r border-gray-300">
+      <div className="flex flex-col w-1/3 p-4 border-r border-gray-300">
         <h2 className="text-xl font-bold mb-4">Add New Notification</h2>
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
@@ -90,11 +100,16 @@ const Notification = () => {
       </div>
 
       {/* Right Div: Notifications Table */}
-      <div className="w-1/2 p-4">
+      <div className="flex flex-col w-2/3 p-4">
         <h2 className="text-xl font-bold mb-4">Recent Notifications</h2>
         <DataTable
           columns={columns}
           rows={notifications}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: "creationTime", sort: "desc" }],
+            },
+          }}
           onFilterModelChange={() => {}}
           onRowSelectionModelChange={() => {}}
         />

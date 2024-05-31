@@ -79,8 +79,11 @@ const Residence = () => {
       { field: "countryName", headerName: "Država", width: 150 },
       {
         field: "needsHospitalisation",
-        headerName: "Hospitalizacija",
-        width: 150,
+        headerName: "Potrebna \n hospitalizacija",
+        width: 200,
+        valueGetter: (params) => {
+          return params ? "Da" : "Ne";
+        },
       },
       { field: "employeeJmbg", headerName: "JMBG Zaposlenog", width: 150 },
       // Add actions column if needed

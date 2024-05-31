@@ -78,9 +78,9 @@ const CampDashboard = ({
         (rp) => rp.campName === campName
       );
 
-      console.log("RESIDENTS", residents);
+      //console.log("RESIDENTS", residents);
       //console.log("residencePeriod", residencePeriod);
-      console.log("filteredResidentPeriod", filteredResidentPeriod);
+      //console.log("filteredResidentPeriod", filteredResidentPeriod);
 
       const filteredREsidents = residents.filter((res) => {
         return filteredResidentPeriod.some(
@@ -88,7 +88,7 @@ const CampDashboard = ({
         );
       });
 
-      console.log("filteredREsidents", filteredREsidents);
+      //console.log("filteredREsidents", filteredREsidents);
 
       setCurrentCampResidents(filteredREsidents);
 
@@ -107,7 +107,7 @@ const CampDashboard = ({
   }, [residencePeriod, residencePeriod]);
 
   useEffect(() => {
-    console.log("Postavljanje broja resi");
+    //console.log("Postavljanje broja resi");
     setResNumber(currentCampResidents.length);
   }, [currentCampResidents, residents, currentCampResidents.length]);
 

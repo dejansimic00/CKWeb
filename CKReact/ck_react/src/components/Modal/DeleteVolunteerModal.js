@@ -71,6 +71,7 @@ const DeleteVolunteerModal = ({
             <div className="flex space-x-4">
               <Button
                 text={"Da"}
+                type="submit"
                 onClick={handleConfirmDelete}
                 style={{ marginRight: "10px" }}
               />

@@ -6,8 +6,9 @@ import { useState, useEffect } from "react";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import theme from "../../styles/colors";
 import "./LoggedUser.css";
-import { Link } from "react-router-dom";
+import { Link, json } from "react-router-dom";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
+import API_URLS from "../../utils/api";
 
 const LoggedUser = ({ logOutAction }) => {
   const { getItem } = useSessionStorage();
@@ -15,13 +16,7 @@ const LoggedUser = ({ logOutAction }) => {
   const [selected, setSelected] = useState(false);
 
   useEffect(() => {
-    //console.log(selected);
-    const userFromStorage = getItem("user");
-
-    const parsedUser = userFromStorage
-      ? JSON.parse(userFromStorage)
-      : { name: "dejan" };
-    setUserValue(parsedUser.name);
+    setUserValue(getItem("username"));
   }, []);
 
   const handleCLick = () => {
