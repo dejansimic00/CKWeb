@@ -29,7 +29,11 @@ const AssignmentModal = ({
   const { getItem } = useSessionStorage();
 
   useEffect(() => {
-    console.log("Selected camp iz usee", selectedCamp);
+    console.log("volunteerData", volunteerData);
+
+    const camp = camps.find((camp) => camp.name === volunteerData.campName);
+    console.log("camp", camp);
+    setSelectedCamp(camp);
   }, []);
 
   const handleAssignClick = async (event) => {
@@ -103,7 +107,7 @@ const AssignmentModal = ({
             <div className="flex flex-col w-full items-start">
               <p className="self-start font-bold">Kamp</p>
               <Select
-                defaultValue={-1}
+                value={selectedCamp?.id ?? -1}
                 className="min-w-48"
                 sx={{
                   ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {

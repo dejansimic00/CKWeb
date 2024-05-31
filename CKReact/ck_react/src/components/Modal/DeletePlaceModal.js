@@ -11,9 +11,24 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
-const DeletePlaceModal = ({ open, setOpen, handleDelete, placeData }) => {
+const DeletePlaceModal = ({
+  open,
+  setOpen,
+  handleDelete,
+  placeData,
+  refresh,
+  setRefresh,
+}) => {
   const handleClose = () => setOpen(false);
 
+  const handleCloseClick = () => {
+    setOpen(false);
+  };
+
+  const handleDeleteClick = () => {
+    setOpen(false);
+    handleDelete();
+  };
   return (
     <Modal
       open={open}
@@ -41,8 +56,8 @@ const DeletePlaceModal = ({ open, setOpen, handleDelete, placeData }) => {
             Are you sure you want to delete the place: {placeData?.description}?
           </p>
           <div className="flex gap-4">
-            <Button text="Cancel" onClick={handleClose} />
-            <Button text="Delete" onClick={handleDelete} />
+            <Button text="Cancel" onClick={handleCloseClick} />
+            <Button text="Delete" onClick={handleDeleteClick} />
           </div>
         </div>
       </Box>

@@ -22,12 +22,22 @@ const PlaceModal = ({
   mode = "add",
   placeData = {},
   municipalities,
+  refresh,
+  setRefresh,
 }) => {
   const [formData, setFormData] = useState({
     id: placeData?.id ?? "",
     municipalityId: placeData?.municipalityId ?? "",
     description: placeData?.description ?? "",
   });
+
+  useEffect(() => {
+    const munid = municipalities.find(
+      (mun) => mun.name === placeData.municipalityName
+    )?.id;
+
+    setFormData({ ...formData, municipalityId: munid });
+  }, []);
   const { getItem } = useSessionStorage();
 
   const handleClose = () => setOpen(false);
@@ -61,6 +71,8 @@ const PlaceModal = ({
       if (!response.ok) {
         throw new Error(`Failed to ${mode === "add" ? "add" : "update"} place`);
       }
+
+      setRefresh(!refresh);
 
       console.log(`Place ${mode === "add" ? "added" : "updated"} successfully`);
       handleClose();

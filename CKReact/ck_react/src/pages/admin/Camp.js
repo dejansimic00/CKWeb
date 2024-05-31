@@ -23,6 +23,7 @@ const Camp = () => {
   const [statuses, setStatuses] = useState([]);
   const [places, setPlaces] = useState([]);
   const { getItem } = useSessionStorage();
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     // Fetch data from the API
@@ -34,7 +35,8 @@ const Camp = () => {
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Greska pri dohvatanju kampova", error));
-
+  }, [refresh]);
+  useEffect(() => {
     fetch(API_URLS.CAMP_STATUSES, {
       headers: {
         Authorization: `Bearer ${getItem("token")}`,
@@ -42,7 +44,7 @@ const Camp = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("CAMP: ", data);
+        //console.log("CAMP: ", data);
         setStatuses(data);
       })
       .catch((error) =>
@@ -122,6 +124,7 @@ const Camp = () => {
       const response = await fetch(URL, {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${getItem("token")}`,
           "Content-Type": "application/json",
         },
       });
@@ -130,7 +133,9 @@ const Camp = () => {
         throw new Error(response.status + " " + response.statusText);
       }
 
-      console.log("Zaposleni uspjesno obrisan");
+      setRefresh(!refresh);
+
+      //console.log("Zaposleni uspjesno obrisan");
     } catch (error) {
       console.error("Greska kod brisanja korisnika:", error.message);
     }
@@ -153,6 +158,9 @@ const Camp = () => {
           open={newCampModal}
           setOpen={setNewCampModal}
           statuses={statuses}
+          refresh={refresh}
+          places={places}
+          setRefresh={setRefresh}
         ></CampModal>
       )}
       {editCampModal && (
@@ -163,6 +171,8 @@ const Camp = () => {
           campData={{ ...selectedRow }}
           statuses={statuses}
           places={places}
+          refresh={refresh}
+          setRefresh={setRefresh}
         ></CampModal>
       )}
       {deleteCampModal && (
@@ -171,6 +181,8 @@ const Camp = () => {
           setOpen={setDeleteCampModal}
           handleDelete={handleDeleteCamp}
           campData={selectedRow}
+          refresh={refresh}
+          setRefresh={setRefresh}
         ></DeleteCampModal>
       )}
       <div className="">

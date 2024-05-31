@@ -18,11 +18,19 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
-const DeleteCampModal = ({ open, setOpen, handleDelete, campData }) => {
+const DeleteCampModal = ({
+  open,
+  setOpen,
+  handleDelete,
+  campData,
+  setRefresh,
+  refresh,
+}) => {
   const handleClose = () => setOpen(false);
 
   const handleConfirmDelete = () => {
     handleDelete(); // Call the parent component's delete function
+    setRefresh(!refresh);
     setOpen(false); // Close the modal
   };
 

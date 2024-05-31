@@ -20,11 +20,11 @@ const Place = () => {
   const selectedRowRef = useRef(null);
   const [municipalities, setMunicipalities] = useState([]);
   const { getItem } = useSessionStorage();
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
     // Fetch places data
 
-    console.log("TOKEN", getItem("token"));
     fetch(API_URLS.PLACES, {
       headers: {
         Authorization: `Bearer ${getItem("token")}`,
@@ -36,7 +36,9 @@ const Place = () => {
         setData(data); // Update the data state
       })
       .catch((error) => console.error("Error fetching places", error));
+  }, [refresh]);
 
+  useEffect(() => {
     // Fetch municipalities data
     fetch(API_URLS.MUNICIPALITIES, {
       headers: {
@@ -96,6 +98,8 @@ const Place = () => {
       const response = await fetch(URL, {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+
           "Content-Type": "application/json",
         },
       });
@@ -104,9 +108,8 @@ const Place = () => {
         throw new Error(response.status + " " + response.statusText);
       }
 
-      console.log("Place successfully deleted");
-      // Remove the deleted place from the data
-      setData(data.filter((item) => item.id !== selectedRow.id));
+      setRefresh(!refresh);
+      //setData(data.filter((item) => item.id !== selectedRow.id));
     } catch (error) {
       console.error("Error deleting place:", error.message);
     }
@@ -129,6 +132,8 @@ const Place = () => {
           open={newPlaceModal}
           setOpen={setNewPlaceModal}
           municipalities={municipalities}
+          refresh={refresh}
+          setRefresh={setRefresh}
         />
       )}
       {editPlaceModal && (
@@ -137,6 +142,8 @@ const Place = () => {
           setOpen={setEditPlaceModal}
           mode="edit"
           placeData={{ ...selectedRow }}
+          refresh={refresh}
+          setRefresh={setRefresh}
           municipalities={municipalities}
         />
       )}
@@ -146,6 +153,8 @@ const Place = () => {
           setOpen={setDeletePlaceModal}
           handleDelete={handleDeletePlace}
           placeData={selectedRow}
+          refresh={refresh}
+          setRefresh={setRefresh}
         />
       )}
       <div>

@@ -8,6 +8,7 @@ const Notification = () => {
   const [notifications, setNotifications] = useState([]);
   const [newNotification, setNewNotification] = useState("");
   const { getItem } = useSessionStorage();
+  const [refresh, setRefresh] = useState(false);
 
   const fetchMessages = async () => {};
 
@@ -30,7 +31,7 @@ const Notification = () => {
         setNotifications(formattedData);
       })
       .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  }, [refresh]);
 
   const handleAddNotification = () => {
     if (newNotification.trim()) {
@@ -55,7 +56,11 @@ const Notification = () => {
         method: "POST",
         body: JSON.stringify(messageBody),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          setRefresh(!refresh);
+          setNewNotification("");
+          response.json();
+        })
         .catch((error) => console.error("Error fetching data:", error));
     }
   };
@@ -65,13 +70,6 @@ const Notification = () => {
     { field: "content", headerName: "Poruka", flex: 1 },
     { field: "creationTime", headerName: "Datum", width: 200 },
     { field: "employeeUsername", headerName: "Kreirao", width: 120 },
-  ];
-
-  const sortModel = [
-    {
-      field: "creationTime",
-      sort: "asc",
-    },
   ];
 
   return (

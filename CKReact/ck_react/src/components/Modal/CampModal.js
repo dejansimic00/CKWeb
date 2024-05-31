@@ -17,7 +17,15 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
-const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
+const CampModal = ({
+  open,
+  setOpen,
+  mode = "add",
+  campData = {},
+  places,
+  refresh,
+  setRefresh,
+}) => {
   const [formData, setFormData] = useState({
     id: campData?.id ?? "",
     name: campData?.name ?? "",
@@ -36,16 +44,12 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
   };
 
   useEffect(() => {
-    //console.log("place", places);
-    //console.log("formData", formData);
-
     const lokId = places?.find(
       (place) => place.description === campData.placeDescription
     )?.id;
 
-    console.log(lokId);
+    //console.log(lokId);
     if (lokId) {
-      //console.log("LOKID");
       setFormData((prevData) => ({
         ...prevData,
         placeId: lokId,
@@ -86,7 +90,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
   }, []);
 
   const handleSubmit = async (event) => {
-    //event.preventDefault();
+    event.preventDefault();
 
     const url =
       mode === "add" ? API_URLS.CAMPS : `${API_URLS.CAMPS}/${campData.id}`;
@@ -108,9 +112,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
         );
       }
 
-      console.log(
-        `Camp ${mode === "add" ? "registered" : "updated"} successfully`
-      );
+      setRefresh(!refresh);
       handleClose();
     } catch (error) {
       console.error(
@@ -155,7 +157,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
                 value={formData.placeId}
                 className="min-w-48"
                 onChange={(e) => {
-                  console.log(e.target);
+                  //console.log(e.target);
                   setFormData({ ...formData, placeId: e.target.value });
                 }}
                 sx={{
@@ -165,7 +167,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
                   },
                 }}
               >
-                <MenuItem key={0} value="0">
+                <MenuItem key={0} value={0}>
                   {"Izaberi lokaciju"}
                 </MenuItem>
                 {places.map((place) => (
@@ -200,7 +202,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
                   })
                 }
               >
-                <MenuItem key={0} value="0">
+                <MenuItem key={0} value={0}>
                   {"Izaberi"}
                 </MenuItem>
                 {statuses.map((status) => (

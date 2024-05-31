@@ -123,7 +123,9 @@ const Residence = () => {
         (ass) => ass.employeeId === Number.parseInt(getItem("id"))
       );
 
-      setCampName(ass.campName);
+      if (!ass) {
+        setCampName("");
+      } else setCampName(ass.campName);
     }
   }, [assignments, getItem]);
 

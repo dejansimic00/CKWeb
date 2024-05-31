@@ -41,6 +41,8 @@ const Dashboard = () => {
 
   // Dohvatanje podataka iz 3 razlicite tabele u bazi i skladistenje u stanja
   useEffect(() => {
+    console.log("getItem", getItem("token"));
+
     fetch(API_URLS.CAMPS, {
       headers: {
         Authorization: `Bearer ${getItem("token")}`,
@@ -118,10 +120,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (assignments) {
+      console.log("ASS", assignments);
       setNonAdminCampName(
-        assignments.find(
-          (ass) => ass.employeeId === Number.parseInt(getItem("id"))
-        )?.campName
+        assignments
+          .filter((ass) => ass.endDate === null)
+          .find((ass) => ass.employeeId === Number.parseInt(getItem("id")))
+          ?.campName
       );
     }
   }, [assignments]);
