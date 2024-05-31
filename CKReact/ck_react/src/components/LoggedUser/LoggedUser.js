@@ -7,9 +7,10 @@ import LogOutButton from "../LogOutButton/LogOutButton";
 import theme from "../../styles/colors";
 import "./LoggedUser.css";
 import { Link } from "react-router-dom";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const LoggedUser = ({ logOutAction }) => {
-  const { getItem } = useLocalStorage();
+  const { getItem } = useSessionStorage();
   const [userValue, setUserValue] = useState("");
   const [selected, setSelected] = useState(false);
 
@@ -37,16 +38,21 @@ const LoggedUser = ({ logOutAction }) => {
             ${!selected ? "  max-h-0 " : "  max-h-20 "}
           `}
         >
-          <Link to={"settings"}>
-            <div className="self-center flex items-center  ">
-              <img
-                className="w-3 h-3 align-middle  mr-2"
-                src={settings}
-                alt="user"
-              ></img>
-              <span>Podesavanja</span>
-            </div>
-          </Link>
+          {
+            //za podesavanja, potencijalni dodatak
+            false && (
+              <Link to={"settings"}>
+                <div className="self-center flex items-center  ">
+                  <img
+                    className="w-3 h-3 align-middle  mr-2"
+                    src={settings}
+                    alt="user"
+                  ></img>
+                  <span>Podesavanja</span>
+                </div>
+              </Link>
+            )
+          }
           <div className="self-center flex items-center">
             <LogOutButton logOutAction={logOutAction}></LogOutButton>
           </div>

@@ -8,6 +8,7 @@ import theme from "../../styles/colors";
 import Button from "../Button/Button";
 import { MenuItem, Select } from "@mui/material";
 import API_URLS from "../../utils/api";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const style = {
   position: "absolute",
@@ -25,6 +26,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
     campStatusId: campData?.campStatusId ?? 0, // Changed to campStatusId
   });
   const [statuses, setStatuses] = useState([]);
+  const { getItem } = useSessionStorage();
 
   const handleClose = () => setOpen(false);
 
@@ -52,9 +54,6 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
   }, []);
 
   useEffect(() => {
-    //console.log("formData", formData);
-  }, [formData]);
-  useEffect(() => {
     const statusId = statuses?.find(
       (status) => status.name === campData.campStatusName
     )?.id;
@@ -68,7 +67,11 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
   useEffect(() => {
     const fetchStatuses = async () => {
       try {
-        const response = await fetch(API_URLS.CAMP_STATUSES);
+        const response = await fetch(API_URLS.CAMP_STATUSES, {
+          headers: {
+            Authorization: `Bearer ${getItem("token")}`,
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch statuses");
         }
@@ -93,6 +96,7 @@ const CampModal = ({ open, setOpen, mode = "add", campData = {}, places }) => {
       const response = await fetch(url, {
         method: method,
         headers: {
+          Authorization: `Bearer ${getItem("token")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),

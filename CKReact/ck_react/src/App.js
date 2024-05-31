@@ -3,7 +3,9 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 
 import Dashboard from "./pages/common/Dashboard";
@@ -15,18 +17,23 @@ import { AuthContext } from "./context/AuthContext";
 import { useAuth } from "./hooks/useAuth";
 import AdminNavBar from "./components/navigation/NavBar/AdminNavBar";
 import Volunteer from "./pages/admin/Volunteer";
-import Notification from "./pages/admin/Notification";
+import Notification from "./pages/common/Notification";
 import Camp from "./pages/admin/Camp";
 import Place from "./pages/admin/Place";
 import { useEffect } from "react";
+import { useSessionStorage } from "./hooks/useSessionStorage";
 
 function MainLayout() {
   const location = useLocation();
+  const { getItem } = useSessionStorage();
+  const navigate = useNavigate();
 
-  /*
+  // Redirect to /login if not authenticated
   useEffect(() => {
-    console.log("Current path:", location.pathname);
-  }, [location.pathname]);*/
+    if (!getItem("token") && location.pathname !== "/login") {
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <div className="flex">

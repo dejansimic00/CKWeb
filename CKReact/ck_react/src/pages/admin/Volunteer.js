@@ -10,6 +10,7 @@ import deleteImg from "../../assets/images/delete.png";
 import campImg from "../../assets/images/camp-red.png";
 import DeleteVolunteerModal from "../../components/Modal/DeleteVolunteerModal";
 import AssignmentModal from "../../components/Modal/AssignmentModal";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const Volunteer = () => {
   const [data, setData] = useState([]);
@@ -26,29 +27,46 @@ const Volunteer = () => {
   const [countryId, setCountryId] = useState();
   const [assignments, setAssignments] = useState();
   const [camps, setCamps] = useState([]);
+  const { getItem } = useSessionStorage();
 
   useEffect(() => {
     // Fetch data from the API
-    fetch(API_URLS.EMPLOYEES)
+    fetch(API_URLS.EMPLOYEES, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching data:", error));
 
-    fetch(API_URLS.COUNTRIES)
+    fetch(API_URLS.COUNTRIES, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setCountries(data))
       .catch((error) =>
         console.error("Greska pri dohvatanju drzava iz baze:", error)
       );
 
-    fetch(API_URLS.CAMPS)
+    fetch(API_URLS.CAMPS, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setCamps(data))
       .catch((error) =>
         console.error("Greska pri dohvatanju drzava iz baze:", error)
       );
 
-    fetch(API_URLS.ASSIGNMENTS)
+    fetch(API_URLS.ASSIGNMENTS, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setAssignments(data))
       .catch((error) =>
@@ -145,7 +163,7 @@ const Volunteer = () => {
   useEffect(() => {
     data.forEach((row) => {
       const campNameX = assignments?.find((ass) => {
-        return ass.employeeJmbg === row.jmbg;
+        return ass.employeeId === row.id;
       })?.campName;
       row.campName = campNameX;
     });

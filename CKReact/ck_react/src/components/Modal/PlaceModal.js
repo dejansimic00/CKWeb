@@ -7,6 +7,7 @@ import Button from "../Button/Button";
 import { MenuItem, Select } from "@mui/material";
 import API_URLS from "../../utils/api";
 import Logo from "../Logo/Logo";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const style = {
   position: "absolute",
@@ -15,12 +16,19 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
-const PlaceModal = ({ open, setOpen, mode = "add", placeData = {}, municipalities }) => {
+const PlaceModal = ({
+  open,
+  setOpen,
+  mode = "add",
+  placeData = {},
+  municipalities,
+}) => {
   const [formData, setFormData] = useState({
     id: placeData?.id ?? "",
     municipalityId: placeData?.municipalityId ?? "",
     description: placeData?.description ?? "",
   });
+  const { getItem } = useSessionStorage();
 
   const handleClose = () => setOpen(false);
 
@@ -36,13 +44,15 @@ const PlaceModal = ({ open, setOpen, mode = "add", placeData = {}, municipalitie
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = mode === "add" ? API_URLS.PLACES : `${API_URLS.PLACES}/${placeData.id}`;
+    const url =
+      mode === "add" ? API_URLS.PLACES : `${API_URLS.PLACES}/${placeData.id}`;
     const method = mode === "add" ? "POST" : "PUT";
 
     try {
       const response = await fetch(url, {
         method: method,
         headers: {
+          Authorization: `Bearer ${getItem("token")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
@@ -55,7 +65,10 @@ const PlaceModal = ({ open, setOpen, mode = "add", placeData = {}, municipalitie
       console.log(`Place ${mode === "add" ? "added" : "updated"} successfully`);
       handleClose();
     } catch (error) {
-      console.error(`Error ${mode === "add" ? "adding" : "updating"} place:`, error.message);
+      console.error(
+        `Error ${mode === "add" ? "adding" : "updating"} place:`,
+        error.message
+      );
     }
   };
 
@@ -100,9 +113,7 @@ const PlaceModal = ({ open, setOpen, mode = "add", placeData = {}, municipalitie
                   },
                 }}
               >
-                <MenuItem value="">
-                  {"Select Municipality"}
-                </MenuItem>
+                <MenuItem value="">{"Select Municipality"}</MenuItem>
                 {municipalities.map((municipality) => (
                   <MenuItem key={municipality.id} value={municipality.id}>
                     {municipality.name}
@@ -110,10 +121,7 @@ const PlaceModal = ({ open, setOpen, mode = "add", placeData = {}, municipalitie
                 ))}
               </Select>
             </div>
-            <Button
-              text={mode === "add" ? "Add" : "Save"}
-              type="submit"
-            />
+            <Button text={mode === "add" ? "Add" : "Save"} type="submit" />
           </div>
         </form>
       </Box>

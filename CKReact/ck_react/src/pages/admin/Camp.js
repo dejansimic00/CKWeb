@@ -8,6 +8,7 @@ import CampModal from "../../components/Modal/CampModal";
 import editImg from "../../assets/images/edit.png";
 import deleteImg from "../../assets/images/delete.png";
 import DeleteCampModal from "../../components/Modal/DeleteCampModal";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const Camp = () => {
   const [data, setData] = useState([]);
@@ -21,15 +22,24 @@ const Camp = () => {
   const [campStatusId, setCampStatusId] = useState();
   const [statuses, setStatuses] = useState([]);
   const [places, setPlaces] = useState([]);
+  const { getItem } = useSessionStorage();
 
   useEffect(() => {
     // Fetch data from the API
-    fetch(API_URLS.CAMPS)
+    fetch(API_URLS.CAMPS, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Greska pri dohvatanju kampova", error));
 
-    fetch(API_URLS.CAMP_STATUSES)
+    fetch(API_URLS.CAMP_STATUSES, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("CAMP: ", data);
@@ -39,7 +49,11 @@ const Camp = () => {
         console.error("Greska pri dohvatanju statusa kampa: ", error)
       );
 
-    fetch(API_URLS.PLACES)
+    fetch(API_URLS.PLACES, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setPlaces(data))
       .catch((error) => console.error("Greska pri dohvatanju lokacija", error));

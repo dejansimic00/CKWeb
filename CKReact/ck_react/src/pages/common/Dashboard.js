@@ -17,43 +17,34 @@ const Dashboard = () => {
   const [camps, setCamps] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
   const [places, setPlaces] = useState([]);
-  const [assignments, setAssignments] = useState([]);
+  const [assignments, setAssignments] = useState();
   const [selectedCamp, setSelectedCamp] = useState("");
   const [token, setToken] = useState();
-  const [tokenReady, setTokenReady] = useState(false); 
-
+  const [tokenReady, setTokenReady] = useState(false);
+  const [nonAdminCampName, setNonAdminCampName] = useState("Summer Camp 2024");
   const { user } = useUser();
   const { getItem } = useSessionStorage();
 
+  // useEffect(() => {
+  //   const checkToken = () => {
+  //     const tokenFromStorage = getItem("token");
+  //     if (tokenFromStorage) {
+  //       setTokenReady(true);
+  //       setToken(tokenFromStorage);
+  //     } else {
+  //       setTimeout(checkToken, 1000); // Check again after 1 second
+  //     }
+  //   };
 
-   useEffect(() => {
-    const checkToken = () => {
-      const tokenFromStorage = getItem("token");
-      console.log("TEST", tokenFromStorage);
-      if (tokenFromStorage) {
-        setTokenReady(true);
-        setToken(tokenFromStorage);
-      } else {
-        setTimeout(checkToken, 1000); // Check again after 1 second
-      }
-};
-
-
-    // Call tghe function initially
-    checkToken();
-
-  }, []);
+  //   checkToken();
+  // }, []);
 
   // Dohvatanje podataka iz 3 razlicite tabele u bazi i skladistenje u stanja
   useEffect(() => {
-
-     return;
-
-    console.log("SRBIJAAAAAAAAAAAAA", token);
     fetch(API_URLS.CAMPS, {
-      headers:{
-          "Autorization": `Bearer ${getItem("token")}`
-      }
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
     })
       .then((response) => response.json())
       .then((newData) => {
@@ -62,11 +53,9 @@ const Dashboard = () => {
       .catch((error) => console.error("Error fetching data:", error));
 
     fetch(API_URLS.MUNICIPALITIES, {
-      headers:{
-        
-          "Autorization": `Bearer ${getItem("token")}`
-        
-      }
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
     })
       .then((response) => response.json())
       .then((newData) => {
@@ -75,11 +64,9 @@ const Dashboard = () => {
       .catch((error) => console.error("Error fetching data:", error));
 
     fetch(API_URLS.PLACES, {
-      headers:{
-        
-          "Autorization": `Bearer ${getItem("token")}`
-        
-      }
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
     })
       .then((response) => response.json())
       .then((newData) => {
@@ -87,7 +74,11 @@ const Dashboard = () => {
       })
       .catch((error) => console.error("Error fetching data:", error));
 
-    fetch(API_URLS.ASSIGNMENTS)
+    fetch(API_URLS.ASSIGNMENTS, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((newData) => {
         setAssignments(newData);
@@ -120,8 +111,19 @@ const Dashboard = () => {
         ),
       },
     ]);
-  }, [tokenReady]);
 
+    setIsAdmin(getItem("isAdmin"));
+  }, []);
+
+  useEffect(() => {
+    if (assignments) {
+      setNonAdminCampName(
+        assignments.find(
+          (ass) => ass.employeeId === Number.parseInt(getItem("id"))
+        )?.campName
+      );
+    }
+  }, [assignments]);
 
   const handleDetailsClick = (camp) => {
     setSelectedCamp(camp);
@@ -167,17 +169,21 @@ const Dashboard = () => {
         </div>
       )}
 
-      {isAdmin && showCampStatistics && (
+      {isAdmin && showCampStatistics && assignments && (
         <CampDashboard
           campName={selectedCamp.name}
           admin={true}
           adminBackButton={() => setShowCampStatistics(false)}
+          assignments={assignments}
         ></CampDashboard>
       )}
-      {!isAdmin && (
+      {!isAdmin && assignments && (
         <div>
           {/* Ovje dodati ime kampa na kojem je volonter zaduzen */}
-          <CampDashboard campName={"Summer Camp 2024"}></CampDashboard>
+          <CampDashboard
+            campName={nonAdminCampName}
+            assignments={assignments}
+          ></CampDashboard>
         </div>
       )}
     </>

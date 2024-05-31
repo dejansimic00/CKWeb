@@ -7,6 +7,7 @@ import theme from "../../styles/colors";
 import Button from "../Button/Button";
 import { MenuItem, Select } from "@mui/material";
 import API_URLS from "../../utils/api";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const style = {
   position: "absolute",
@@ -24,21 +25,17 @@ const AssignmentModal = ({
 }) => {
   const handleClose = () => setOpen(false);
   const [selectedCamp, setSelectedCamp] = new useState();
+  const { getItem } = useSessionStorage();
 
   useEffect(() => {
     console.log("Selected camp iz usee", selectedCamp);
   }, []);
 
   const handleAssignClick = (e) => {
-    //console.log("assignments", assignments);
-    //console.log("volonterDAta", volunteerData);
-
     const volunteerAssingmnet = assignments.find(
       (ass) => ass.employeeJmbg === volunteerData.jmbg
     );
     const newStartDate = new Date();
-
-    //console.log("volASS", volunteerAssingmnet);
 
     const dataForPost = {
       startDate: newStartDate,
@@ -46,12 +43,12 @@ const AssignmentModal = ({
       employeeId: volunteerData.id,
       campId: selectedCamp.id,
     };
-    console.log("dataForPost", dataForPost);
     if (volunteerAssingmnet) {
-      //console.log("Assignment postoji, ide PUT");
       fetch(API_URLS.ASSIGNMENTS + "/" + volunteerAssingmnet.id, {
         method: "PUT",
+
         headers: {
+          Authorization: `Bearer ${getItem("token")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dataForPost),
@@ -63,6 +60,7 @@ const AssignmentModal = ({
       fetch(API_URLS.ASSIGNMENTS, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${getItem("token")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dataForPost),
@@ -71,7 +69,7 @@ const AssignmentModal = ({
       });
     }
 
-    //setOpen(false); // Close the modal
+    setOpen(false);
   };
 
   return (

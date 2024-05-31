@@ -2,20 +2,30 @@ import { React, useState, useEffect } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import API_URLS from "../../utils/api";
 import dayjs from "dayjs";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
-const CampLineChart = ({ campName }) => {
+const CampLineChart = ({ campName, residencePeriod }) => {
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]);
   const [values, setValues] = useState([]);
+  const { getItem } = useSessionStorage();
+
+  // useEffect(() => {
+  //   fetch(API_URLS.RESIDENCE_PERIOD, {
+  //     headers: {
+  //       Authorization: `Bearer ${getItem("token")}`,
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => setData(data))
+  //     .catch((error) =>
+  //       console.error("Greska pri dohvatanju drzava iz baze:", error)
+  //     );
+  // }, []);
 
   useEffect(() => {
-    fetch(API_URLS.RESIDENCE_PERIOD)
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) =>
-        console.error("Greska pri dohvatanju drzava iz baze:", error)
-      );
-  }, []);
+    setData(residencePeriod);
+  }, [residencePeriod]);
 
   useEffect(() => {
     if (data) {

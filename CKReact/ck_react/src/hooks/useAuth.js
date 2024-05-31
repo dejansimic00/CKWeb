@@ -5,7 +5,7 @@ import { useSessionStorage } from "./useSessionStorage";
 
 export const useAuth = () => {
   const { user, addUser, removeUser, setUser } = useUser();
-  const { getItem } = useSessionStorage();
+  const { getItem, removeItem } = useSessionStorage();
 
   useEffect(() => {
     const storedUser = getItem("user");
@@ -23,6 +23,12 @@ export const useAuth = () => {
   };
 
   const logout = () => {
+    // removeItem ("user")
+    // removeItem ("jmbg")
+    // removeItem ("name")
+    // removeItem ("isAdmin")
+    sessionStorage.clear();
+    removeItem("user");
     removeUser();
   };
 

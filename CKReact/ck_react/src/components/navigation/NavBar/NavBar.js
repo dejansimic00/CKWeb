@@ -1,59 +1,67 @@
 import { React, useState, useContext, useEffect } from "react";
-import logo from "../../../assets/images/logo.png";
-import resident from "../../../assets/images/resident.png";
-import archive from "../../../assets/images/archive.png";
-import dashboard from "../../../assets/images/dashboard.png";
+import logoImg from "../../../assets/images/logo.png";
+import residentImg from "../../../assets/images/resident.png";
+import archiveImg from "../../../assets/images/archive.png";
+import dashboardImg from "../../../assets/images/dashboard.png";
 import NavButton from "../NavButton/NavButton";
 import LogOutButton from "../../LogOutButton/LogOutButton";
 import { useAuth } from "../../../hooks/useAuth";
-import { useLocalStorage } from "../../../hooks/useLocalStorage";
 import LoggedUser from "../../LoggedUser/LoggedUser";
 import theme from "../../../styles/colors";
+import { useSessionStorage } from "../../../hooks/useSessionStorage";
+import notificationImg from "../../../assets/images/notification.png";
 
 function NavBar({ user }) {
   const [selectedPage, setSelectedPage] = useState("dashboard");
   const { logout } = useAuth();
   const [loggedIn, setLoggedIn] = useState(true);
-  const { getItem } = useLocalStorage();
+  const { getItem, setItem } = useSessionStorage();
 
   const handleMouseClick = (event, selected) => {
-    console.log(selected);
     setSelectedPage(selected);
+    setItem("selectedPage", selected);
   };
 
   return (
     <>
       {loggedIn && (
         <nav
-          className="flex flex-col  h-screen min-w-60 mr-4"
+          className="flex flex-col sticky top-0 h-screen min-w-60 mr-4"
           style={{ background: theme.colors.nav_bg }}
         >
           <div className="flex flex-col items-center p-2 mt-4">
-            <img src={logo} className="w-12 h-12 mr-2" alt="Logo"></img>
+            <img src={logoImg} className="w-12 h-12 mr-2" alt="Logo"></img>
             <p className="font-medium text-2xl">eKamp</p>
           </div>
           <div className="flex flex-col justify-between h-full">
             <div>
               <NavButton
-                icon={dashboard}
+                icon={dashboardImg}
                 text="Izvjestaj"
                 isActive={selectedPage === "dashboard"}
                 to="/dashboard"
                 onAction={(event) => handleMouseClick(event, "dashboard")}
               ></NavButton>
               <NavButton
-                icon={resident}
+                icon={residentImg}
                 text="User"
                 isActive={selectedPage === "residents"}
                 to="/residents"
                 onAction={(event) => handleMouseClick(event, "residents")}
               ></NavButton>
               <NavButton
-                icon={archive}
+                icon={archiveImg}
                 text="Arhiva"
                 isActive={selectedPage === "archive"}
                 to="/archive"
                 onAction={(event) => handleMouseClick(event, "archive")}
+              ></NavButton>
+              <NavButton
+                icon={notificationImg}
+                text="Obavjestenje"
+                isActive={selectedPage === "notification"}
+                to="/notification"
+                onAction={(event) => handleMouseClick(event, "notification")}
               ></NavButton>
             </div>
             <LoggedUser

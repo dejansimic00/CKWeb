@@ -7,6 +7,7 @@ import PlaceModal from "../../components/Modal/PlaceModal";
 import editImg from "../../assets/images/edit.png";
 import deleteImg from "../../assets/images/delete.png";
 import DeletePlaceModal from "../../components/Modal/DeletePlaceModal";
+import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const Place = () => {
   const [data, setData] = useState([]);
@@ -18,10 +19,17 @@ const Place = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const selectedRowRef = useRef(null);
   const [municipalities, setMunicipalities] = useState([]);
+  const { getItem } = useSessionStorage();
 
   useEffect(() => {
     // Fetch places data
-    fetch(API_URLS.PLACES)
+
+    console.log("TOKEN", getItem("token"));
+    fetch(API_URLS.PLACES, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Places Data: ", data); // Check if data is fetched correctly
@@ -30,7 +38,11 @@ const Place = () => {
       .catch((error) => console.error("Error fetching places", error));
 
     // Fetch municipalities data
-    fetch(API_URLS.MUNICIPALITIES)
+    fetch(API_URLS.MUNICIPALITIES, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Municipalities Data: ", data); // Check if municipalities data is fetched correctly
@@ -60,7 +72,6 @@ const Place = () => {
       },
     ]);
   }, []);
-
 
   const handleRowSelection = (selected) => {
     const row = data.find((row) => row.id === selected[0]);
@@ -173,7 +184,6 @@ const Place = () => {
           }))}
           onRowSelectionModelChange={handleRowSelection}
         />
-
       </div>
     </div>
   );

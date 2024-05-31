@@ -20,23 +20,26 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
-const VolunteerModal = ({
+const ResidentModal = ({
   open,
   setOpen,
   mode = "add",
-  volunteerData = {},
+  residentData = {},
   countries,
+  campId,
 }) => {
   const [formData, setFormData] = React.useState({
-    firstName: volunteerData?.firstName ?? "",
-    lastName: volunteerData?.lastName ?? "",
-    dateOfBirth: volunteerData?.dateOfBirth ?? "",
-    sex: volunteerData?.sex ?? "F",
-    countryId: volunteerData?.countryId ?? "",
-    jmbg: volunteerData?.jmbg ?? "",
-    username: volunteerData?.username ?? "",
-    password: volunteerData?.password ?? "",
+    firstName: residentData?.firstName ?? "",
+    lastName: residentData?.lastName ?? "",
+    dateOfBirth: residentData?.dateOfBirth ?? "",
+    sex: residentData?.sex ?? "F",
+    jmbg: residentData?.jmbg ?? "",
+    countryId: residentData?.countryId ?? "",
+    needsHospitalisation: residentData?.needsHospitalisation ?? "",
+    employeeId: residentData?.employeeId ?? "",
   });
+
+  const [residencePeriodData, setResidencePeriodData] = useState();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { getItem } = useSessionStorage();
@@ -46,19 +49,38 @@ const VolunteerModal = ({
     setFormData({ ...formData, [id]: value });
   };
 
+  useEffect(() => {
+    setFormData({ ...formData, employeeId: getItem("id") });
+    setResidencePeriodData({
+      startDate: "2024-07-01T06:00:00.000+00:00",
+      endDate: null,
+      campId: campId,
+    });
+  }, []);
+
   // ------------------------------------------------ slanje zahtjeva
   const handleSubmit = async (event) => {
     //event.preventDefault();
 
-    const url =
-      mode === "add"
-        ? API_URLS.EMPLOYEES
-        : `${API_URLS.EMPLOYEES}/${volunteerData.id}`;
-    const method = mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
+    console.log("residentData", formData);
 
+    const url1 =
+      mode === "add"
+        ? API_URLS.RESIDENTS
+        : `${API_URLS.RESIDENTS}/${residentData.id}`;
+    const method1 = mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
+
+    const url2 = API_URLS.RESIDENCE_PERIOD;
+    //   mode === "add"
+    //     ? API_URLS.RESIDENCE_PERIOD
+    //     : `${API_URLS.RESIDENCE_PERIOD}/${residentData.id}`;
+    const method2 = "POST"; //= mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
+
+    console.log(formData, "formData");
+    console.log(residencePeriodData, "residencePeriodData");
     try {
-      const response = await fetch(url, {
-        method: method,
+      const response1 = await fetch(url1, {
+        method: method1,
         headers: {
           Authorization: `Bearer ${getItem("token")}`,
           "Content-Type": "application/json",
@@ -66,7 +88,28 @@ const VolunteerModal = ({
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) {
+      if (!response1.ok) {
+        throw new Error(
+          `Failed to ${mode === "add" ? "register" : "update"} employee`
+        );
+      }
+
+      const data1 = await response1.json(); // Parse the response JSON
+      const residentId = data1.id; // Extract the ID from the parsed data
+
+      console.log(await response1.id);
+      setResidencePeriodData({ ...residencePeriodData, id: response1.id });
+
+      const response2 = await fetch(url2, {
+        method: method2,
+        headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...residencePeriodData, residentId }),
+      });
+
+      if (!response2.ok) {
         throw new Error(
           `Failed to ${mode === "add" ? "register" : "update"} employee`
         );
@@ -155,7 +198,7 @@ const VolunteerModal = ({
                   <MenuItem value="w">Ženski</MenuItem>
                 </Select>
               </div>
-              {/** ---------------------drzava---------------------------------- */}
+              {/* ---------------------drzava----------------------------------*/}
               <div className="flex flex-col w-full items-start">
                 <p className="self-start font-bold">Država</p>
                 <Select
@@ -172,7 +215,7 @@ const VolunteerModal = ({
                   }
                 >
                   <MenuItem key={-1} value={-1}>
-                    {"Izaberi"}
+                    {"Izaber    i"}
                   </MenuItem>
                   {countries.map((country) => (
                     <MenuItem value={country.id}>{country.name}</MenuItem>
@@ -187,21 +230,36 @@ const VolunteerModal = ({
                 value={formData.jmbg}
                 onChange={handleChange}
               ></Input>
-              {/** ---------------------username---------------------------------- */}
-              <Input
-                id="username"
-                placeholder="korisničko ime"
-                value={formData.username}
-                onChange={handleChange}
-              ></Input>
-              {/** ---------------------password---------------------------------- */}
-              <Input
-                id="password"
-                placeholder="lozinka"
-                value={formData.password}
-                onChange={handleChange}
-                type="password"
-              ></Input>
+              {/* ---------------------hospitalizacija----------------------------------*/}
+              <div className="flex flex-col w-full items-start">
+                <p className="self-start font-bold">Hospitalizacija</p>
+                <Select
+                  defaultValue={-1}
+                  className="min-w-48"
+                  sx={{
+                    ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
+                      border: "2px solid black",
+                      borderRadius: "12px",
+                    },
+                  }}
+                  onChange={(event) =>
+                    setFormData({
+                      ...formData,
+                      needsHospitalisation: event.target.value,
+                    })
+                  }
+                >
+                  <MenuItem key={-1} value={-1}>
+                    {"Izaberi"}
+                  </MenuItem>
+                  <MenuItem key={1} value={1}>
+                    {"Da"}
+                  </MenuItem>
+                  <MenuItem key={0} value={0}>
+                    {"Ne"}
+                  </MenuItem>
+                </Select>
+              </div>
               <Button
                 text={mode === "add" ? "Dodaj" : "Sačuvaj"} // Change button text based on mode
                 type="submit"
@@ -215,4 +273,4 @@ const VolunteerModal = ({
   );
 };
 
-export default VolunteerModal;
+export default ResidentModal;

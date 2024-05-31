@@ -10,7 +10,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 function Login() {
   const { login } = useAuth();
-  const {setItem} = useSessionStorage()
+  const { setItem, getItem } = useSessionStorage();
   const navigate = useNavigate();
 
   // State for storing input values
@@ -21,26 +21,25 @@ function Login() {
     "Korisnicko ime i lozinka netacni!"
   );
 
-
-  const handleSuccessfulLogin = async (response) =>{
+  const handleSuccessfulLogin = async (response) => {
     // Handle successful login
-        const responseData = await response.json(); // Parse JSON response
-        setErrorText("");
-        setError(false);
-        const isAdmin = responseData.role === "ADMIN";
-        // login({
-        //   jmbg: responseData.jmbg,
-        //   name: responseData.username,
-        //   isAdmin: isAdmin,
-        //   token: responseData.token
-        // });
+    const responseData = await response.json(); // Parse JSON response
+    setErrorText("");
+    setError(false);
+    const isAdmin = responseData.role === "ADMIN";
+    // login({
+    //   jmbg: responseData.jmbg,
+    //   name: responseData.username,
+    //   isAdmin: isAdmin,
+    //   token: responseData.token
+    // });
 
-        setItem("jmbg", responseData.jmbg)
-        setItem("name", responseData.username)
-        setItem("isAdmin", isAdmin)
-        setItem("token", responseData.token)
-        
-  }
+    setItem("jmbg", responseData.jmbg);
+    setItem("name", responseData.username);
+    setItem("isAdmin", isAdmin);
+    setItem("token", responseData.token);
+    setItem("id", responseData.id);
+  };
 
   // Function to handle form submission
   const handleSubmit = async (event) => {
@@ -49,14 +48,15 @@ function Login() {
       const response = await fetch(API_URLS.LOGIN, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+
           "Content-Type": "application/json",
         },
-        
+
         body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
-        
         /** Handle successful login
         const responseData = await response.json(); // Parse JSON response
         setErrorText("");
@@ -73,8 +73,10 @@ function Login() {
           
         }, timeout);
         */
-       handleSuccessfulLogin(response);
-        navigate("/dashboard"); // Redirect to dashboard after successful login
+        handleSuccessfulLogin(response);
+        setTimeout(() => {
+          navigate("/dashboard"); // Redirect to dashboard after successful login
+        }, 10);
       } else {
         setErrorText("Neispravni podaci za prijavu");
         setError(true);

@@ -8,11 +8,12 @@ export default function DataTable({
   onRowSelectionModelChange,
 }) {
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div className="w-[100%] ">
       <DataGrid
         rows={rows}
         columns={columns}
         selection
+        autoHeight={true}
         onFilterModelChange={onFilterModelChange}
         onRowSelectionModelChange={onRowSelectionModelChange}
         // slots={{
@@ -23,7 +24,7 @@ export default function DataTable({
             paginationModel: { page: 0, pageSize: 5 },
           },
         }}
-        pageSizeOptions={[5, 10]}
+        pageSizeOptions={[5, 10, 15]}
       />
     </div>
   );

@@ -12,12 +12,13 @@ import { useLocalStorage } from "../../../hooks/useLocalStorage";
 import LoggedUser from "../../LoggedUser/LoggedUser";
 import theme from "../../../styles/colors";
 import NavBar from "./NavBar";
+import { useSessionStorage } from "../../../hooks/useSessionStorage";
 
 function AdminNavBar() {
   const [selectedPage, setSelectedPage] = useState("");
   const { user, logout } = useAuth();
   const [loggedIn, setLoggedIn] = useState(true);
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem, setItem } = useSessionStorage();
   const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
@@ -30,9 +31,9 @@ function AdminNavBar() {
   }, []);
 
   useEffect(() => {
-    let user = JSON.parse(getItem("user"));
-    setAdmin(Boolean(user.isAdmin));
-    setLoggedIn(user !== null && user !== undefined);
+    let isAdmin = JSON.parse(getItem("isAdmin"));
+    setAdmin(Boolean(isAdmin));
+    setLoggedIn(getItem("jmbg") != null);
   }, [user]);
 
   const handleMouseClick = (event, selected) => {
