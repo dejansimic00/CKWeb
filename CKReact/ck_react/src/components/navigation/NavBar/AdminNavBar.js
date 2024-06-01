@@ -57,7 +57,7 @@ function AdminNavBar() {
             <div>
               <NavButton
                 icon={dashboard}
-                text="Izvjestaj"
+                text="Izvještaj"
                 isActive={selectedPage === "dashboard"}
                 to="/dashboard"
                 onAction={(event) => handleMouseClick(event, "dashboard")}
@@ -94,7 +94,7 @@ function AdminNavBar() {
               ></NavButton>
               <NavButton
                 icon={notification}
-                text="Obavjestenje"
+                text="Obavještenje"
                 isActive={selectedPage === "notification"}
                 to="/notification"
                 onAction={(event) => handleMouseClick(event, "notification")}

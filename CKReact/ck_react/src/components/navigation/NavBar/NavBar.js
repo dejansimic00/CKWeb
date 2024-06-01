@@ -37,14 +37,14 @@ function NavBar({ user }) {
             <div>
               <NavButton
                 icon={dashboardImg}
-                text="Izvjestaj"
+                text="Izvještaj"
                 isActive={selectedPage === "dashboard"}
                 to="/dashboard"
                 onAction={(event) => handleMouseClick(event, "dashboard")}
               ></NavButton>
               <NavButton
                 icon={residentImg}
-                text="User"
+                text="Unesrećeni"
                 isActive={selectedPage === "residents"}
                 to="/residents"
                 onAction={(event) => handleMouseClick(event, "residents")}
@@ -58,7 +58,7 @@ function NavBar({ user }) {
               ></NavButton>
               <NavButton
                 icon={notificationImg}
-                text="Obavjestenje"
+                text="Obavještenje"
                 isActive={selectedPage === "notification"}
                 to="/notification"
                 onAction={(event) => handleMouseClick(event, "notification")}

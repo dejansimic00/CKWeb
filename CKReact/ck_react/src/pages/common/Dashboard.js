@@ -3,9 +3,7 @@ import API_URLS from "../../utils/api";
 import React, { useEffect, useState } from "react";
 import CampDashboard from "../../components/CampDashboard/CampDashboard";
 import detailsImg from "../../assets/images/details.png";
-import { useAuth } from "../../hooks/useAuth";
 import { useUser } from "../../hooks/useUser";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
 
 const Dashboard = () => {
@@ -163,7 +161,7 @@ const Dashboard = () => {
     <>
       {isAdmin && !showCampStatistics && (
         <div className="flex flex-col items-center w-full">
-          <h1>Data Table Example</h1>
+          <h1 className="text-3xl py-10">Izvještaj</h1>
           <div className="">
             <DataTable
               columns={columns}

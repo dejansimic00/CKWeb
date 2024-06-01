@@ -19,6 +19,7 @@ export default function DataTable({
         // slots={{
         //   toolbar: GridToolbar,
         // }}
+
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 10 },

@@ -165,7 +165,7 @@ const Place = () => {
               type="text"
               className="bg-transparent w-full outline-none pl-2"
               onChange={handleSearchTextChange}
-              placeholder="Search ..."
+              placeholder="Pretraži  ..."
             />
           </div>
           <Button

@@ -70,79 +70,72 @@ const AssignmentModal = ({
   };
 
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <div
-            className="w-90 rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
-            style={{
-              background: theme.colors.modal_bg,
-              maxHeight: "100vh",
-              overflowY: "auto",
-
-              WebkitScrollbar: {
-                width: "0",
-              },
-              scrollbarWidth: "none",
-            }}
-          >
-            <Typography variant="h6" id="modal-modal-title" component="h2">
-              Da li ste sigurni?
-            </Typography>
-            <div>
-              Ime:
-              {volunteerData.firstName}
-            </div>
-
-            <div>
-              JMBG:
-              {volunteerData.jmbg}
-            </div>
-            {/** ---------------------kamp---------------------------------- */}
-            <div className="flex flex-col w-full items-start">
-              <p className="self-start font-bold">Kamp</p>
-              <Select
-                value={selectedCamp?.id ?? -1}
-                className="min-w-48"
-                sx={{
-                  ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
-                    border: "2px solid black",
-                    borderRadius: "12px",
-                  },
-                }}
-                onChange={(event) => {
-                  //console.log(camps.find((c) => c.id == event.target.value));
-                  setSelectedCamp(
-                    camps.find((c) => c.id == event.target.value)
-                  );
-                }}
-              >
-                <MenuItem key={-1} value={-1}>
-                  {"Izaberi"}
-                </MenuItem>
-                {camps.map((camp) => (
-                  <MenuItem value={camp.id}>{camp.name}</MenuItem>
-                ))}
-              </Select>
-            </div>
-            <div className="flex space-x-4">
-              <Button
-                text={"Da"}
-                onClick={handleAssignClick}
-                type="submit"
-                style={{ marginRight: "10px" }}
-              />
-              <Button text={"Ne"} onClick={handleClose} />
-            </div>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <div
+          className="flex flex-col items-center p-6 rounded-3xl border-3 border-black"
+          style={{
+            background: theme.colors.modal_bg,
+            maxHeight: "100vh",
+            overflowY: "auto",
+          }}
+        >
+          <Typography variant="h6" id="modal-modal-title" component="h2">
+            Da li ste sigurni?
+          </Typography>
+          <div className="w-full my-2 flex justify-between">
+            <Typography variant="body1">Ime:</Typography>
+            <Typography variant="body1">{volunteerData.firstName}</Typography>
           </div>
-        </Box>
-      </Modal>
-    </div>
+          <div className="w-full my-2 flex justify-between">
+            <Typography variant="body1">JMBG:</Typography>
+            <Typography variant="body1">{volunteerData.jmbg}</Typography>
+          </div>
+
+          <div className="flex flex-col w-full items-start my-2">
+            <Typography variant="body1" className="font-bold">
+              Kamp
+            </Typography>
+            <Select
+              value={selectedCamp?.id ?? -1}
+              className="w-full"
+              sx={{
+                ".MuiOutlinedInput-notchedOutline": {
+                  border: "2px solid black",
+                  borderRadius: "12px",
+                },
+              }}
+              onChange={(event) =>
+                setSelectedCamp(camps.find((c) => c.id == event.target.value))
+              }
+            >
+              <MenuItem key={-1} value={-1}>
+                Izaberi
+              </MenuItem>
+              {camps.map((camp) => (
+                <MenuItem key={camp.id} value={camp.id}>
+                  {camp.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
+          <div className="flex space-x-4 mt-4">
+            <Button
+              text="Da"
+              onClick={handleAssignClick}
+              type="submit"
+              style={{ marginRight: "10px" }}
+            />
+            <Button text="Ne" onClick={handleClose} />
+          </div>
+        </div>
+      </Box>
+    </Modal>
   );
 };
 

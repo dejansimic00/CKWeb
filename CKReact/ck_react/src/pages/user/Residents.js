@@ -163,13 +163,6 @@ const Residence = () => {
     }, 1);
   };
 
-  const handleAssignClick = (row) => {
-    setSelectedRow(row);
-    setTimeout(() => {
-      setEditAssignmentModal(true);
-    }, 1);
-  };
-
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
   };
@@ -208,7 +201,7 @@ const Residence = () => {
 
   return (
     <div className="flex flex-col items-center w-full pt-10">
-      <h1>USERI U KAMPU {campName}</h1>
+      <h1>Unesreceni u kampu {campName}</h1>
       {newResidentModal && (
         <ResidentModal
           open={newResidentModal}
@@ -254,7 +247,7 @@ const Residence = () => {
               type="text"
               className="bg-transparent w-full outline-none pl-2"
               onChange={handleSearchTextChange}
-              placeholder="Pretrazi ..."
+              placeholder="Pretraži ..."
             ></input>
           </div>
           <Button

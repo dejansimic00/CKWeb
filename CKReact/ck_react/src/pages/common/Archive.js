@@ -84,7 +84,7 @@ function Archive() {
               type="text"
               className="bg-transparent w-full outline-none pl-2"
               onChange={handleSearchTextChange}
-              placeholder="Pretrazi ..."
+              placeholder="Pretraži ..."
             ></input>
           </div>
         </div>

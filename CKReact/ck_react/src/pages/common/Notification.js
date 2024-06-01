@@ -74,14 +74,13 @@ const Notification = () => {
 
   return (
     <div className="flex justify-between p-4">
-      {/* Left Div: Add New Notification */}
       <div className="flex flex-col w-1/3 p-4 border-r border-gray-300">
-        <h2 className="text-xl font-bold mb-4">Add New Notification</h2>
+        <h2 className="text-xl font-bold mb-4">Novo obavještenje</h2>
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="notification"
         >
-          Notification Text
+          Sadržaj obavještenja:
         </label>
         <textarea
           id="notification"
@@ -90,16 +89,15 @@ const Notification = () => {
           onChange={(e) => setNewNotification(e.target.value)}
         />
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           onClick={handleAddNotification}
         >
-          Add Notification
+          Pošalji
         </button>
       </div>
 
-      {/* Right Div: Notifications Table */}
       <div className="flex flex-col w-2/3 p-4">
-        <h2 className="text-xl font-bold mb-4">Recent Notifications</h2>
+        <h2 className="text-xl font-bold mb-4">Najnovija obavještenja</h2>
         <DataTable
           columns={columns}
           rows={notifications}
