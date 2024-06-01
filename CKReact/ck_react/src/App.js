@@ -40,10 +40,10 @@ function MainLayout() {
       {/* Conditionally render AdminNavBar based on the current path */}
       {location.pathname !== "/login" && <AdminNavBar />}
 
-      <div className="w-full">
+      <div className="w-full ">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/settings" element={<Settings />} />
+          {/* <Route path="/settings" element={<Settings />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/archive" element={<Archive />} />
           <Route path="/residents" element={<Residents />} />

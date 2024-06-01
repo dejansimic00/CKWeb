@@ -88,7 +88,9 @@ function Archive() {
             ></input>
           </div>
         </div>
-        <DataTable columns={[...columns]} rows={filteredData} />
+        <div className="w-full overflow-x-auto">
+          <DataTable columns={[...columns]} rows={filteredData} />
+        </div>
       </div>
     </div>
   );

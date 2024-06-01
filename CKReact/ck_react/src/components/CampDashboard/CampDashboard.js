@@ -1,10 +1,11 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import API_URLS from "../../utils/api";
 import dayjs from "dayjs";
 import CampLineChart from "../Chart/CampLineChart";
 import CampPieChart from "../Chart/CampPieChart";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
+import { useMediaQuery } from "@mui/material"; // Step 1
 
 const CampDashboard = ({
   campName,
@@ -27,6 +28,9 @@ const CampDashboard = ({
   const [averageStay, setAverageStay] = useState(0);
   const [volNumber, setVolNumber] = useState(0);
   const [resNumber, setResNumber] = useState(0);
+
+  // Step 2: Determine screen size using useMediaQuery
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     fetch(API_URLS.RESIDENCE_PERIOD, {
@@ -129,13 +133,12 @@ const CampDashboard = ({
       <div className="flex flex-col w-full max-w-4xl space-y-8">
         <div className="flex flex-col space-y-2">
           <div className="font-semibold">Ime kampa: {campName}</div>
-          {/* <div>Datum otvaranja: {"DODATI NA BEKEND"}</div> */}
           <div>Broj volontera : {volNumber}</div>
           <div>Broj unesrećenih : {resNumber}</div>
           <div>Prosječno trajanje boravka: {averageStay.toFixed(2)} dana</div>
         </div>
         <hr className="border-t-2 border-gray-300" />
-        <div className="flex justify-around space-x-10">
+        <div className="flex  flex-col sm:flex-row justify-around space-x-10">
           <CampPieChart
             title="Muška populacija"
             data={maleResidents}
@@ -146,15 +149,18 @@ const CampDashboard = ({
             title="Ženska populacija"
             data={femaleResidents}
             width={350}
+            className="w-20"
             endColor="#ed44fc"
           />
         </div>
         <hr className="border-t-2 border-gray-300" />
         <div>
           <div className="font-semibold mb-2">Pristizanja po danima</div>
+          {/* Step 3: Pass isMobile to CampLineChart */}
           <CampLineChart
             campName={campName}
             residencePeriod={residencePeriod}
+            isMobile={isMobile}
           />
         </div>
       </div>

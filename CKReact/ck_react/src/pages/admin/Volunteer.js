@@ -305,11 +305,13 @@ const Volunteer = () => {
             plusSign={true}
           ></Button>
         </div>
-        <DataTable
-          columns={[...columns]}
-          rows={filteredData}
-          onRowSelectionModelChange={handleRowSelection}
-        />
+        <div className="w-full overflow-x-auto">
+          <DataTable
+            columns={[...columns]}
+            rows={filteredData}
+            onRowSelectionModelChange={handleRowSelection}
+          />
+        </div>
       </div>
     </div>
   );

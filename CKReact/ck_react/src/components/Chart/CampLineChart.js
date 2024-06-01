@@ -2,26 +2,14 @@ import { React, useState, useEffect } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import API_URLS from "../../utils/api";
 import dayjs from "dayjs";
+import { useMediaQuery } from "@mui/material";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
 
-const CampLineChart = ({ campName, residencePeriod }) => {
+const CampLineChart = ({ campName, residencePeriod, isMobile }) => {
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]);
   const [values, setValues] = useState([]);
   const { getItem } = useSessionStorage();
-
-  // useEffect(() => {
-  //   fetch(API_URLS.RESIDENCE_PERIOD, {
-  //     headers: {
-  //       Authorization: `Bearer ${getItem("token")}`,
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => setData(data))
-  //     .catch((error) =>
-  //       console.error("Greska pri dohvatanju drzava iz baze:", error)
-  //     );
-  // }, []);
 
   useEffect(() => {
     setData(residencePeriod);
@@ -52,6 +40,7 @@ const CampLineChart = ({ campName, residencePeriod }) => {
   };
   return (
     <LineChart
+      className={isMobile ? "w-10 h-10" : "w-20 h-20"}
       xAxis={[
         {
           data: keys,
@@ -72,8 +61,8 @@ const CampLineChart = ({ campName, residencePeriod }) => {
           valueFormatter: formatCount,
         },
       ]}
-      width={800}
-      height={400}
+      width={isMobile ? 400 : 800} // Adjust width based on isMobile prop
+      height={isMobile ? 200 : 400} // Adjust height based on isMobile prop
       colors={["#ff0000"]}
     />
   );
