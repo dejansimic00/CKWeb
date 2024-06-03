@@ -41,7 +41,6 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("DATA", data);
         setResidencePeriod(data);
       })
       .catch((error) => console.error("Error fetching data:", error));
@@ -53,7 +52,9 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => setResidents(data))
-      .catch((error) => console.error("Greška pri dohvatanju podataka:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka:", error)
+      );
 
     fetch(API_URLS.ASSIGNMENTS, {
       headers: {
@@ -62,7 +63,9 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => setAssignments(data))
-      .catch((error) => console.error("Greška pri dohvatanju podataka:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka:", error)
+      );
 
     fetch(API_URLS.COUNTRIES, {
       headers: {
@@ -71,7 +74,9 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => setCountries(data))
-      .catch((error) => console.error("Greška pri dohvatanju podataka:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka:", error)
+      );
 
     fetch(API_URLS.CAMPS, {
       headers: {
@@ -99,7 +104,6 @@ const Residence = () => {
         },
       },
       { field: "employeeJmbg", headerName: "JMBG Zaposlenog", width: 150 },
-      // Add actions column if needed
       {
         field: "actions",
         headerName: "Akcije",
@@ -139,10 +143,7 @@ const Residence = () => {
       if (!ass) {
         setCampName("");
       } else {
-        //console.log("ass.campName", ass.campName);
         setCampName(ass.campName);
-
-        console.log("ASSSSSSSSSSS", ass);
 
         const camp = camps?.find((c) => c.name === ass.campName);
         setCampId(camp.id);
@@ -152,10 +153,7 @@ const Residence = () => {
 
   useEffect(() => {
     if (residents.length > 0 && residencePeriod.length > 0 && campName) {
-      residencePeriod.forEach((e) => console.log(e));
-
       const newResidencePeriod = residencePeriod.filter((resP) => {
-        console.log("RESP", resP);
         return resP.campName === campName;
       });
 
@@ -169,8 +167,6 @@ const Residence = () => {
           }
         }
       });
-
-      //console.log("newResidencePeriod", newResidencePeriod);
 
       setData(newData); // Update state once with the new data array
     }
