@@ -59,13 +59,16 @@ const CampDashboard = ({
   useEffect(() => {
     if (assignments) {
       setCurrentCampVolunteers(
-        assignments.filter((vol) => vol.campName === campName)
+        assignments.filter(
+          (vol) => vol.campName === campName && vol.endDate === null
+        )
       );
     }
   }, [assignments]);
 
   useEffect(() => {
     const x = currentCampVolunteers?.length;
+    console.log("CCV", currentCampVolunteers);
     setVolNumber(x);
   }, [currentCampVolunteers]);
 

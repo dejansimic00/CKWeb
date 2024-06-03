@@ -52,7 +52,7 @@ const ResidentModal = ({
   useEffect(() => {
     setFormData({ ...formData, employeeId: getItem("id") });
     setResidencePeriodData({
-      startDate: "2024-07-01T06:00:00.000+00:00",
+      startDate: new Date().toISOString(),
       endDate: null,
       campId: campId,
     });
@@ -60,9 +60,7 @@ const ResidentModal = ({
 
   // ------------------------------------------------ slanje zahtjeva
   const handleSubmit = async (event) => {
-    //event.preventDefault();
-
-    console.log("residentData", formData);
+    event.preventDefault();
 
     const url1 =
       mode === "add"
@@ -78,6 +76,7 @@ const ResidentModal = ({
 
     console.log(formData, "formData");
     console.log(residencePeriodData, "residencePeriodData");
+
     try {
       const response1 = await fetch(url1, {
         method: method1,

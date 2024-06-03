@@ -30,6 +30,7 @@ const Residence = () => {
   const { getItem } = useSessionStorage();
   const [campName, setCampName] = useState();
   const [countries, setCountries] = useState([]);
+  const [campId, setCampId] = useState();
 
   useEffect(() => {
     // Fetch data from the API
@@ -39,7 +40,10 @@ const Residence = () => {
       },
     })
       .then((response) => response.json())
-      .then((data) => setResidencePeriod(data))
+      .then((data) => {
+        console.log("DATA", data);
+        setResidencePeriod(data);
+      })
       .catch((error) => console.error("Error fetching data:", error));
 
     fetch(API_URLS.RESIDENTS, {
@@ -67,6 +71,15 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => setCountries(data))
+      .catch((error) => console.error("Error fetching data:", error));
+
+    fetch(API_URLS.CAMPS, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setCamps(data))
       .catch((error) => console.error("Error fetching data:", error));
 
     setColumns([
@@ -125,17 +138,29 @@ const Residence = () => {
 
       if (!ass) {
         setCampName("");
-      } else setCampName(ass.campName);
+      } else {
+        //console.log("ass.campName", ass.campName);
+        setCampName(ass.campName);
+
+        console.log("ASSSSSSSSSSS", ass);
+
+        const camp = camps?.find((c) => c.name === ass.campName);
+        setCampId(camp.id);
+      }
     }
-  }, [assignments, getItem]);
+  }, [assignments, camps, getItem]);
 
   useEffect(() => {
     if (residents.length > 0 && residencePeriod.length > 0 && campName) {
-      const newResidencePeriod = residencePeriod.filter(
-        (resP) => resP.campName === campName
-      );
+      residencePeriod.forEach((e) => console.log(e));
+
+      const newResidencePeriod = residencePeriod.filter((resP) => {
+        console.log("RESP", resP);
+        return resP.campName === campName;
+      });
 
       const newData = [];
+
       newResidencePeriod.forEach((resP) => {
         if (resP.campName === campName) {
           let x = residents.find((res) => res.jmbg === resP.residentJmbg);
@@ -144,6 +169,8 @@ const Residence = () => {
           }
         }
       });
+
+      //console.log("newResidencePeriod", newResidencePeriod);
 
       setData(newData); // Update state once with the new data array
     }
@@ -207,7 +234,7 @@ const Residence = () => {
           open={newResidentModal}
           setOpen={setNewResidentModal}
           countries={countries}
-          campId="1"
+          campId={campId}
         ></ResidentModal>
       )}
 
