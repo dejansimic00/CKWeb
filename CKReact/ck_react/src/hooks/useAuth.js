@@ -13,7 +13,7 @@ export const useAuth = () => {
       try {
         addUser(JSON.parse(storedUser));
       } catch (error) {
-        console.error("Error parsing stored user:", error);
+        console.error("Greška pri parsiranju korisnika:", error);
       }
     }
   }, [addUser, getItem]);
