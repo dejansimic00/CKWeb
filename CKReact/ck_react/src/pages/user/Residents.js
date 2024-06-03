@@ -53,7 +53,7 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => setResidents(data))
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => console.error("Greška pri dohvatanju podataka:", error));
 
     fetch(API_URLS.ASSIGNMENTS, {
       headers: {
@@ -62,7 +62,7 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => setAssignments(data))
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => console.error("Greška pri dohvatanju podataka:", error));
 
     fetch(API_URLS.COUNTRIES, {
       headers: {
@@ -71,7 +71,7 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => setCountries(data))
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => console.error("Greška pri dohvatanju podataka:", error));
 
     fetch(API_URLS.CAMPS, {
       headers: {

@@ -35,7 +35,7 @@ const Place = () => {
         console.log("Fetched Places Data: ", data); // Check if data is fetched correctly
         setData(data); // Update the data state
       })
-      .catch((error) => console.error("Error fetching places", error));
+      .catch((error) => console.error("Greška pri dohvatanju mjesta", error));
   }, [refresh]);
 
   useEffect(() => {
@@ -55,11 +55,11 @@ const Place = () => {
     setColumns([
       // Define columns
       { field: "id", headerName: "ID", width: 100 },
-      { field: "description", headerName: "Description", width: 200 },
-      { field: "municipalityName", headerName: "Municipality", width: 200 },
+      { field: "description", headerName: "Opis", width: 200 },
+      { field: "municipalityName", headerName: "Mjesto", width: 200 },
       {
         field: "actions",
-        headerName: "Actions",
+        headerName: "Akcije",
         width: 150,
         renderCell: (params) => (
           <div>
@@ -111,7 +111,7 @@ const Place = () => {
       setRefresh(!refresh);
       //setData(data.filter((item) => item.id !== selectedRow.id));
     } catch (error) {
-      console.error("Error deleting place:", error.message);
+      console.error("Greška pri brisanju mjesta:", error.message);
     }
   };
 
