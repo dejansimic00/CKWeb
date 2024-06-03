@@ -36,7 +36,7 @@ const ResidentModal = ({
     jmbg: residentData?.jmbg ?? "",
     countryId: residentData?.countryId ?? "",
     needsHospitalisation: residentData?.needsHospitalisation ?? "",
-    employeeId: residentData?.employeeId ?? "",
+    employeeId: parseInt(residentData?.employeeId),
   });
 
   const [residencePeriodData, setResidencePeriodData] = useState();
@@ -50,7 +50,7 @@ const ResidentModal = ({
   };
 
   useEffect(() => {
-    setFormData({ ...formData, employeeId: getItem("id") });
+    setFormData({ ...formData, employeeId: parseInt(getItem("id")) });
     setResidencePeriodData({
       startDate: new Date().toISOString(),
       endDate: null,
@@ -244,7 +244,7 @@ const ResidentModal = ({
                   onChange={(event) =>
                     setFormData({
                       ...formData,
-                      needsHospitalisation: event.target.value,
+                      needsHospitalisation: event.target.value ? "true" : "false",
                     })
                   }
                 >
