@@ -40,6 +40,8 @@ const ResidentModal = ({
   });
 
   const [residencePeriodData, setResidencePeriodData] = useState();
+  const [errors, setErrors] = React.useState({});
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { getItem } = useSessionStorage();
@@ -47,6 +49,25 @@ const ResidentModal = ({
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    }
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
+    }
+    // if (!dayjs(obj.startDate).isValid()) {
+    //   newErrors.dateOfBirth = "Datum nije validan";
+    //   return false; // Invalid startDate
+    // }
+    if (!["M", "F"].includes(formData.sex.toUpperCase())) {
+      newErrors.sex = "Invalid sex";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   useEffect(() => {
@@ -60,7 +81,7 @@ const ResidentModal = ({
 
   // ------------------------------------------------ slanje zahtjeva
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    //event.preventDefault();
 
     const url1 =
       mode === "add"
@@ -76,6 +97,13 @@ const ResidentModal = ({
 
     console.log(formData, "formData");
     console.log(residencePeriodData, "residencePeriodData");
+
+    // validate data
+
+    if (!validateForm()) {
+      console.log(errors);
+      return;
+    }
 
     try {
       const response1 = await fetch(url1, {
