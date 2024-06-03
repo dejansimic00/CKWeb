@@ -6,6 +6,7 @@ import CampLineChart from "../Chart/CampLineChart";
 import CampPieChart from "../Chart/CampPieChart";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
 import { useMediaQuery } from "@mui/material"; // Step 1
+import CampPyramidChart from "../Chart/CampPyramidChart";
 
 const CampDashboard = ({
   campName,
@@ -140,7 +141,7 @@ const CampDashboard = ({
           <div>Broj unesrećenih : {resNumber}</div>
           <div>Prosječno trajanje boravka: {averageStay.toFixed(2)} dana</div>
         </div>
-        <hr className="border-t-2 border-gray-300" />
+        {/*<hr className="border-t-2 border-gray-300" />
         <div className="flex  flex-col sm:flex-row justify-around space-x-10">
           <CampPieChart
             title="Muška populacija"
@@ -155,6 +156,10 @@ const CampDashboard = ({
             className="w-20"
             endColor="#ed44fc"
           />
+        </div> */}
+        <hr className="border-t-2 border-gray-300" />
+        <div>
+          <CampPyramidChart residents={currentCampResidents} />
         </div>
         <hr className="border-t-2 border-gray-300" />
         <div>

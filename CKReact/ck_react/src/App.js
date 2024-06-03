@@ -15,7 +15,7 @@ import Residents from "./pages/user/Residents";
 import Settings from "./pages/common/Settings";
 import { AuthContext } from "./context/AuthContext";
 import { useAuth } from "./hooks/useAuth";
-import AdminNavBar from "./components/navigation/NavBar/AdminNavBar";
+import NavBar from "./components/navigation/NavBar/NavBar";
 import Volunteer from "./pages/admin/Volunteer";
 import Notification from "./pages/common/Notification";
 import Camp from "./pages/admin/Camp";
@@ -37,8 +37,8 @@ function MainLayout() {
 
   return (
     <div className="flex">
-      {/* Conditionally render AdminNavBar based on the current path */}
-      {location.pathname !== "/login" && <AdminNavBar />}
+      {/* Conditionally render NavBar based on the current path */}
+      {location.pathname !== "/login" && <NavBar />}
 
       <div className="w-full ">
         <Routes>
