@@ -116,7 +116,11 @@ const Residence = () => {
         headerName: "Akcije",
         renderCell: (params) => (
           <div className="flex flex-row justify-center items-center space-x-5 h-full ">
-            <button onClick={() => setDeleteResidentModal(true)}>
+            <button
+              onClick={(event) => {
+                handleDeleteClick(event, params.row);
+              }}
+            >
               <img
                 src={deleteImg}
                 alt="Obrisi volontera"
@@ -124,8 +128,8 @@ const Residence = () => {
               ></img>
             </button>
             <button
-              onClick={() => {
-                handleEditClick(params.row);
+              onClick={(event) => {
+                handleEditClick(event, params.row);
               }}
             >
               <img
@@ -190,7 +194,8 @@ const Residence = () => {
     setResidentInfoModal(true);
   };
 
-  const handleEditClick = (row) => {
+  const handleEditClick = (event, row) => {
+    event.stopPropagation();
     //setSelectedRow(row, console.log("setSelectedRow Completed"));
     setSelectedRow(row);
     setTimeout(() => {
@@ -198,30 +203,38 @@ const Residence = () => {
     }, 1);
   };
 
+  const handleDeleteClick = (event, row) => {
+    console.log("DELETE", row);
+    console.log("IDCAMP", campId);
+
+    event.stopPropagation();
+    setSelectedRow(row);
+    setTimeout(() => {
+      setDeleteResidentModal(true);
+    }, 1);
+  };
+
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  const handleDeleteResident = async () => {
-    //console.log("bice obrisan korisnik:" + JSON.stringify(selectedRow));
-    /*
-    try {
-      const URL = API_URLS.EMPLOYEES + "/" + selectedRow.id;
-      const response = await fetch(URL, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  const handleDeleteResident = (event, row) => {
+    const messageBody = {
+      campId: campId,
+      residentId: selectedRow.id,
+    };
 
-      if (!response.ok) {
-        throw new Error(response.status + " " + response.statusText);
-      }
-
-      console.log("Zaposleni uspjesno obrisan");
-    } catch (error) {
-      console.error("Greska kod brisanja korisnika:", error.message);
-    }*/
+    console.log(messageBody);
+    fetch(API_URLS.RESIDENTS_DEPART, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+      body: JSON.stringify(messageBody),
+    }).catch((error) =>
+      console.error("Greška kod odlaska unesrećenog iz kampa:", error)
+    );
   };
 
   const filteredData = data?.filter((row) =>
@@ -302,6 +315,7 @@ const Residence = () => {
         <DataTable
           columns={[...columns]}
           rows={filteredData}
+          onRowClick={(event) => console.log("EE sssssssV", event)}
           onRowSelectionModelChange={handleRowSelection}
           initialState={{
             columns: {

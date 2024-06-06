@@ -81,7 +81,7 @@ const ResidentModal = ({
 
   // ------------------------------------------------ slanje zahtjeva
   const handleSubmit = async (event) => {
-    //event.preventDefault();
+    event.preventDefault();
 
     const url1 =
       mode === "add"
@@ -272,7 +272,9 @@ const ResidentModal = ({
                   onChange={(event) =>
                     setFormData({
                       ...formData,
-                      needsHospitalisation: event.target.value ? "true" : "false",
+                      needsHospitalisation: event.target.value
+                        ? "true"
+                        : "false",
                     })
                   }
                 >

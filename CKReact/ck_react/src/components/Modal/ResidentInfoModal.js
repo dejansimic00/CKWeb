@@ -55,6 +55,7 @@ const ResidentInfoModal = ({
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("data", data);
         setResidencePeriod(data);
       })
       .catch((error) => console.error("Error fetching data:", error));
@@ -66,6 +67,7 @@ const ResidentInfoModal = ({
         flex: 1,
         renderCell: (params) => {
           const date = new Date(params.value);
+          console.log("starrtDate", date);
           return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
         },
       },
@@ -74,8 +76,11 @@ const ResidentInfoModal = ({
         headerName: "Datum odlaska",
         flex: 1,
         renderCell: (params) => {
-          const date = new Date(params.value);
-          return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+          const date = params.value !== null ? new Date(params.value) : null;
+          console.log("endDate", date);
+          if (date)
+            return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+          else return "";
         },
       },
       {

@@ -14,6 +14,7 @@ const API_URLS = {
   PLACES: `${BASE_URL}/places`,
   LOGIN: `${BASE_URL}/login`,
   MESSAGES: `${BASE_URL}/messages`,
+  RESIDENTS_DEPART: `${BASE_URL}/residents/depart`,
   // Add more endpoints as needed
 };
 

@@ -7,6 +7,8 @@ export default function DataTable({
   onFilterModelChange,
   onRowSelectionModelChange,
   initialState,
+
+  onRowClick,
 }) {
   return (
     <div className="w-[100%] ">
@@ -15,6 +17,7 @@ export default function DataTable({
         columns={columns}
         selection
         autoHeight={true}
+        onRowClick={onRowClick}
         onFilterModelChange={onFilterModelChange}
         onRowSelectionModelChange={onRowSelectionModelChange}
         // slots={{
