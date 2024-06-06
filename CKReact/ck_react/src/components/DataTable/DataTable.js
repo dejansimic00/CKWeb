@@ -7,7 +7,7 @@ export default function DataTable({
   onFilterModelChange,
   onRowSelectionModelChange,
   initialState,
-
+  getRowClassName,
   onRowClick,
 }) {
   return (
@@ -16,6 +16,7 @@ export default function DataTable({
         rows={rows}
         columns={columns}
         selection
+        getRowClassName={getRowClassName}
         autoHeight={true}
         onRowClick={onRowClick}
         onFilterModelChange={onFilterModelChange}

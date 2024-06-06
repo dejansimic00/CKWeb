@@ -3,39 +3,48 @@ import DataTable from "../../components/DataTable/DataTable"; // Adjust the impo
 import API_URLS from "../../utils/api";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
 import dayjs from "dayjs";
+import NotificationModal from "../../components/Modal/NotificationModal"; // Adjust the import path as needed
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
   const [newNotification, setNewNotification] = useState("");
   const { getItem } = useSessionStorage();
   const [refresh, setRefresh] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [notificationModal, setNotificationModal] = useState(false);
 
-  const fetchMessages = async () => {};
+  const fetchMessages = async () => {
+    const URL = API_URLS.EMPLOYEES + "/" + getItem("id") + "/messages";
+    try {
+      const response = await fetch(URL, {
+        headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+        },
+      });
+      const data = await response.json();
+      const formattedData = data.map((item) => ({
+        ...item.message,
+        creationTime: dayjs(item.message.creationTime).format(
+          "DD-MM-YYYY HH:mm:ss"
+        ),
+        readAt: item.readAt
+          ? dayjs(item.readAt).format("DD-MM-YYYY HH:mm:ss")
+          : null,
+      }));
+      setNotifications(formattedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    fetch(API_URLS.MESSAGES, {
-      headers: {
-        Authorization: `Bearer ${getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((newData) => {
-        const formattedData = newData.map((notification) => ({
-          ...notification,
-          creationTime: dayjs(notification.creationTime)
-            .format("DD-MM-YYYY HH:mm:ss")
-            .toLocaleString("sr-RS", {
-              timeZone: "Europe/Belgrade",
-            }),
-        }));
-        setNotifications(formattedData);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+    fetchMessages();
   }, [refresh]);
 
-  const handleAddNotification = () => {
+  const readNotification = () => {};
+
+  const handleAddNotification = async () => {
     if (newNotification.trim()) {
-      // Function to add 2 hours to the current date and return ISO string
       const addTwoHoursUsingSetHours = (date) => {
         date.setHours(date.getHours() + 2);
         return date.toISOString();
@@ -44,24 +53,23 @@ const Notification = () => {
       const messageBody = {
         content: newNotification.trim(),
         employeeId: Number.parseInt(getItem("id")),
-        creationTime: addTwoHoursUsingSetHours(new Date()), // Use the function here
+        creationTime: addTwoHoursUsingSetHours(new Date()),
       };
 
-      console.log(JSON.stringify(messageBody));
-      fetch(API_URLS.MESSAGES, {
-        headers: {
-          Authorization: `Bearer ${getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(messageBody),
-      })
-        .then((response) => {
-          setRefresh(!refresh);
-          setNewNotification("");
-          response.json();
-        })
-        .catch((error) => console.error("Error fetching data:", error));
+      try {
+        await fetch(API_URLS.MESSAGES, {
+          headers: {
+            Authorization: `Bearer ${getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(messageBody),
+        });
+        setRefresh(!refresh);
+        setNewNotification("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
     }
   };
 
@@ -71,6 +79,22 @@ const Notification = () => {
     { field: "creationTime", headerName: "Datum", width: 200 },
     { field: "employeeUsername", headerName: "Kreirao", width: 120 },
   ];
+
+  const handleRowSelection = (selected) => {
+    const row = notifications.find((row) => row.id === selected[0]);
+    setSelectedRow(row);
+    setNotificationModal(true);
+  };
+
+  const setNotificationRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((notification) =>
+        notification.id === id
+          ? { ...notification, readAt: dayjs().format("DD-MM-YYYY HH:mm:ss") }
+          : notification
+      )
+    );
+  };
 
   return (
     <div className="flex justify-between p-4">
@@ -96,20 +120,32 @@ const Notification = () => {
         </button>
       </div>
 
-      <div className="flex flex-col w-2/3 p-4">
+      <div className="flex flex-col w-2/3 p-4 ">
         <h2 className="text-xl font-bold mb-4">Najnovija obavještenja</h2>
         <DataTable
           columns={columns}
           rows={notifications}
+          getRowClassName={(params) => (!params.row.readAt ? "font-bold " : "")}
           initialState={{
             sorting: {
               sortModel: [{ field: "creationTime", sort: "desc" }],
             },
           }}
           onFilterModelChange={() => {}}
-          onRowSelectionModelChange={() => {}}
+          onRowSelectionModelChange={(newSelection) => {
+            handleRowSelection(newSelection);
+          }}
         />
       </div>
+
+      {notificationModal && (
+        <NotificationModal
+          notification={selectedRow}
+          setNotification={setSelectedRow}
+          onClose={() => setNotificationModal(false)}
+          setNotificationRead={setNotificationRead}
+        />
+      )}
     </div>
   );
 };

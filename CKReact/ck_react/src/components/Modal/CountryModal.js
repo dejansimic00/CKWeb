@@ -90,6 +90,7 @@ const CountryModal = ({
         error.message
       );
     }
+
     handleClose();
   };
 
