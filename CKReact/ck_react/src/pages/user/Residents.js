@@ -11,6 +11,7 @@ import campImg from "../../assets/images/camp-red.png";
 import DeleteResidentModal from "../../components/Modal/DeleteResidentModal.js";
 import AssignmentModal from "../../components/Modal/AssignmentModal";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
+import ResidentInfoModal from "../../components/Modal/ResidentInfoModal.js";
 
 const Residence = () => {
   const [data, setData] = useState([]);
@@ -31,6 +32,7 @@ const Residence = () => {
   const [campName, setCampName] = useState();
   const [countries, setCountries] = useState([]);
   const [campId, setCampId] = useState();
+  const [residentInfoModal, setResidentInfoModal] = useState(false);
 
   useEffect(() => {
     // Fetch data from the API
@@ -88,28 +90,32 @@ const Residence = () => {
       .catch((error) => console.error("Error fetching data:", error));
 
     setColumns([
-      { field: "id", headerName: "ID", width: 70 },
-      { field: "firstName", headerName: "Ime", width: 150 },
-      { field: "lastName", headerName: "Prezime", width: 150 },
+      { field: "id", headerName: "ID", width: 70, hide: true },
+      { field: "firstName", headerName: "Ime", width: 150, flex: 1 },
+      { field: "lastName", headerName: "Prezime", width: 150, flex: 1 },
       { field: "dateOfBirth", headerName: "Datum rođenja", width: 130 },
-      { field: "sex", headerName: "Pol", width: 90 },
+      { field: "sex", headerName: "Pol" },
       { field: "jmbg", headerName: "JMBG", width: 150 },
-      { field: "countryName", headerName: "Država", width: 150 },
+      { field: "countryName", headerName: "Država" },
       {
         field: "needsHospitalisation",
         headerName: "Potrebna \n hospitalizacija",
-        width: 200,
         valueGetter: (params) => {
           return params ? "Da" : "Ne";
         },
+        renderHeader: (params) => (
+          <div className="flex flex-col">
+            <span>Potrebna </span>
+            <span>hospitalizacija</span>
+          </div>
+        ),
       },
       { field: "employeeJmbg", headerName: "JMBG Zaposlenog", width: 150 },
       {
         field: "actions",
         headerName: "Akcije",
-        width: 150,
         renderCell: (params) => (
-          <div>
+          <div className="flex flex-row justify-center items-center space-x-5 h-full ">
             <button onClick={() => setDeleteResidentModal(true)}>
               <img
                 src={deleteImg}
@@ -128,6 +134,11 @@ const Residence = () => {
                 about="Izmijeni volontera"
               ></img>
             </button>
+          </div>
+        ),
+        renderHeader: (params) => (
+          <div className="flex  w-20 justify-center">
+            <span>Akcije</span>
           </div>
         ),
       },
@@ -176,6 +187,7 @@ const Residence = () => {
     const row = data.find((row) => row.id === selected[0]);
     setSelectedRow(row);
     selectedRowRef.current = row; // Update the ref
+    setResidentInfoModal(true);
   };
 
   const handleEditClick = (row) => {
@@ -251,6 +263,14 @@ const Residence = () => {
           residentData={selectedRow}
         ></DeleteResidentModal>
       )}
+      {residentInfoModal && (
+        <ResidentInfoModal
+          open={residentInfoModal}
+          setOpen={setResidentInfoModal}
+          id={selectedRowRef.current.id}
+          selectedRow={selectedRow}
+        ></ResidentInfoModal>
+      )}
       {/* {editAssignmentModal && (
         <AssignmentModal
           open={editAssignmentModal}
@@ -262,7 +282,7 @@ const Residence = () => {
           {" "}
         </AssignmentModal>
       )} */}
-      <div className="">
+      <div className="w-[60rem]">
         <div className="flex justify-between">
           <div className=" flex items-center pl-2 h-10 w-80  self-start mb-4 rounded-xl border-black border-2">
             <img src={search} alt="search" className="w-4 h-4"></img>
@@ -283,6 +303,16 @@ const Residence = () => {
           columns={[...columns]}
           rows={filteredData}
           onRowSelectionModelChange={handleRowSelection}
+          initialState={{
+            columns: {
+              columnVisibilityModel: {
+                // Hide columns status and traderName, the other columns will remain visible
+                id: false,
+                jmbg: false,
+                employeeJmbg: false,
+              },
+            },
+          }}
         />
       </div>
     </div>

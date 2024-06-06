@@ -6,6 +6,7 @@ export default function DataTable({
   rows,
   onFilterModelChange,
   onRowSelectionModelChange,
+  initialState,
 }) {
   return (
     <div className="w-[100%] ">
@@ -21,6 +22,7 @@ export default function DataTable({
         // }}
 
         initialState={{
+          ...initialState,
           pagination: {
             paginationModel: { page: 0, pageSize: 10 },
           },

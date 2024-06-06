@@ -7,7 +7,7 @@ import { ThemeProvider } from "styled-components";
 import { createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 
-const DatePicker = ({ value, onChange }) => {
+const DatePicker = ({ value, onChange, readOnly = false }) => {
   const [date, setDate] = useState(dayjs(value));
 
   const newTheme = createTheme({
@@ -36,6 +36,7 @@ const DatePicker = ({ value, onChange }) => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ThemeProvider theme={newTheme}>
         <MUI
+          readOnly={readOnly}
           sx={{
             ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
               borderRadius: "12px",

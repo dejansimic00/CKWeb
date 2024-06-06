@@ -1,8 +1,17 @@
-const Input = ({ img, placeholder, id, onChange, value, type = "text" }) => {
+const Input = ({
+  img,
+  placeholder,
+  id,
+  onChange,
+  value,
+  type = "text",
+  readOnly = false,
+}) => {
   return (
     <div className="flex items-center pl-2 h-10 w-80 self-start rounded-xl border-black border-2">
       {img && <img src={img} alt="input" className="w-4 h-4"></img>}
       <input
+        readOnly={readOnly}
         id={id}
         type={type}
         value={value}

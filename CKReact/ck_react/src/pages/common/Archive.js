@@ -19,7 +19,10 @@ function Archive() {
       },
     })
       .then((response) => response.json())
-      .then((data) => setResidents(data))
+      .then((data) => {
+        console.log("RESIDENTI", data);
+        setResidents(data);
+      })
       .catch((error) =>
         console.error("Greška pri dohvatanju unesrećenih", error)
       );
@@ -34,32 +37,18 @@ function Archive() {
       { field: "countryName", headerName: "Država", width: 150 },
       {
         field: "needsHospitalisation",
-        headerName: "Potrebna hospitalizacija",
-        width: 200,
+        headerName: "Potrebna \n hospitalizacija",
         valueGetter: (params) => {
           return params ? "Da" : "Ne";
         },
+        renderHeader: (params) => (
+          <div className="flex flex-col">
+            <span>Potrebna </span>
+            <span>hospitalizacija</span>
+          </div>
+        ),
       },
       { field: "employeeJmbg", headerName: "JMBG volontera", width: 150 },
-      // {
-      //   field: "actions",
-      //   headerName: "Actions",
-      //   width: 150,
-      //   renderCell: (params) => (
-      //     <div>
-      //       <button onClick={() => setDeleteCampModal(true)}>
-      //         <img src={deleteImg} alt="Delete" about="Delete"></img>
-      //       </button>
-      //       <button
-      //         onClick={() => {
-      //           handleEditClick(params.row);
-      //         }}
-      //       >
-      //         <img src={editImg} alt="Edit" about="Edit"></img>
-      //       </button>
-      //     </div>
-      //   ),
-      // },
     ]);
   }, []);
 
