@@ -33,6 +33,8 @@ const DeleteVolunteerModal = ({
     setOpen(false); // Close the modal
   };
 
+  
+
   return (
     <Modal
       open={open}

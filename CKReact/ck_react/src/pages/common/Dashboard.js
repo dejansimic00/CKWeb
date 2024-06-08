@@ -193,7 +193,7 @@ const Dashboard = () => {
         <div>
           {/* Ovje dodati ime kampa na kojem je volonter zaduzen */}
           <CampDashboard
-            campId={selectedCamp.id}
+            campId={selectedCamp?.id ?? undefined}
             campName={nonAdminCampName}
             assignments={assignments}
           ></CampDashboard>

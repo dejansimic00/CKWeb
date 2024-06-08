@@ -34,6 +34,7 @@ const CampDashboard = ({
   // Step 2: Determine screen size using useMediaQuery
   const isMobile = useMediaQuery("(max-width:600px)");
 
+  
   useEffect(() => {
     if (campId) {
       const URL = API_URLS.CAMPS + "/" + campId + "/residence-periods";
@@ -45,23 +46,22 @@ const CampDashboard = ({
       })
         .then((response) => response.json())
         .then((newData) => {
-          console.log("NEW RESP", newData);
           setResidencePeriod(newData);
         })
         .catch((error) =>
           console.error("Greška pri dohvatanju podataka o kampovima:", error)
         );
 
-      fetch(API_URLS.RESIDENTS, {
+      const URL2   = API_URLS.CAMPS + "/" + campId + "/residents";
+
+      fetch(URL2, {
         headers: {
           Authorization: `Bearer ${getItem("token")}`,
         },
       })
         .then((response) => response.json())
         .then((newData) => {
-          const arr = [...newData.content];
-          console.log("arr", ...arr);
-          setResidents(arr);
+          setResidents(newData);
         })
         .catch((error) =>
           console.error("Greška pri dohvatanju podataka o unesrećenima:", error)
@@ -85,8 +85,6 @@ const CampDashboard = ({
   }, [currentCampVolunteers]);
 
   useEffect(() => {
-    console.log("residents22222222222222", residents);
-    console.log("residencePeriod2222222222222222", residencePeriod);
     if (residents?.length > 0 && residencePeriod?.length > 0) {
       // Clear the arrays before updating
       setMaleResidents([]);

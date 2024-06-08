@@ -48,7 +48,6 @@ const VolunteerModal = ({
 
   // ------------------------------------------------ slanje zahtjeva
   const handleSubmit = async (event) => {
-    //event.preventDefault();
 
     const url =
       mode === "add"
@@ -56,6 +55,10 @@ const VolunteerModal = ({
         : `${API_URLS.EMPLOYEES}/${volunteerData.id}`;
     const method = mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
 
+
+    if (mode !== "add"){
+      delete formData.password;
+    }
     try {
       const response = await fetch(url, {
         method: method,
@@ -195,13 +198,15 @@ const VolunteerModal = ({
                 onChange={handleChange}
               ></Input>
               {/** ---------------------password---------------------------------- */}
+              { mode === "add" &&
+    (
               <Input
                 id="password"
                 placeholder="lozinka"
                 value={formData.password}
                 onChange={handleChange}
                 type="password"
-              ></Input>
+              ></Input>)}
               <Button
                 text={mode === "add" ? "Dodaj" : "Sačuvaj"} // Change button text based on mode
                 type="submit"

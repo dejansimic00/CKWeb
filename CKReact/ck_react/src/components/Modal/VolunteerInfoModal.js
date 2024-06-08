@@ -23,12 +23,12 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
-const ResidentInfoModal = ({
+const VolunteerInfoModal = ({
   open,
   setOpen,
   id,
   selectedRow,
-  residentData = {},
+  volunteerData = {},
 }) => {
   const [formData, setFormData] = React.useState({
     firstName: selectedRow?.firstName ?? "",
@@ -37,78 +37,68 @@ const ResidentInfoModal = ({
     sex: selectedRow?.sex ?? "F",
     jmbg: selectedRow?.jmbg ?? "",
     countryName: selectedRow?.countryName ?? "",
-    needsHospitalisation: selectedRow?.needsHospitalisation ?? false,
-    employeeJmbg: selectedRow?.employeeJmbg,
-  });
+    campName: selectedRow?.campName ?? "",
+    username: selectedRow?.username ?? "",
+    status: selectedRow?.status ?? "ACTIVE",
+  });   
 
-  const [residencePeriod, setResidencePeriod] = useState();
+  const [assignments, setAssignments] = useState([]);
   const [columns, setColumns] = useState([]);
 
   const handleClose = () => setOpen(false);
   const { getItem } = useSessionStorage();
 
+
+  useEffect(()=>{
+    console.log("selectedassignmentsRow", assignments)
+  },[assignments])
+
+
   useEffect(() => {
-    fetch(API_URLS.RESIDENCE_PERIOD + "/resident/" + selectedRow.id, {
+
+    ////////////// trenutno dohvata trenutne ass, gdje je endDate null
+    if (selectedRow){
+    fetch(API_URLS.EMPLOYEES + "/" + selectedRow.id + "/assignments", {
       headers: {
         Authorization: `Bearer ${getItem("token")}`,
       },
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("data", data);
-        setResidencePeriod(data);
+        
+        // console.log("assigmnetns", data)
+        // const assArray = [data];
+        // setAssignments( assArray);
+        setAssignments(data)
       })
       .catch((error) =>
         console.error(
-          "Greška pri dohvatanju podataka o prisustvima unesrećenog u kampovima:",
+          "Greška pri dohvatanju podataka o istoriji volontera:",
           error
         )
       );
 
     setColumns([
-      {
-        field: "startDate",
-        headerName: "Datum pristizanja",
-        flex: 1,
-        renderCell: (params) => {
-          const date = new Date(params.value);
-          console.log("starrtDate", date);
-          return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-        },
-      },
-      {
-        field: "endDate",
-        headerName: "Datum odlaska",
-        flex: 1,
-        renderCell: (params) => {
-          const date = params.value !== null ? new Date(params.value) : null;
-          console.log("endDate", date);
-          if (date)
-            return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-          else return "";
-        },
-      },
-      {
-        field: "campName",
-        headerName: "Kamp",
-        flex: 1,
-      },
-    ]);
-  }, []);
+      { field: "id", headerName: "ID"},
+      { field: "startDate", headerName: "Pocetak zaduzenja", width: 150 },
+      { field: "endDate", headerName: "Kraj zaduzenja", width: 150 },
+      { field: "campName", headerName: "Kamp", flex:1 },
+      { field: "employeeId", headerName: "Kamp"},
+      
+    ]);}
+  }, [selectedRow]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
-  useEffect(() => {
-    if (residencePeriod) console.log(residencePeriod);
-    console.log(formData);
-  }, [residencePeriod]);
+
 
   const handlePrint = () => {
     window.print();
   };
+
   return (
     <div>
       <Modal
@@ -119,7 +109,7 @@ const ResidentInfoModal = ({
       >
         <Box sx={style}>
           <div
-            className="w-[40rem]  rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
+            className="w-[40rem] rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
             style={{
               background: theme.colors.modal_bg,
               maxHeight: "100vh",
@@ -132,7 +122,7 @@ const ResidentInfoModal = ({
           >
             <Logo />
             {/** ---------------------ime---------------------------------- */}
-            <div className="flex flex-col  items-center">
+            <div className="flex flex-col w-full items-center">
               <p className="self-start font-bold">Ime i prezime</p>
               <Input
                 id="firstName"
@@ -144,7 +134,7 @@ const ResidentInfoModal = ({
             </div>
 
             {/** ---------------------datumrodjenja---------------------------------- */}
-            <div className="flex flex-col    items-center">
+            <div className="flex flex-col w-full   items-center">
               <p className="self-start font-bold">Datum rođenja</p>
               <div className="w-80 self-start">
                 <DatePicker
@@ -157,19 +147,19 @@ const ResidentInfoModal = ({
               </div>
             </div>
             {/** ---------------------pol---------------------------------- */}
-            <div className="flex flex-col  items-center">
+            <div className="flex flex-col w-full items-center">
               <p className="self-start font-bold">Pol</p>
               <Input
                 readOnly={true}
-                id="jmbg"
-                placeholder="JMBG"
+                id="sex"
+                placeholder="Pol"
                 value={formData.sex.toLowerCase() === "m" ? "Muški" : "Ženski"}
                 onChange={handleChange}
               ></Input>
             </div>
 
             {/** ---------------------drzava---------------------------------- */}
-            <div className="flex flex-col  items-start">
+            <div className="flex flex-col w-full items-start">
               <p className="self-start font-bold">Država</p>
               <Input
                 readOnly={true}
@@ -180,7 +170,7 @@ const ResidentInfoModal = ({
               ></Input>
             </div>
             {/** ---------------------jmbg---------------------------------- */}
-            <div className="flex flex-col  items-center">
+            <div className="flex flex-col w-full items-center">
               <p className="self-start font-bold">JMBG</p>
               <Input
                 readOnly={true}
@@ -190,20 +180,53 @@ const ResidentInfoModal = ({
                 onChange={handleChange}
               ></Input>
             </div>
-            {/** ---------------------hospitalizacija---------------------------------- */}
-            <div className="flex flex-col  items-center">
-              <p className="self-start font-bold">Potrebna hospitalizacija</p>
+            {/** ---------------------kamp---------------------------------- */}
+            <div className="flex flex-col w-full items-center">
+              <p className="self-start font-bold">Kamp</p>
               <Input
                 readOnly={true}
-                id="jmbg"
-                placeholder="JMBG"
-                value={formData.needsHospitalisation ? "Da" : "Ne"}
+                id="campName"
+                placeholder="Kamp"
+                value={formData.campName}
                 onChange={handleChange}
               ></Input>
             </div>
-            {residencePeriod && (
-              <div className=" border-black border-2 rounded-lg">
-                <DataTable columns={columns} rows={residencePeriod} />
+            {/** ---------------------korisnicko ime---------------------------------- */}
+            <div className="flex flex-col w-full items-center">
+              <p className="self-start font-bold">Korisničko ime</p>
+              <Input
+                readOnly={true}
+                id="username"
+                placeholder="Korisničko ime"
+                value={formData.username}
+                onChange={handleChange}
+              ></Input>
+            </div>
+            {/** ---------------------status---------------------------------- */}
+            <div className="flex flex-col w-full items-center">
+              <p className="self-start font-bold">Status</p>
+              <Input
+                readOnly={true}
+                id="status"
+                placeholder="Status"
+                value={formData.status === "ACTIVE" ? "Aktivan" : "Blokiran"}
+                onChange={handleChange}
+              ></Input>
+            </div>
+            {assignments && (
+              <div className="w-full border-black border-2 rounded-lg">
+                <DataTable 
+                    columns={columns} 
+                    rows={assignments}
+                    initialState={{
+                        columns: {
+                            columnVisibilityModel: {
+                                id: false,
+                                employeeId: false
+                            },
+                        },
+                    }}
+                />
               </div>
             )}
             <div className="flex space-x-4">
@@ -223,4 +246,4 @@ const ResidentInfoModal = ({
   );
 };
 
-export default ResidentInfoModal;
+export default VolunteerInfoModal;

@@ -37,11 +37,12 @@ const AssignmentModal = ({
   }, []);
 
   const handleAssignClick = async (event) => {
+    //event.preventDefault();
     const newStartDate = new Date();
 
     const dataForPost = {
       startDate: newStartDate,
-      campId: selectedCamp.id,
+      campId: selectedCamp.id ,
     };
 
     try {
@@ -110,12 +111,18 @@ const AssignmentModal = ({
                   borderRadius: "12px",
                 },
               }}
-              onChange={(event) =>
-                setSelectedCamp(camps.find((c) => c.id == event.target.value))
+              onChange={(event) =>{
+                const camp = camps.find((c) => c.id == event.target.value) ?? {};
+                if (event.target.value === 0) camp.id =0;
+                console.log("IZMJANA KAMPA",camp)
+                setSelectedCamp(camp)}
               }
             >
               <MenuItem key={-1} value={-1}>
                 Izaberi
+              </MenuItem>
+              <MenuItem key={0} value={0}>
+                Razduzi
               </MenuItem>
               {camps.map((camp) => (
                 <MenuItem key={camp.id} value={camp.id}>

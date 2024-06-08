@@ -11,6 +11,7 @@ import campImg from "../../assets/images/camp-red.png";
 import DeleteVolunteerModal from "../../components/Modal/DeleteVolunteerModal";
 import AssignmentModal from "../../components/Modal/AssignmentModal";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
+import VolunteerInfoModal from "../../components/Modal/VolunteerInfoModal";
 
 const Volunteer = () => {
   const [data, setData] = useState([]);
@@ -29,6 +30,7 @@ const Volunteer = () => {
   const [camps, setCamps] = useState([]);
   const { getItem } = useSessionStorage();
   const [refreshData, setRefreshData] = useState(false);
+  const [volunteerInfoModal, setVolunteerInfoModal] = useState(false)
 
   useEffect(() => {
     fetch(API_URLS.EMPLOYEES, {
@@ -53,11 +55,12 @@ const Volunteer = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        const x = data.filter((row) => row.endDate === null);
-        setAssignments(x);
+         const x = data.filter((row) => row.endDate === null);
+         setAssignments(x);
+        //setAssignments(data)
       })
       .catch((error) =>
-        console.error("Greska pri dohvatanju drzava iz baze:", error)
+        console.error("Greska pri dohvatanju zaduzenja iz baze:", error)
       );
   }, [refreshData]);
 
@@ -111,7 +114,10 @@ const Volunteer = () => {
         width: 150,
         renderCell: (params) => (
           <div>
-            <button onClick={() => setDeleteVolunteerModal(true)}>
+            <button onClick={(event) =>{
+              handleDeleteClick(event, params.row);
+            }
+             }>
               <img
                 src={deleteImg}
                 alt="Obrisi volontera"
@@ -119,8 +125,8 @@ const Volunteer = () => {
               ></img>
             </button>
             <button
-              onClick={() => {
-                handleEditClick(params.row);
+              onClick={(event) => {
+                handleEditClick(event, params.row);
               }}
             >
               <img
@@ -130,8 +136,8 @@ const Volunteer = () => {
               ></img>
             </button>
             <button
-              onClick={() => {
-                handleAssignClick(params.row);
+              onClick={(event) => {
+                handleAssignClick(event, params.row);
               }}
             >
               <img
@@ -152,9 +158,20 @@ const Volunteer = () => {
     const row = data.find((row) => row.id === selected[0]);
     setSelectedRow(row);
     selectedRowRef.current = row; // Update the ref
+    setVolunteerInfoModal(true)
   };
 
-  const handleEditClick = (row) => {
+   const handleDeleteClick = (event, row) => {
+    event.stopPropagation();
+    //setSelectedRow(row, console.log("setSelectedRow Completed"));
+    setSelectedRow(row);
+    setTimeout(() => {
+      setDeleteVolunteerModal(true);
+    }, 1);
+  };
+
+  const handleEditClick = (event, row) => {
+    event.stopPropagation();
     //setSelectedRow(row, console.log("setSelectedRow Completed"));
     setSelectedRow(row);
     setTimeout(() => {
@@ -162,7 +179,8 @@ const Volunteer = () => {
     }, 1);
   };
 
-  const handleAssignClick = (row) => {
+  const handleAssignClick = (event, row) => {
+    event.stopPropagation();
     setSelectedRow(row);
     setTimeout(() => {
       setEditAssignmentModal(true);
@@ -182,6 +200,8 @@ const Volunteer = () => {
   };
 
   useEffect(() => {
+    console.log("DATA", data)
+    console.log("ASSIGNMENTS", assignments)
     data.forEach((row) => {
       const campNameX = assignments?.find((ass) => {
         return ass.employeeId === row.id;
@@ -280,6 +300,15 @@ const Volunteer = () => {
           volunteerData={selectedRow}
         ></DeleteVolunteerModal>
       )}
+      {volunteerInfoModal && (
+          <VolunteerInfoModal
+           
+            open={volunteerInfoModal}
+            setOpen={setVolunteerInfoModal}
+            id={selectedRowRef.current.id}
+            selectedRow={selectedRow}
+          />
+        )}
       {editAssignmentModal && (
         <AssignmentModal
           open={editAssignmentModal}
@@ -312,6 +341,22 @@ const Volunteer = () => {
             columns={[...columns]}
             rows={filteredData}
             onRowSelectionModelChange={handleRowSelection}
+
+
+     
+            initialState={{
+            columns: {
+              columnVisibilityModel: {
+                // Hide columns status and traderName, the other columns will remain visible
+                id: false,
+                dateOfBirth: false,
+                sex: false,
+                jmbg:false,
+                country: false
+
+              },
+            },
+          }}
           />
         </div>
       </div>
