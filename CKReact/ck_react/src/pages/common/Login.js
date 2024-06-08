@@ -18,7 +18,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState(
-    "Korisnicko ime i lozinka netacni!"
+    "Korisničko ime i lozinka netacni!"
   );
 
   const handleSuccessfulLogin = async (response) => {
@@ -93,7 +93,7 @@ function Login() {
         <Logo width={90} />
         <form onSubmit={handleSubmit}>
           <TextBox
-            placeholder="korisnicko ime"
+            placeholder="korisničko ime"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />

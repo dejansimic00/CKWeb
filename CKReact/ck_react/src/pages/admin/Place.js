@@ -63,7 +63,9 @@ const Place = () => {
         console.log("Fetched Municipalities Data: ", data); // Check if municipalities data is fetched correctly
         setMunicipalities(data); // Update the municipalities state
       })
-      .catch((error) => console.error("Error fetching municipalities", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka o gradovima", error)
+      );
 
     fetch(API_URLS.COUNTRIES, {
       headers: {
@@ -75,7 +77,9 @@ const Place = () => {
         console.log("Fetched Countries Data: ", data); // Check if countries data is fetched correctly
         setCountries(data); // Update the countries state
       })
-      .catch((error) => console.error("Error fetching countries", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka o državama", error)
+      );
 
     setColumns([
       // Define columns

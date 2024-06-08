@@ -14,6 +14,7 @@ const CampDashboard = ({
   adminBackButton,
   openingDate,
   assignments,
+  campId,
 }) => {
   const [camp, setCamp] = useState();
   const [residents, setResidents] = useState([]);
@@ -34,28 +35,39 @@ const CampDashboard = ({
   const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
-    fetch(API_URLS.RESIDENCE_PERIOD, {
-      headers: {
-        Authorization: `Bearer ${getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((newData) => {
-        setResidencePeriod(newData);
+    if (campId) {
+      const URL = API_URLS.CAMPS + "/" + campId + "/residence-periods";
+      // console.log("URL", URL);
+      fetch(URL, {
+        headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+        },
       })
-      .catch((error) => console.error("Error fetching data:", error));
+        .then((response) => response.json())
+        .then((newData) => {
+          console.log("NEW RESP", newData);
+          setResidencePeriod(newData);
+        })
+        .catch((error) =>
+          console.error("Greška pri dohvatanju podataka o kampovima:", error)
+        );
 
-    fetch(API_URLS.RESIDENTS, {
-      headers: {
-        Authorization: `Bearer ${getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((newData) => {
-        setResidents(newData);
+      fetch(API_URLS.RESIDENTS, {
+        headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+        },
       })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+        .then((response) => response.json())
+        .then((newData) => {
+          const arr = [...newData.content];
+          console.log("arr", ...arr);
+          setResidents(arr);
+        })
+        .catch((error) =>
+          console.error("Greška pri dohvatanju podataka o unesrećenima:", error)
+        );
+    }
+  }, [campId]);
 
   useEffect(() => {
     if (assignments) {
@@ -69,11 +81,12 @@ const CampDashboard = ({
 
   useEffect(() => {
     const x = currentCampVolunteers?.length;
-    console.log("CCV", currentCampVolunteers);
     setVolNumber(x);
   }, [currentCampVolunteers]);
 
   useEffect(() => {
+    console.log("residents22222222222222", residents);
+    console.log("residencePeriod2222222222222222", residencePeriod);
     if (residents?.length > 0 && residencePeriod?.length > 0) {
       // Clear the arrays before updating
       setMaleResidents([]);
@@ -87,11 +100,12 @@ const CampDashboard = ({
         (rp) => rp.campName === campName
       );
 
-      const filteredResidents = residents.filter((res) => {
-        return filteredResidentPeriod.some(
-          (rp) => rp.residentJmbg === res.jmbg
-        );
-      });
+      const filteredResidents = residents;
+      // .filter((res) => {
+      //   return filteredResidentPeriod.some(
+      //     (rp) => rp.residentJmbg === res.jmbg
+      //   );
+      // });
 
       // Calculate average stay duration
       const totalDays = filteredResidents.reduce((acc, res) => {
@@ -109,6 +123,8 @@ const CampDashboard = ({
       const averageStayDuration =
         filteredResidents.length > 0 ? totalDays / filteredResidents.length : 0;
       setAverageStay(averageStayDuration);
+
+      console.log("filteredResidents", filteredResidents);
       setCurrentCampResidents(filteredResidents);
 
       filteredResidents.forEach((res) => {

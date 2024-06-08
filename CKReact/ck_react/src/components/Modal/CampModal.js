@@ -82,7 +82,7 @@ const CampModal = ({
         const data = await response.json();
         setStatuses(data);
       } catch (error) {
-        console.error("Error fetching statuses:", error);
+        console.error("Greška pri dohvatanju statusa kampova:", error);
       }
     };
 

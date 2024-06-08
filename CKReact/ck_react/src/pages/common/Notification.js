@@ -33,7 +33,10 @@ const Notification = () => {
       }));
       setNotifications(formattedData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error(
+        "Greška pri dohvatanju podataka o pročitanim porukama:",
+        error
+      );
     }
   };
 

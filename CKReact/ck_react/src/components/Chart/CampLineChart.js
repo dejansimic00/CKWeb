@@ -44,7 +44,7 @@ const CampLineChart = ({ campName, residencePeriod, isMobile }) => {
       xAxis={[
         {
           data: keys,
-          label: "Srbija",
+          label: "pristizanja po vremenu",
           tickLabelInterval: (v, i) => i % 4 === 0,
           fill: "#992200",
           valueFormatter: formatDate,
@@ -58,6 +58,7 @@ const CampLineChart = ({ campName, residencePeriod, isMobile }) => {
       yAxis={[
         {
           min: 0,
+          label: "broj pristizanja",
           valueFormatter: formatCount,
         },
       ]}

@@ -58,7 +58,12 @@ const ResidentInfoModal = ({
         console.log("data", data);
         setResidencePeriod(data);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) =>
+        console.error(
+          "Greška pri dohvatanju podataka o prisustvima unesrećenog u kampovima:",
+          error
+        )
+      );
 
     setColumns([
       {

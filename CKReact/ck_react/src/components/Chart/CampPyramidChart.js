@@ -19,10 +19,21 @@ ChartJS.register(
   Legend
 );
 
-const CampPyramidChart = ({ residents }) => {
+const CampPyramidChart = ({ residents, gap = 5 }) => {
   const data = {
     labels: [],
-    datasets: [],
+    datasets: [
+      {
+        label: "Muškarci",
+        data: [],
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+      },
+      {
+        label: "Žene",
+        data: [],
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+      },
+    ],
   };
 
   function populateData() {
@@ -48,32 +59,36 @@ const CampPyramidChart = ({ residents }) => {
       }
     });
 
-    // Populate labels and data for male dataset
-    data.datasets.push({
-      label: "Muškarci",
-      data: Object.values(maleAges).map((count) => -count), // Negative values for left side of the pyramid
-      backgroundColor: "rgba(54, 162, 235, 0.6)",
-    });
-
-    // Populate labels and data for female dataset
-    data.datasets.push({
-      label: "Žene",
-      data: Object.values(femaleAges),
-      backgroundColor: "rgba(255, 99, 132, 0.6)",
-    });
+    // Define the maximum age limit
+    const ageLimit = 100; // Set your desired maximum age here
 
     // Populate age labels
-    const minAge = Math.min(
-      ...Object.keys(maleAges),
-      ...Object.keys(femaleAges)
-    );
-    const maxAge = Math.max(
-      ...Object.keys(maleAges),
-      ...Object.keys(femaleAges)
-    );
+    const minAge = 0;
+    //  Math.min(
+    //   ...Object.keys(maleAges).map(Number),
+    //   ...Object.keys(femaleAges).map(Number)
+    // );
+    const maxAge = ageLimit;
+    //  Math.min(
+    //   ageLimit,
+    //   Math.max(
+    //     ...Object.keys(maleAges).map(Number),
+    //     ...Object.keys(femaleAges).map(Number)
+    //   )
+    // );
 
-    for (let i = minAge; i <= maxAge; i++) {
-      data.labels.push(`${i}-${i + 1}`);
+    for (let i = minAge; i <= maxAge; i += gap) {
+      data.labels.push(`${i}-${i + gap - 1}`);
+      let maleCount = 0;
+      let femaleCount = 0;
+
+      for (let j = i; j < i + gap; j++) {
+        maleCount += maleAges[j] || 0;
+        femaleCount += femaleAges[j] || 0;
+      }
+
+      data.datasets[0].data.push(-maleCount); // Negative values for left side of the pyramid
+      data.datasets[1].data.push(femaleCount);
     }
   }
 

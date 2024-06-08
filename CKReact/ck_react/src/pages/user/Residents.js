@@ -45,7 +45,12 @@ const Residence = () => {
       .then((data) => {
         setResidencePeriod(data);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) =>
+        console.error(
+          "Greška pri dohvatanju podataka o prisustvima unesrećenih u kampovima:",
+          error
+        )
+      );
 
     fetch(API_URLS.RESIDENTS, {
       headers: {
@@ -55,7 +60,7 @@ const Residence = () => {
       .then((response) => response.json())
       .then((data) => setResidents(data))
       .catch((error) =>
-        console.error("Greška pri dohvatanju podataka:", error)
+        console.error("Greška pri dohvatanju podataka o unesrećenima:", error)
       );
 
     fetch(API_URLS.ASSIGNMENTS, {
@@ -87,7 +92,9 @@ const Residence = () => {
     })
       .then((response) => response.json())
       .then((data) => setCamps(data))
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka o kampovima:", error)
+      );
 
     setColumns([
       { field: "id", headerName: "ID", width: 70, hide: true },

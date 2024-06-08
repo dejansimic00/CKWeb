@@ -42,7 +42,9 @@ const Volunteer = () => {
 
         setData(x);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka o zaposlenima:", error)
+      );
 
     fetch(API_URLS.ASSIGNMENTS, {
       headers: {
@@ -242,7 +244,7 @@ const Volunteer = () => {
         setData(result);
         setRefreshData(!refreshData);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Greška pri dohvatanju podataka o zaposlenima:", error);
       }
     };
 

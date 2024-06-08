@@ -23,24 +23,12 @@ const Dashboard = () => {
   const { user } = useUser();
   const { getItem } = useSessionStorage();
 
-  // useEffect(() => {
-  //   const checkToken = () => {
-  //     const tokenFromStorage = getItem("token");
-  //     if (tokenFromStorage) {
-  //       setTokenReady(true);
-  //       setToken(tokenFromStorage);
-  //     } else {
-  //       setTimeout(checkToken, 1000); // Check again after 1 second
-  //     }
-  //   };
-
-  //   checkToken();
-  // }, []);
+  useEffect(() => {
+    if (selectedCamp) console.log("selectedCamp", selectedCamp);
+  }, [selectedCamp]);
 
   // Dohvatanje podataka iz 3 razlicite tabele u bazi i skladistenje u stanja
   useEffect(() => {
-    console.log("getItem", getItem("token"));
-
     fetch(API_URLS.CAMPS, {
       headers: {
         Authorization: `Bearer ${getItem("token")}`,
@@ -50,7 +38,9 @@ const Dashboard = () => {
       .then((newData) => {
         setCamps(newData);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka o kampovima:", error)
+      );
 
     fetch(API_URLS.MUNICIPALITIES, {
       headers: {
@@ -61,7 +51,9 @@ const Dashboard = () => {
       .then((newData) => {
         setMunicipalities(newData);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka o gradovima:", error)
+      );
 
     fetch(API_URLS.PLACES, {
       headers: {
@@ -72,7 +64,9 @@ const Dashboard = () => {
       .then((newData) => {
         setPlaces(newData);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka o lokacijama:", error)
+      );
 
     fetch(API_URLS.ASSIGNMENTS, {
       headers: {
@@ -83,7 +77,9 @@ const Dashboard = () => {
       .then((newData) => {
         setAssignments(newData);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) =>
+        console.error("Greška pri dohvatanju podataka o zaduženjima:", error)
+      );
     setColumns([
       { field: "id", headerName: "ID", width: 50 },
       { field: "name", headerName: "Ime", width: 250 },
@@ -118,7 +114,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (assignments) {
-      console.log("ASS", assignments);
+      //console.log("assignments", assignments);
+      const _campName = assignments
+        .filter((ass) => ass.endDate === null)
+        .find(
+          (ass) => ass.employeeId === Number.parseInt(getItem("id"))
+        )?.campName;
+
+      // console.log("camps", camps);
+
+      const _findCamp = camps.find((c) => c.name === _campName);
+
+      // console.log("_findCamp", _findCamp);
+      setSelectedCamp(_findCamp);
       setNonAdminCampName(
         assignments
           .filter((ass) => ass.endDate === null)
@@ -174,6 +182,7 @@ const Dashboard = () => {
 
       {isAdmin && showCampStatistics && assignments && (
         <CampDashboard
+          campId={selectedCamp.id ?? 3}
           campName={selectedCamp.name}
           admin={true}
           adminBackButton={() => setShowCampStatistics(false)}
@@ -184,6 +193,7 @@ const Dashboard = () => {
         <div>
           {/* Ovje dodati ime kampa na kojem je volonter zaduzen */}
           <CampDashboard
+            campId={selectedCamp.id}
             campName={nonAdminCampName}
             assignments={assignments}
           ></CampDashboard>

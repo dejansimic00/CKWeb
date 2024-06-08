@@ -25,7 +25,7 @@ function Archive() {
       .then((response) => response.json())
       .then((data) => {
         console.log("RESIDENTI", data);
-        setResidents(data);
+        setResidents(data.content);
       })
       .catch((error) =>
         console.error("Greška pri dohvatanju unesrećenih", error)
