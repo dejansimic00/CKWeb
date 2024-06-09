@@ -95,7 +95,7 @@ const VolunteerModal = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div
               className="w-90 rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
               style={{
