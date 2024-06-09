@@ -42,7 +42,7 @@ const AssignmentModal = ({
 
     const dataForPost = {
       startDate: newStartDate,
-      campId: selectedCamp.id ,
+      campId: selectedCamp.id,
     };
 
     try {
@@ -87,15 +87,11 @@ const AssignmentModal = ({
           }}
         >
           <Typography variant="h6" id="modal-modal-title" component="h2">
-            Da li ste sigurni?
+            Potvrdite dodjelu kampa{" "}
           </Typography>
           <div className="w-full my-2 flex justify-between">
             <Typography variant="body1">Ime:</Typography>
             <Typography variant="body1">{volunteerData.firstName}</Typography>
-          </div>
-          <div className="w-full my-2 flex justify-between">
-            <Typography variant="body1">JMBG:</Typography>
-            <Typography variant="body1">{volunteerData.jmbg}</Typography>
           </div>
 
           <div className="flex flex-col w-full items-start my-2">
@@ -111,12 +107,13 @@ const AssignmentModal = ({
                   borderRadius: "12px",
                 },
               }}
-              onChange={(event) =>{
-                const camp = camps.find((c) => c.id == event.target.value) ?? {};
-                if (event.target.value === 0) camp.id =0;
-                console.log("IZMJANA KAMPA",camp)
-                setSelectedCamp(camp)}
-              }
+              onChange={(event) => {
+                const camp =
+                  camps.find((c) => c.id == event.target.value) ?? {};
+                if (event.target.value === 0) camp.id = 0;
+                console.log("IZMJANA KAMPA", camp);
+                setSelectedCamp(camp);
+              }}
             >
               <MenuItem key={-1} value={-1}>
                 Izaberi

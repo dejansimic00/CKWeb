@@ -96,6 +96,7 @@ const ResidentModal = ({
     const method2 = "POST"; //= mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
 
     console.log(formData, "formData");
+    console.log(campId, "campId");
     console.log(residencePeriodData, "residencePeriodData");
 
     // validate data
@@ -105,6 +106,7 @@ const ResidentModal = ({
       return;
     }
 
+    return;
     try {
       const response1 = await fetch(url1, {
         method: method1,
@@ -205,8 +207,6 @@ const ResidentModal = ({
                 <DatePicker
                   value={formData.dateOfBirth}
                   onChange={(selectedDate) => {
-                    console.log(selectedDate);
-                    console.log(formData);
                     setFormData({ ...formData, dateOfBirth: selectedDate });
                   }}
                 />
@@ -216,7 +216,7 @@ const ResidentModal = ({
                 <p className="self-start font-bold">Pol</p>
                 <Select
                   className="min-w-24"
-                  defaultValue={"w"}
+                  defaultValue={"f"}
                   sx={{
                     ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
                       border: "2px solid black",
@@ -227,8 +227,12 @@ const ResidentModal = ({
                     setFormData({ ...formData, sex: event.target.value })
                   }
                 >
-                  <MenuItem value="m">Muški</MenuItem>
-                  <MenuItem value="w">Ženski</MenuItem>
+                  <MenuItem key="m" value="m">
+                    Muški
+                  </MenuItem>
+                  <MenuItem key="f" value="f">
+                    Ženski
+                  </MenuItem>
                 </Select>
               </div>
               {/* ---------------------drzava----------------------------------*/}
