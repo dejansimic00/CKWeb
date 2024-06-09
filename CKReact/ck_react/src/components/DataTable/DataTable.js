@@ -2,6 +2,7 @@ import React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 export default function DataTable({
+  className,
   columns,
   rows,
   onFilterModelChange,
@@ -11,7 +12,7 @@ export default function DataTable({
   onRowClick,
 }) {
   return (
-    <div className="w-full ">
+    <div className={`"w-full" `}>
       <DataGrid
         rows={rows}
         columns={columns}

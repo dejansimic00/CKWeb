@@ -13,6 +13,7 @@ import theme from "../../../styles/colors";
 import { useAuth } from "../../../hooks/useAuth";
 import { useSessionStorage } from "../../../hooks/useSessionStorage";
 import { FaBars } from "react-icons/fa"; // Import icon for the toggle button
+import "./NavBar.css";
 
 function AdminNavBar() {
   const [selectedPage, setSelectedPage] = useState("dashboard");
@@ -48,8 +49,9 @@ function AdminNavBar() {
     <>
       {loggedIn && (
         <nav
-          className="flex flex-col sticky top-0 h-screen  mr-4 print:hidden"
-          style={{ background: theme.colors.nav_bg }}
+          className={`flex flex-col bg-[#E5E7EB] sticky top-0 md:h-screen z-10   mr-4 print:hidden max-md:fixed max-md:w-screen  ${
+            menuOpen ? "h-screen " : "h-10"
+          } `}
         >
           <button
             className="md:hidden p-2 text-xl"

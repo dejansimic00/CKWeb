@@ -101,9 +101,9 @@ const VolunteerInfoModal = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={style} px={3}>
           <div
-            className="w-[40rem] rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
+            className="md:w-[40rem]  rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
             style={{
               background: theme.colors.modal_bg,
               maxHeight: "100vh",

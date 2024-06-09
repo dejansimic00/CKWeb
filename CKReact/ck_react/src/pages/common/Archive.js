@@ -114,7 +114,7 @@ function Archive() {
   };
 
   return (
-    <div className="flex flex-col items-center w-full max-md:overflow-auto    pt-10">
+    <div className="flex flex-col md:items-center w-full    p-10">
       <div className="flex justify-between">
         <div className=" flex items-center pl-2 h-10 w-80  self-start mb-4 rounded-xl border-black border-2">
           <img src={search} alt="search" className="w-4 h-4"></img>
@@ -134,29 +134,33 @@ function Archive() {
           selectedRow={selectedRow}
         ></ResidentInfoModal>
       )}
-      <div className="overflow-x-auto min-w-[37.5rem] max-w-[60rem]">
-        <DataGrid
-          columns={columns}
-          rows={filteredData}
-          onRowSelectionModelChange={handleRowSelection}
-          pagination
-          paginationMode="server"
-          rowCount={rowCount}
-          pageSize={pageSize}
-          pageSizeOptions={[5, 10, 20, 100]}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          initialState={{
-            columns: {
-              columnVisibilityModel: {
-                id: false,
-                jmbg: false,
-                employeeJmbg: false,
-                countryName: false,
-              },
-            },
-          }}
-        />
+      <div className=" md:min-w-[40rem] md:max-w-[60rem]">
+        <div className=" max-md:overflow-scroll ">
+          <div className="max-md:w-[40rem] ">
+            <DataGrid
+              columns={columns}
+              rows={filteredData}
+              onRowSelectionModelChange={handleRowSelection}
+              pagination
+              paginationMode="server"
+              rowCount={rowCount}
+              pageSize={pageSize}
+              pageSizeOptions={[5, 10, 20, 100]}
+              paginationModel={paginationModel}
+              onPaginationModelChange={setPaginationModel}
+              initialState={{
+                columns: {
+                  columnVisibilityModel: {
+                    id: false,
+                    jmbg: false,
+                    employeeJmbg: false,
+                    countryName: false,
+                  },
+                },
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

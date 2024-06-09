@@ -26,6 +26,10 @@ const DeleteResidentModal = ({ open, setOpen, handleDelete, residentData }) => {
     setOpen(false); // Close the modal
   };
 
+  React.useEffect(() => {
+    console.log("residentData", residentData);
+  }, []);
+
   return (
     <div>
       <Modal
@@ -49,20 +53,16 @@ const DeleteResidentModal = ({ open, setOpen, handleDelete, residentData }) => {
             }}
           >
             <Typography variant="h6" id="modal-modal-title" component="h2">
-              Da li ste sigurni?
+              Potvrdite odlazak
             </Typography>
-            <div>
-              Ime:
-              {residentData.firstName}
-            </div>
-            <div>
-              Prezime:
-              {residentData.lastName}
-            </div>
-            <div>
-              JMBG:
-              {residentData.jmbg}
-            </div>
+            <p>
+              Da li unesrećeni{" "}
+              <strong>
+                {" "}
+                {residentData.firstName + " " + residentData.lastName}{" "}
+              </strong>
+              zaista napušta kamp?
+            </p>
             <div className="flex space-x-4">
               <Button
                 text={"Da"}

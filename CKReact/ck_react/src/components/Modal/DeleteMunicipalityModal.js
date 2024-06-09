@@ -2,7 +2,8 @@ import * as React from "react";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
+import Button from "../Button/Button";
+import theme from "../../styles/colors";
 
 const style = {
   position: "absolute",
@@ -17,10 +18,13 @@ const DeleteMunicipalityModal = ({
   handleDeleteMunicipality,
   municipalityData,
 }) => {
+  React.useEffect(() => {
+    console.log("municipalityData", municipalityData);
+  }, []);
   const handleClose = () => setOpen(false);
 
   const handleDelete = () => {
-    handleDeleteMunicipality(municipalityData.id);
+    handleDeleteMunicipality(municipalityData.name);
     handleClose();
   };
 
@@ -35,17 +39,28 @@ const DeleteMunicipalityModal = ({
         <div
           className="w-90 rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
           style={{
-            background: "#FFFFFF", // Change background color as needed
+            background: theme.colors.modal_bg,
             maxHeight: "100vh",
             overflowY: "auto",
+
+            WebkitScrollbar: {
+              width: "0",
+            },
+            scrollbarWidth: "none",
           }}
         >
-          <h2 id="modal-modal-title">Delete Municipality</h2>
-          <p id="modal-modal-description">
-            Are you sure you want to delete this municipality?
+          <h2 id="modal-modal-title" className="font-bold text-lg">
+            Potvrdi brisanje
+          </h2>
+          <p id="modal-modal-description" className="text-center mb-4">
+            Da li ste sigurni da želite obrisati grad:{" "}
+            <strong>{municipalityData?.name}</strong>?
           </p>
-          <Button onClick={handleDelete}>Delete</Button>
-          <Button onClick={handleClose}>Cancel</Button>
+
+          <div className="flex gap-4">
+            <Button text="Izađi" onClick={handleClose} />
+            <Button text="Obriši" onClick={handleDelete} />
+          </div>
         </div>
       </Box>
     </Modal>

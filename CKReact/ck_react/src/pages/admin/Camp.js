@@ -64,10 +64,10 @@ const Camp = () => {
 
     setColumns([
       { field: "id", headerName: "ID", width: 20 },
-      { field: "name", headerName: "Ime", flex: 1 },
-      { field: "place", headerName: "Mjesto", flex: 1 },
-      { field: "placeDescription", headerName: "Lokacija", flex: 1 },
-      { field: "capacity", headerName: "Kapacitet" },
+      { field: "name", headerName: "Ime", width: 100 },
+      { field: "place", headerName: "Mjesto", width: 100 },
+      { field: "placeDescription", headerName: "Lokacija", width: 150 },
+      { field: "capacity", headerName: "Kapacitet", width: 140 },
       { field: "campStatusName", headerName: "Status", width: 150 },
       {
         field: "actions",
@@ -156,7 +156,7 @@ const Camp = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full pt-10">
+    <div className="flex flex-col md:items-center w-full    p-10">
       {newCampModal && (
         <CampModal
           open={newCampModal}
@@ -206,19 +206,21 @@ const Camp = () => {
             plusSign={true}
           ></Button>
         </div>
-        <DataTable
-          columns={[...columns]}
-          rows={filteredData}
-          onRowSelectionModelChange={handleRowSelection}
-          initialState={{
-            columns: {
-              columnVisibilityModel: {
-                id: false,
-                place: false,
+        <div className="">
+          <DataTable
+            columns={[...columns]}
+            rows={filteredData}
+            onRowSelectionModelChange={handleRowSelection}
+            initialState={{
+              columns: {
+                columnVisibilityModel: {
+                  id: false,
+                  place: false,
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </div>
       </div>
     </div>
   );

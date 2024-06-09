@@ -276,7 +276,7 @@ const Volunteer = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full pt-10">
+    <div className="flex flex-col md:items-center w-full    p-10">
       {newVolunteerModal && (
         <VolunteerModal
           open={newVolunteerModal}

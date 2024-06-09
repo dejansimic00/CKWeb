@@ -33,7 +33,9 @@ const DeleteVolunteerModal = ({
     setOpen(false); // Close the modal
   };
 
-  
+  React.useEffect(() => {
+    console.log(volunteerData);
+  }, []);
 
   return (
     <Modal
@@ -62,13 +64,13 @@ const DeleteVolunteerModal = ({
             </div>
           </div>
           <div className="flex space-x-4">
+            <Button text={"Ne"} onClick={handleClose} />
             <Button
               text={"Da"}
               type="submit"
               onClick={handleConfirmDelete}
               style={{ marginRight: "10px" }}
             />
-            <Button text={"Ne"} onClick={handleClose} />
           </div>
         </div>
       </Box>

@@ -88,7 +88,7 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center pt-24">
+    <div className="flex items-center justify-center pt-24 px-6">
       <div className="border-black border-2 w-[30rem] rounded-[60px] p-16 flex flex-col items-center">
         <Logo width={90} />
         <form onSubmit={handleSubmit}>

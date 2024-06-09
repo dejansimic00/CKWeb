@@ -40,7 +40,7 @@ function MainLayout() {
       {/* Conditionally render NavBar based on the current path */}
       {location.pathname !== "/login" && <NavBar />}
 
-      <div className="w-full ">
+      <div className="w-full max-md:pt-10 max-md:overflow-scroll">
         <Routes>
           <Route path="/login" element={<Login />} />
           {/* <Route path="/settings" element={<Settings />} /> */}

@@ -12,6 +12,7 @@ import DeleteResidentModal from "../../components/Modal/DeleteResidentModal.js";
 import AssignmentModal from "../../components/Modal/AssignmentModal";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
 import ResidentInfoModal from "../../components/Modal/ResidentInfoModal.js";
+import { Typography } from "@mui/material";
 
 const Residence = () => {
   const [data, setData] = useState([]);
@@ -272,8 +273,12 @@ const Residence = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full pt-10">
-      <h1>Unesreceni u kampu {campName}</h1>
+    <div className="flex flex-col items-center  pt-10 ">
+      <div className="w-full content-center">
+        <Typography variant="h4" component="h4" className="text-center">
+          Unesrećeni u kampu {campName}
+        </Typography>
+      </div>
       {newResidentModal && (
         <ResidentModal
           open={newResidentModal}
@@ -319,9 +324,9 @@ const Residence = () => {
           {" "}
         </AssignmentModal>
       )} */}
-      <div className="w-[60rem]">
+      <div className="w-[60rem] max-md:w-screen  py-10 px-6">
         <div className="flex justify-between">
-          <div className=" flex items-center pl-2 h-10 w-80  self-start mb-4 rounded-xl border-black border-2">
+          <div className=" flex items-center pl-2 h-10  self-start mb-4 rounded-xl border-black border-2">
             <img src={search} alt="search" className="w-4 h-4"></img>
             <input
               type="text"
@@ -331,30 +336,32 @@ const Residence = () => {
             ></input>
           </div>
           <Button
-            text={"Novi UNESR"}
+            text={"Novi unesrećeni"}
             onClick={newResidentOnClick}
             plusSign={true}
           ></Button>
         </div>
-        <div className="overflow-auto min-w-[60.5rem]">
-          <DataTable
-            columns={[...columns]}
-            rows={data}
-            onRowClick={(event) => console.log("EE sssssssV", event)}
-            onRowSelectionModelChange={handleRowSelection}
-            initialState={{
-              columns: {
-                columnVisibilityModel: {
-                  // Hide columns status and traderName, the other columns will remain visible
-                  id: false,
-                  jmbg: false,
-                  employeeJmbg: false,
-                  dateOfBirth: false,
-                  countryName: false,
+        <div className=" max-md:overflow-scroll ">
+          <div className="max-md:w-[40rem] ">
+            <DataTable
+              columns={[...columns]}
+              rows={data}
+              onRowClick={(event) => console.log("EE sssssssV", event)}
+              onRowSelectionModelChange={handleRowSelection}
+              initialState={{
+                columns: {
+                  columnVisibilityModel: {
+                    // Hide columns status and traderName, the other columns will remain visible
+                    id: false,
+                    jmbg: false,
+                    employeeJmbg: false,
+                    dateOfBirth: false,
+                    countryName: false,
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

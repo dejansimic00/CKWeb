@@ -13,38 +13,33 @@ const Notification = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [notificationModal, setNotificationModal] = useState(false);
 
-  const fetchMessages = async () => {
-    const URL = API_URLS.EMPLOYEES + "/" + getItem("id") + "/messages";
-    try {
-      const response = await fetch(URL, {
-        headers: {
-          Authorization: `Bearer ${getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      const formattedData = data.map((item) => ({
-        ...item.message,
-        creationTime: dayjs(item.message.creationTime).format(
-          "DD-MM-YYYY HH:mm:ss"
-        ),
-        readAt: item.readAt
-          ? dayjs(item.readAt).format("DD-MM-YYYY HH:mm:ss")
-          : null,
-      }));
-      setNotifications(formattedData);
-    } catch (error) {
-      console.error(
-        "Greška pri dohvatanju podataka o pročitanim porukama:",
-        error
-      );
-    }
-  };
-
   useEffect(() => {
-    fetchMessages();
+    const URL = API_URLS.EMPLOYEES + "/" + getItem("id") + "/messages";
+    fetch(URL, {
+      headers: {
+        Authorization: `Bearer ${getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data.map((item) => ({
+          ...item.message,
+          creationTime: dayjs(item.message.creationTime).format(
+            "DD-MM-YYYY HH:mm:ss"
+          ),
+          readAt: item.readAt
+            ? dayjs(item.readAt).format("DD-MM-YYYY HH:mm:ss")
+            : null,
+        }));
+        setNotifications(formattedData);
+      })
+      .catch((error) => {
+        console.error(
+          "Greška pri dohvatanju podataka o pročitanim porukama:",
+          error
+        );
+      });
   }, [refresh]);
-
-  const readNotification = () => {};
 
   const handleAddNotification = async () => {
     if (newNotification.trim()) {
@@ -104,8 +99,8 @@ const Notification = () => {
   };
 
   return (
-    <div className="flex justify-between p-4">
-      <div className="flex flex-col w-1/3 p-4 border-r border-gray-300">
+    <div className="flex max-md:flex-col justify-between p-4">
+      <div className="flex flex-col  md:w-1/3 p-4 md:border-r max-md:border-b border-gray-300">
         <h2 className="text-xl font-bold mb-4">Novo obavještenje</h2>
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
@@ -115,7 +110,7 @@ const Notification = () => {
         </label>
         <textarea
           id="notification"
-          className="w-full h-[39rem] px-3 py-2 mb-4 text-gray-700 border rounded-lg focus:outline-none"
+          className="w-full md:h-[39rem] min-h-[18rem] px-3 py-2 mb-4 text-gray-700 border rounded-lg focus:outline-none"
           value={newNotification}
           onChange={(e) => setNewNotification(e.target.value)}
         />
@@ -127,7 +122,7 @@ const Notification = () => {
         </button>
       </div>
 
-      <div className="flex flex-col w-2/3 p-4 ">
+      <div className="flex flex-col md:w-2/3 p-4 ">
         <h2 className="text-xl font-bold mb-11">Najnovija obavještenja</h2>
 
         <DataTable

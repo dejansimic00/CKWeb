@@ -85,10 +85,11 @@ const Place = () => {
       // Define columns
       { field: "id", headerName: "ID" },
       { field: "description", headerName: "Opis", flex: 2 },
-      { field: "municipalityName", headerName: "Mjesto", flex: 1 },
+      { field: "municipalityName", headerName: "Mjesto", flex: 2 },
       {
         field: "actions",
         headerName: "Akcije",
+        width: 120,
         renderCell: (params) => (
           <div className="flex flex-row justify-center items-center space-x-5 h-full ">
             <button onClick={() => handleDeletePlaceClick(params.row)}>
@@ -327,7 +328,7 @@ const Place = () => {
         )}
 
         {/* MJESTA----------------------------------------------------------------------------------------------------- */}
-        <div>
+        <div className="max-md:w-screen px-6">
           <Typography variant="h4" component="h4">
             Lokacije
           </Typography>
@@ -354,12 +355,19 @@ const Place = () => {
               description: row.description,
               municipalityName: row.municipalityName,
             }))}
+            initialState={{
+              columns: {
+                columnVisibilityModel: {
+                  id: false,
+                },
+              },
+            }}
             onRowSelectionModelChange={handleRowSelection}
           />
         </div>
 
         {/* GRADOVI----------------------------------------------------------------------------------------------------- */}
-        <div>
+        <div className="max-md:w-screen px-6  ">
           <div className="flex py-4  justify-between items-center">
             <Typography variant="h4" component="h4">
               Gradovi
@@ -370,42 +378,67 @@ const Place = () => {
               plusSign={true}
             />
           </div>
-          <DataTable
-            columns={[
-              { field: "id", headerName: "ID", width: 100 },
-              { field: "name", headerName: "Naziv", flex: 1 },
-              { field: "postCode", headerName: "Poštanski broj", width: 150 },
-              { field: "countryName", headerName: "Država", width: 200 },
-              {
-                field: "actions",
-                headerName: "Akcije",
-                renderCell: (params) => (
-                  <div className="flex flex-row justify-center items-center space-x-5 h-full ">
-                    <button
-                      onClick={() => handleDeleteMunicipalityClick(params.row)}
-                    >
-                      <img src={deleteImg} alt="Delete municipality" />
-                    </button>
-                    <button
-                      onClick={() => handleEditMunicipalityClick(params.row)}
-                    >
-                      <img src={editImg} alt="Edit municipality" />
-                    </button>
-                  </div>
-                ),
-              },
-            ]}
-            rows={municipalities.map((municipality) => ({
-              id: municipality.id,
-              name: municipality.name,
-              postCode: municipality.postCode,
-              countryName: municipality.countryName,
-            }))}
-          />
+          <div className=" max-md:overflow-scroll ">
+            <div className="max-md:w-[30rem] ">
+              <DataTable
+                columns={[
+                  { field: "id", headerName: "ID" },
+                  { field: "name", headerName: "Naziv", flex: 3 },
+                  {
+                    field: "postCode",
+                    width: 130,
+                    renderHeader: (params) => (
+                      <div className="flex flex-col">
+                        <span>Poštanski</span>
+                        <span>broj</span>
+                      </div>
+                    ),
+                  },
+                  { field: "countryName", headerName: "Država", flex: 3 },
+                  {
+                    field: "actions",
+                    headerName: "Akcije",
+                    width: 120,
+                    renderCell: (params) => (
+                      <div className="flex flex-row justify-center items-center space-x-5 h-full ">
+                        <button
+                          onClick={() =>
+                            handleDeleteMunicipalityClick(params.row)
+                          }
+                        >
+                          <img src={deleteImg} alt="Delete municipality" />
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleEditMunicipalityClick(params.row)
+                          }
+                        >
+                          <img src={editImg} alt="Edit municipality" />
+                        </button>
+                      </div>
+                    ),
+                  },
+                ]}
+                rows={municipalities.map((municipality) => ({
+                  id: municipality.id,
+                  name: municipality.name,
+                  postCode: municipality.postCode,
+                  countryName: municipality.countryName,
+                }))}
+                initialState={{
+                  columns: {
+                    columnVisibilityModel: {
+                      id: false,
+                    },
+                  },
+                }}
+              />
+            </div>
+          </div>
         </div>
 
         {/* DRZAVE----------------------------------------------------------------------------------------------------- */}
-        <div className="w-full">
+        <div className="max-md:w-screen px-6">
           <div className="flex py-4  justify-between items-center">
             <Typography variant="h4" component="h4">
               Države
@@ -417,32 +450,46 @@ const Place = () => {
               plusSign={true}
             />
           </div>
-          <DataTable
-            columns={[
-              { field: "id", headerName: "ID", width: 100 },
-              { field: "name", headerName: "Naziv", flex: 1 },
-              {
-                field: "actions",
-                headerName: "Akcije",
-                renderCell: (params) => (
-                  <div className="flex flex-row justify-center items-center space-x-5 h-full ">
-                    <button
-                      onClick={() => handleDeleteCountryClick(params.row)}
-                    >
-                      <img src={deleteImg} alt="Delete country" />
-                    </button>
-                    <button onClick={() => handleEditCountryClick(params.row)}>
-                      <img src={editImg} alt="Edit country" />
-                    </button>
-                  </div>
-                ),
-              },
-            ]}
-            rows={countries.map((country) => ({
-              id: country.id,
-              name: country.name,
-            }))}
-          />
+          <div className=" max-md:overflow-scroll ">
+            <div className="max-md:w-[40rem] ">
+              <DataTable
+                columns={[
+                  { field: "id", headerName: "ID", width: 100 },
+                  { field: "name", headerName: "Naziv", flex: 1 },
+                  {
+                    field: "actions",
+                    width: 140,
+                    headerName: "Akcije",
+                    renderCell: (params) => (
+                      <div className="flex flex-row justify-center items-center space-x-5 h-full ">
+                        <button
+                          onClick={() => handleDeleteCountryClick(params.row)}
+                        >
+                          <img src={deleteImg} alt="Delete country" />
+                        </button>
+                        <button
+                          onClick={() => handleEditCountryClick(params.row)}
+                        >
+                          <img src={editImg} alt="Edit country" />
+                        </button>
+                      </div>
+                    ),
+                  },
+                ]}
+                rows={countries.map((country) => ({
+                  id: country.id,
+                  name: country.name,
+                }))}
+                initialState={{
+                  columns: {
+                    columnVisibilityModel: {
+                      id: false,
+                    },
+                  },
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

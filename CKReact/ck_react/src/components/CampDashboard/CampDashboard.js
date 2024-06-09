@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import CampLineChart from "../Chart/CampLineChart";
 import CampPieChart from "../Chart/CampPieChart";
 import { useSessionStorage } from "../../hooks/useSessionStorage";
-import { useMediaQuery } from "@mui/material"; // Step 1
+import { Typography, useMediaQuery } from "@mui/material"; // Step 1
 import CampPyramidChart from "../Chart/CampPyramidChart";
 
 const CampDashboard = ({
@@ -21,6 +21,7 @@ const CampDashboard = ({
   const [residencePeriod, setResidencePeriod] = useState([]);
 
   const [currentCampResidents, setCurrentCampResidents] = useState([]);
+  const [allCampResidents, setAllCampResidents] = useState([]);
   const [currentCampVolunteers, setCurrentCampVolunteers] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
   const [maleResidents, setMaleResidents] = useState([]);
@@ -61,6 +62,21 @@ const CampDashboard = ({
         .then((response) => response.json())
         .then((newData) => {
           setResidents(newData);
+        })
+        .catch((error) =>
+          console.error("Greška pri dohvatanju podataka o unesrećenima:", error)
+        );
+
+      const URL3 = API_URLS.CAMPS + "/" + campId + "/all-residents";
+
+      fetch(URL3, {
+        headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((newData) => {
+          setAllCampResidents(newData);
         })
         .catch((error) =>
           console.error("Greška pri dohvatanju podataka o unesrećenima:", error)
@@ -146,7 +162,9 @@ const CampDashboard = ({
           Nazad
         </button>
       )}
-      <div className="text-3xl font-bold mb-4">Statistika</div>
+      <Typography variant="h4" component="h4">
+        Statistika
+      </Typography>
       <div className="flex flex-col w-full max-w-4xl space-y-8">
         <div className="flex flex-col space-y-2">
           <div className="font-semibold">Ime kampa: {campName}</div>
@@ -180,7 +198,7 @@ const CampDashboard = ({
         <hr className="border-t-2 border-gray-300" />
         <div>
           <CampPyramidChart
-            residents={currentCampResidents}
+            residents={allCampResidents}
             title="Populaciona piramida kroz istoriju kampa"
           />
         </div>

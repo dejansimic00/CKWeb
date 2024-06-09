@@ -30,6 +30,16 @@ const MunicipalityModal = ({
     countryId: municipalityData?.countryId ?? "",
   });
 
+  React.useEffect(() => {
+    console.log(countries);
+    console.log(municipalityData);
+    const newData = {
+      ...formData,
+      countryId: countries.find((c) => c.name === municipalityData.countryName)
+        ?.id,
+    };
+    setFormData(newData);
+  }, []);
   const [errors, setErrors] = useState({});
   const { getItem } = useSessionStorage();
 
@@ -136,12 +146,14 @@ const MunicipalityModal = ({
                 onChange={handleChange}
               />
               <Select
-                value={formData.countryId}
+                value={formData?.countryId ?? 0}
                 onChange={(e) =>
                   setFormData({ ...formData, countryId: e.target.value })
                 }
               >
-                <MenuItem value="">Select country</MenuItem>
+                <MenuItem key={0} value={9}>
+                  Izaberi državu
+                </MenuItem>
                 {countries.map((country) => (
                   <MenuItem key={country.id} value={country.id}>
                     {country.name}

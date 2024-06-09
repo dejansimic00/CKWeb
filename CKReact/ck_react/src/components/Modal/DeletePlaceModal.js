@@ -50,11 +50,13 @@ const DeletePlaceModal = ({
           }}
         >
           <h2 id="modal-modal-title" className="font-bold text-lg">
-            Confirm Delete
+            Potvrdi brisanje
           </h2>
           <p id="modal-modal-description" className="text-center mb-4">
-            Are you sure you want to delete the place: {placeData?.description}?
+            Da li ste sigurni da želite obrisati lokaciju:{" "}
+            {placeData?.description}?
           </p>
+
           <div className="flex gap-4">
             <Button text="Cancel" onClick={handleCloseClick} />
             <Button text="Delete" onClick={handleDeleteClick} />
