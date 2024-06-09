@@ -107,16 +107,14 @@ const CampModal = ({
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to ${mode === "add" ? "register" : "update"} camp`
-        );
+        throw new Error();
       }
 
       setRefresh(!refresh);
       handleClose();
     } catch (error) {
       console.error(
-        `Error ${mode === "add" ? "registering" : "updating"} camp:`,
+        `Greška pri  ${mode === "add" ? "kreiranju" : "ažuriranju"} kampa:`,
         error.message
       );
     }

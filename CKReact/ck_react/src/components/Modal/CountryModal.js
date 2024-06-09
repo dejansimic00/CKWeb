@@ -76,18 +76,16 @@ const CountryModal = ({
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to ${mode === "add" ? "add" : "update"} country`
-        );
+        throw new Error();
       }
 
       console.log(
-        `Country ${mode === "add" ? "added" : "updated"} successfully`
+        `Država ${mode === "add" ? "kreirana" : "ažurirana"} uspješno`
       );
     } catch (error) {
       console.error(
-        `Error ${mode === "add" ? "adding" : "updating"} country:`,
-        error.message
+        `Greška pri  ${mode === "add" ? "kreiranju" : "ažuriranju"} države:`,
+        error
       );
     }
 
@@ -103,7 +101,7 @@ const CountryModal = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div
               className="w-90 rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
               style={{

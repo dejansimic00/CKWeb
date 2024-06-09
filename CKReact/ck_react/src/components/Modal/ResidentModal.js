@@ -105,9 +105,9 @@ const ResidentModal = ({
     //     : `${API_URLS.RESIDENCE_PERIOD}/${residentData.id}`;
     const method2 = "POST"; //= mode === "add" ? "POST" : "PUT";
 
-    console.log(formData, "formData");
-    console.log(campId, "campId");
-    console.log(residencePeriodData, "residencePeriodData");
+    // console.log(formData, "formData");
+    // console.log(campId, "campId");
+    // console.log(residencePeriodData, "residencePeriodData");
 
     // validate data
 
@@ -127,9 +127,7 @@ const ResidentModal = ({
       });
 
       if (!response1.ok) {
-        throw new Error(
-          `Failed to ${mode === "add" ? "register" : "update"} employee`
-        );
+        throw new Error();
       }
 
       const data1 = await response1.json(); // Parse the response JSON
@@ -148,11 +146,7 @@ const ResidentModal = ({
         });
 
         if (!response2.ok) {
-          throw new Error(
-            `Nije uspelo ${
-              mode === "add" ? "registrovanje" : "ažuriranje"
-            } zaposlenog`
-          );
+          throw new Error();
         }
       }
 

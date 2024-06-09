@@ -69,16 +69,17 @@ const PlaceModal = ({
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to ${mode === "add" ? "add" : "update"} place`);
       }
 
       setRefresh(!refresh);
 
-      console.log(`Place ${mode === "add" ? "added" : "updated"} successfully`);
+      console.log(
+        `Mjesto ${mode === "add" ? "kreirano" : "ažurirano"} uspješno`
+      );
       handleClose();
     } catch (error) {
       console.error(
-        `Error ${mode === "add" ? "adding" : "updating"} place:`,
+        `Greška pri  ${mode === "add" ? "kreiranju" : "ažuriranju"} lokacije:`,
         error.message
       );
     }

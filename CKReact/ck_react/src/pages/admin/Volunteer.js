@@ -220,8 +220,6 @@ const Volunteer = () => {
       accountStatus: status,
     };
 
-    console.log(body);
-
     try {
       const URL = API_URLS.EMPLOYEES + "/" + selectedRow.id + "/status";
       const response = await fetch(URL, {
@@ -283,6 +281,8 @@ const Volunteer = () => {
           setOpen={setNewVolunteerModal}
           countries={countries}
           assingments={assignments}
+          data={data}
+          setData={setData}
         ></VolunteerModal>
       )}
 
@@ -294,6 +294,8 @@ const Volunteer = () => {
           volunteerData={{ ...selectedRow, countryId }}
           countries={countries}
           assingments={assignments}
+          data={data}
+          setData={setData}
         ></VolunteerModal>
       )}
       {deleteVolunteerModal && (

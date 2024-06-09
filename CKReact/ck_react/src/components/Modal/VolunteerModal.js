@@ -26,6 +26,8 @@ const VolunteerModal = ({
   mode = "add",
   volunteerData = {},
   countries,
+  data,
+  setData,
 }) => {
   const [formData, setFormData] = React.useState({
     firstName: volunteerData?.firstName ?? "",
@@ -48,6 +50,7 @@ const VolunteerModal = ({
 
   // ------------------------------------------------ slanje zahtjeva
   const handleSubmit = async (event) => {
+    event.preventDefault();
     const url =
       mode === "add"
         ? API_URLS.EMPLOYEES
@@ -69,18 +72,27 @@ const VolunteerModal = ({
 
       if (!response.ok) {
         throw new Error(
-          `Failed to ${mode === "add" ? "register" : "update"} employee`
+          `Greška kod  ${
+            mode === "add" ? "kreiranja" : "ažuriranja"
+          } zaposlenog`
         );
       }
 
+      const updatedData = data.map((item) =>
+        item.id === volunteerData.id ? { ...item, ...formData } : item
+      );
+
+      if (mode === "add") {
+        updatedData.push(response);
+      }
+      setData(updatedData);
+
+      handleClose();
       console.log(
-        `Employee ${mode === "add" ? "registered" : "updated"} successfully`
+        `Zaposleni uspješno${mode === "add" ? "kreiran" : "ažuriran"} `
       );
     } catch (error) {
-      console.error(
-        `Error ${mode === "add" ? "registering" : "updating"} employee:`,
-        error.message
-      );
+      console.error(error.message);
     }
   };
 
@@ -139,7 +151,7 @@ const VolunteerModal = ({
                 <p className="self-start font-bold">Pol</p>
                 <Select
                   className="min-w-24"
-                  defaultValue={"w"}
+                  defaultValue={"f"}
                   sx={{
                     ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
                       border: "2px solid black",
@@ -150,8 +162,12 @@ const VolunteerModal = ({
                     setFormData({ ...formData, sex: event.target.value })
                   }
                 >
-                  <MenuItem value="m">Muški</MenuItem>
-                  <MenuItem value="w">Ženski</MenuItem>
+                  <MenuItem key={"m"} value="m">
+                    Muški
+                  </MenuItem>
+                  <MenuItem key={"f"} value="f">
+                    Ženski
+                  </MenuItem>
                 </Select>
               </div>
               {/** ---------------------drzava---------------------------------- */}

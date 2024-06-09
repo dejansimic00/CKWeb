@@ -47,21 +47,13 @@ const DeleteVolunteerModal = ({
       <Box sx={style}>
         <div className="flex flex-col items-center space-y-6">
           <Typography variant="h6" id="modal-modal-title" component="h2">
-            Da li ste sigurni?
+            Potvrda izmjene statusa
           </Typography>
-          <div className="w-full flex flex-col space-y-2">
-            <div className="flex justify-between">
-              <span>Ime:</span>
-              <span>{volunteerData.firstName}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Prezime:</span>
-              <span>{volunteerData.lastName}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>JMBG:</span>
-              <span>{volunteerData.jmbg}</span>
-            </div>
+          <div className="w-full space-y-2">
+            <span>
+              Da li ste sigurni da želite izmijeniti status volontera{" "}
+            </span>
+            <strong>{volunteerData.firstName}</strong>?
           </div>
           <div className="flex space-x-4">
             <Button text={"Ne"} onClick={handleClose} />

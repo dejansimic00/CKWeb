@@ -4,10 +4,13 @@ const Button = ({
   onClick,
   plusSign = false,
   type,
+  className,
 }) => {
   return (
     <div
-      className={`rounded-lg  h-10   flex items-center`}
+      className={`rounded-lg  h-10   flex items-center ${
+        className ? className : ""
+      }`}
       style={{ minWidth: minWidth, background: "#ff0000" }}
     >
       {plusSign && <span className="text-2xl leading-3 text-white">+</span>}

@@ -91,17 +91,13 @@ const MunicipalityModal = ({
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to ${mode === "add" ? "add" : "update"} municipality`
-        );
+        throw new Error();
       }
 
-      console.log(
-        `Municipality ${mode === "add" ? "added" : "updated"} successfully`
-      );
+      console.log(`Grad ${mode === "add" ? "kreiran" : "ažuriran"} uspješno`);
     } catch (error) {
       console.error(
-        `Error ${mode === "add" ? "adding" : "updating"} municipality:`,
+        `Greška pri  ${mode === "add" ? "kreiranju" : "ažuriranju"} grada:`,
         error.message
       );
     }
@@ -118,7 +114,7 @@ const MunicipalityModal = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div
               className="w-90 rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
               style={{
