@@ -20,12 +20,9 @@ const CampDashboard = ({
   const [residents, setResidents] = useState([]);
   const [residencePeriod, setResidencePeriod] = useState([]);
 
-  const [currentCampResidents, setCurrentCampResidents] = useState([]);
   const [allCampResidents, setAllCampResidents] = useState([]);
   const [currentCampVolunteers, setCurrentCampVolunteers] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
-  const [maleResidents, setMaleResidents] = useState([]);
-  const [femaleResidents, setFemaleResidents] = useState([]);
   const { getItem } = useSessionStorage();
 
   const [averageStay, setAverageStay] = useState(0);
@@ -100,29 +97,23 @@ const CampDashboard = ({
   }, [currentCampVolunteers]);
 
   useEffect(() => {
-    if (residents?.length > 0 && residencePeriod?.length > 0) {
+    if (allCampResidents?.length > 0 && residencePeriod?.length > 0) {
       // Clear the arrays before updating
-      setMaleResidents([]);
-      setFemaleResidents([]);
 
       const newResidencePeriod = residencePeriod.filter(
         (resP) => resP.campName === campName
       );
 
-      const filteredResidentPeriod = residencePeriod.filter(
-        (rp) => rp.campName === campName
-      );
-
-      const filteredResidents = residents;
-      // .filter((res) => {
-      //   return filteredResidentPeriod.some(
-      //     (rp) => rp.residentJmbg === res.jmbg
-      //   );
-      // });
+      // const filteredResidents = residents;
+      // // .filter((res) => {
+      // //   return filteredResidentPeriod.some(
+      // //     (rp) => rp.residentJmbg === res.jmbg
+      // //   );
+      // // });
 
       // Calculate average stay duration
-      const totalDays = filteredResidents.reduce((acc, res) => {
-        const periods = filteredResidentPeriod.filter(
+      const totalDays = allCampResidents.reduce((acc, res) => {
+        const periods = residencePeriod.filter(
           (rp) => rp.residentJmbg === res.jmbg
         );
         const stayDays = periods.reduce((acc, period) => {
@@ -134,23 +125,20 @@ const CampDashboard = ({
       }, 0);
 
       const averageStayDuration =
-        filteredResidents.length > 0 ? totalDays / filteredResidents.length : 0;
+        allCampResidents.length > 0 ? totalDays / allCampResidents.length : 0;
       setAverageStay(averageStayDuration);
 
-      console.log("filteredResidents", filteredResidents);
-      setCurrentCampResidents(filteredResidents);
+      console.log("totalDays", totalDays);
+      console.log("allCampResidents", allCampResidents);
 
-      filteredResidents.forEach((res) => {
-        if (res.sex.toLowerCase() === "m")
-          setMaleResidents((prevData) => [...prevData, res]);
-        else setFemaleResidents((prevData) => [...prevData, res]);
-      });
+      // console.log("filteredResidents", filteredResidents);
+      // setCurrentCampResidents(filteredResidents);
     }
   }, [residencePeriod, residents]);
 
   useEffect(() => {
-    setResNumber(currentCampResidents.length);
-  }, [currentCampResidents]);
+    setResNumber(residents.length);
+  }, [residents]);
 
   return (
     <div className="flex flex-col items-center text-lg font-serif p-6">
@@ -191,7 +179,7 @@ const CampDashboard = ({
         <hr className="border-t-2 border-gray-300" />
         <div>
           <CampPyramidChart
-            residents={currentCampResidents}
+            residents={residents}
             title="Populaciona piramida za trenuto stanje kampa"
           />
         </div>

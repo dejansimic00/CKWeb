@@ -66,7 +66,11 @@ function Archive() {
       { field: "firstName", headerName: "Ime", flex: 1 },
       { field: "lastName", headerName: "Prezime", flex: 1 },
       { field: "dateOfBirth", headerName: "Datum rođenja", width: 150 },
-      { field: "sex", headerName: "Pol", width: 50 },
+      {
+        field: "sex",
+        headerName: "Pol",
+        renderCell: (params) => (params.value === "M" ? "Muški" : "Ženski"),
+      },
       { field: "jmbg", headerName: "JMBG", width: 150 },
       { field: "countryName", headerName: "Država", width: 150 },
       {
@@ -134,7 +138,7 @@ function Archive() {
           selectedRow={selectedRow}
         ></ResidentInfoModal>
       )}
-      <div className=" md:min-w-[40rem] md:max-w-[60rem]">
+      <div className=" md:min-w-[60rem] md:max-w-[60rem]">
         <div className=" max-md:overflow-scroll ">
           <div className="max-md:w-[40rem] ">
             <DataGrid

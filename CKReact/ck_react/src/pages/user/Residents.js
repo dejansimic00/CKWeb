@@ -107,7 +107,12 @@ const Residence = () => {
       { field: "firstName", headerName: "Ime", width: 150, flex: 1 },
       { field: "lastName", headerName: "Prezime", width: 150, flex: 1 },
       { field: "dateOfBirth", headerName: "Datum rođenja", width: 130 },
-      { field: "sex", headerName: "Pol" },
+      {
+        field: "sex",
+        headerName: "Pol",
+        renderCell: (params) =>
+          params.value.toUpperCase() === "M" ? "Muški" : "Ženski",
+      },
       { field: "jmbg", headerName: "JMBG", width: 150 },
       { field: "countryName", headerName: "Država" },
       {
@@ -131,6 +136,7 @@ const Residence = () => {
           <div className="flex flex-row justify-center items-center space-x-5 h-full ">
             <button
               className="w-6 h-6"
+              type="submit"
               onClick={(event) => {
                 handleDeleteClick(event, params.row);
               }}
@@ -165,21 +171,21 @@ const Residence = () => {
 
   useEffect(() => {
     if (assignments && camps) {
-      const ass = assignments.find(
-        (ass) => ass.employeeId === Number.parseInt(getItem("id"))
-      );
+      // const ass = assignments.find(
+      //   (ass) => ass.employeeId === Number.parseInt(getItem("id"))
+      // );
 
-      if (!ass) {
-        setCampName("");
-      } else {
-        //////SREDITI
-        const temp = ass.campName;
-        console.log("ass", ass);
-        setCampName(temp);
+      // if (!ass) {
+      //   setCampName("");
+      // } else {
+      //   //////SREDITI
+      //   console.log("ass", ass);
+      //   setCampName(temp);
 
-        const camp = camps?.find((c) => c.name === temp);
-        setCampId(camp?.id);
-      }
+      const temp = assignments.campName;
+      const camp = camps?.find((c) => c.name === temp);
+      setCampId(camp?.id);
+      setCampName(assignments.campName);
     }
   }, [assignments, camps, getItem]);
 
@@ -244,7 +250,6 @@ const Residence = () => {
       residentId: selectedRow.id,
     };
 
-    console.log(messageBody);
     fetch(API_URLS.RESIDENTS_DEPART, {
       headers: {
         Authorization: `Bearer ${getItem("token")}`,
@@ -252,20 +257,21 @@ const Residence = () => {
       },
       method: "PATCH",
       body: JSON.stringify(messageBody),
-    }).catch((error) =>
-      console.error("Greška kod odlaska unesrećenog iz kampa:", error)
-    );
+    })
+      .then((response) => {
+        if (response.ok) {
+          const newData = data.filter(
+            (res) => res.id !== messageBody.residentId
+          );
+
+          setData(newData);
+        }
+      })
+
+      .catch((error) =>
+        console.error("Greška kod odlaska unesrećenog iz kampa:", error)
+      );
   };
-
-  // const filteredData = data?.filter((row) =>
-  //   Object.values(row).some((value) =>
-  //     value?.toString().toLowerCase().includes(searchText.toLowerCase())
-  //   )
-  // );
-
-  useEffect(() => {
-    if (data) console.log("data", data);
-  }, [data]);
 
   const newResidentOnClick = () => {
     setNewResidentModal(true);
@@ -284,6 +290,8 @@ const Residence = () => {
           setOpen={setNewResidentModal}
           countries={countries}
           campId={campId}
+          data={data}
+          setData={setData}
         ></ResidentModal>
       )}
 
@@ -294,6 +302,8 @@ const Residence = () => {
           mode="edit"
           residentData={selectedRow}
           countries={countries}
+          data={data}
+          setData={setData}
         ></ResidentModal>
       )}
       {deleteResidentModal && (

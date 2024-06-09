@@ -27,6 +27,8 @@ const ResidentModal = ({
   residentData = {},
   countries,
   campId,
+  data,
+  setData,
 }) => {
   const [formData, setFormData] = React.useState({
     firstName: residentData?.firstName ?? "",
@@ -34,11 +36,19 @@ const ResidentModal = ({
     dateOfBirth: residentData?.dateOfBirth ?? "",
     sex: residentData?.sex ?? "F",
     jmbg: residentData?.jmbg ?? "",
-    countryId: residentData?.countryId ?? "",
+    countryId: -1,
     needsHospitalisation: residentData?.needsHospitalisation ?? "",
     employeeId: parseInt(residentData?.employeeId),
   });
 
+  useEffect(() => {
+    const newData = {
+      ...formData,
+      countryId: countries.find((c) => c.name === residentData.countryName)?.id,
+    };
+    console.log("newData", newData);
+    setFormData(newData);
+  }, []);
   const [residencePeriodData, setResidencePeriodData] = useState();
   const [errors, setErrors] = React.useState({});
 
@@ -87,13 +97,13 @@ const ResidentModal = ({
       mode === "add"
         ? API_URLS.RESIDENTS
         : `${API_URLS.RESIDENTS}/${residentData.id}`;
-    const method1 = mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
+    const method1 = mode === "add" ? "POST" : "PUT";
 
     const url2 = API_URLS.RESIDENCE_PERIOD;
     //   mode === "add"
     //     ? API_URLS.RESIDENCE_PERIOD
     //     : `${API_URLS.RESIDENCE_PERIOD}/${residentData.id}`;
-    const method2 = "POST"; //= mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
+    const method2 = "POST"; //= mode === "add" ? "POST" : "PUT";
 
     console.log(formData, "formData");
     console.log(campId, "campId");
@@ -106,7 +116,6 @@ const ResidentModal = ({
       return;
     }
 
-    return;
     try {
       const response1 = await fetch(url1, {
         method: method1,
@@ -126,25 +135,36 @@ const ResidentModal = ({
       const data1 = await response1.json(); // Parse the response JSON
       const residentId = data1.id; // Extract the ID from the parsed data
 
-      console.log(await response1.id);
       setResidencePeriodData({ ...residencePeriodData, id: response1.id });
 
-      const response2 = await fetch(url2, {
-        method: method2,
-        headers: {
-          Authorization: `Bearer ${getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...residencePeriodData, residentId }),
-      });
+      if (mode === "add") {
+        const response2 = await fetch(url2, {
+          method: method2,
+          headers: {
+            Authorization: `Bearer ${getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...residencePeriodData, residentId }),
+        });
 
-      if (!response2.ok) {
-        throw new Error(
-          `Nije uspelo ${
-            mode === "add" ? "registrovanje" : "ažuriranje"
-          } zaposlenog`
-        );
+        if (!response2.ok) {
+          throw new Error(
+            `Nije uspelo ${
+              mode === "add" ? "registrovanje" : "ažuriranje"
+            } zaposlenog`
+          );
+        }
       }
+
+      const updatedData = data.map((item) =>
+        item.id === residentData.id ? { ...item, ...formData } : item
+      );
+
+      if (mode === "add") {
+        updatedData.push(data1); // Add new entry if the mode is add
+      }
+
+      setData(updatedData);
 
       console.log(
         `Zaposleni ${
@@ -172,7 +192,7 @@ const ResidentModal = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div
               className="w-90 rounded-3xl border-black border-3 gap-3 flex flex-col items-center p-6"
               style={{
@@ -216,7 +236,7 @@ const ResidentModal = ({
                 <p className="self-start font-bold">Pol</p>
                 <Select
                   className="min-w-24"
-                  defaultValue={"f"}
+                  value={formData?.sex?.toLowerCase() ?? "f"}
                   sx={{
                     ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
                       border: "2px solid black",
@@ -239,7 +259,7 @@ const ResidentModal = ({
               <div className="flex flex-col w-full items-start">
                 <p className="self-start font-bold">Država</p>
                 <Select
-                  defaultValue={formData.countryId || -1}
+                  value={formData?.countryId ?? -1}
                   className="min-w-48"
                   sx={{
                     ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
@@ -252,7 +272,7 @@ const ResidentModal = ({
                   }
                 >
                   <MenuItem key={-1} value={-1}>
-                    {"Izaber    i"}
+                    {"Izaberi"}
                   </MenuItem>
                   {countries.map((country) => (
                     <MenuItem value={country.id}>{country.name}</MenuItem>
@@ -271,7 +291,7 @@ const ResidentModal = ({
               <div className="flex flex-col w-full items-start">
                 <p className="self-start font-bold">Hospitalizacija</p>
                 <Select
-                  defaultValue={-1}
+                  value={formData?.needsHospitalisation ? 1 : 0 ?? -1}
                   className="min-w-48"
                   sx={{
                     ".css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
