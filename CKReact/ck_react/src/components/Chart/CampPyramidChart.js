@@ -19,7 +19,11 @@ ChartJS.register(
   Legend
 );
 
-const CampPyramidChart = ({ residents, gap = 5 }) => {
+const CampPyramidChart = ({
+  residents,
+  gap = 5,
+  title = "Populaciona piramida",
+}) => {
   const data = {
     labels: [],
     datasets: [
@@ -109,7 +113,7 @@ const CampPyramidChart = ({ residents, gap = 5 }) => {
 
   return (
     <div>
-      <h2>Populaciona piramida</h2>
+      <h2>{title}</h2>
       <Bar data={data} options={options} />
     </div>
   );

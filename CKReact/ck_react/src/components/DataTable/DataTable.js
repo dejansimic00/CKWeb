@@ -11,7 +11,7 @@ export default function DataTable({
   onRowClick,
 }) {
   return (
-    <div className="w-[100%] ">
+    <div className="w-full ">
       <DataGrid
         rows={rows}
         columns={columns}

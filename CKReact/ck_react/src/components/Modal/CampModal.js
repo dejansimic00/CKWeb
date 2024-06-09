@@ -180,7 +180,7 @@ const CampModal = ({
             <Input
               id="capacity"
               placeholder="kapacitet"
-              value={formData.capacity}
+              value={undefined}
               onChange={handleChange}
             />
             <div className="flex flex-col w-full items-start">

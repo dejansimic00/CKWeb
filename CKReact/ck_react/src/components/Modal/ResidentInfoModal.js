@@ -72,7 +72,6 @@ const ResidentInfoModal = ({
         flex: 1,
         renderCell: (params) => {
           const date = new Date(params.value);
-          console.log("starrtDate", date);
           return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
         },
       },
@@ -82,7 +81,6 @@ const ResidentInfoModal = ({
         flex: 1,
         renderCell: (params) => {
           const date = params.value !== null ? new Date(params.value) : null;
-          console.log("endDate", date);
           if (date)
             return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
           else return "";
@@ -206,7 +204,7 @@ const ResidentInfoModal = ({
                 <DataTable columns={columns} rows={residencePeriod} />
               </div>
             )}
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 print:hidden">
               <Button text={"Izađi"} onClick={handleClose}></Button>
               <IconButton onClick={handlePrint}>
                 <img

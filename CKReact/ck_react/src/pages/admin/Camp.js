@@ -33,7 +33,9 @@ const Camp = () => {
       },
     })
       .then((response) => response.json())
-      .then((data) => setData(data))
+      .then((data) => {
+        setData(data);
+      })
       .catch((error) => console.error("Greska pri dohvatanju kampova", error));
   }, [refresh]);
   useEffect(() => {
@@ -62,20 +64,19 @@ const Camp = () => {
 
     setColumns([
       { field: "id", headerName: "ID", width: 20 },
-      { field: "name", headerName: "Ime", width: 200 },
-      { field: "place", headerName: "Mjesto", width: 150 },
-      { field: "placeDescription", headerName: "Lokacija", width: 150 },
-      { field: "capacity", headerName: "Kapacitet", width: 150 },
+      { field: "name", headerName: "Ime", flex: 1 },
+      { field: "place", headerName: "Mjesto", flex: 1 },
+      { field: "placeDescription", headerName: "Lokacija", flex: 1 },
+      { field: "capacity", headerName: "Kapacitet" },
       { field: "campStatusName", headerName: "Status", width: 150 },
       {
         field: "actions",
         headerName: "Akcije",
-        width: 150,
         renderCell: (params) => (
           <div>
-            <button onClick={() => setDeleteCampModal(true)}>
+            {/* <button onClick={() => setDeleteCampModal(true)}>
               <img src={deleteImg} alt="Obrisi kamp" about="Obrisi kamp"></img>
-            </button>
+            </button> */}
             <button
               onClick={() => {
                 handleEditClick(params.row);
@@ -147,6 +148,9 @@ const Camp = () => {
     )
   );
 
+  useEffect(() => {
+    if (filteredData) console.log("filteredData", filteredData);
+  }, [filteredData]);
   const newCampOnClick = () => {
     setNewCampModal(true);
   };
@@ -206,6 +210,14 @@ const Camp = () => {
           columns={[...columns]}
           rows={filteredData}
           onRowSelectionModelChange={handleRowSelection}
+          initialState={{
+            columns: {
+              columnVisibilityModel: {
+                id: false,
+                place: false,
+              },
+            },
+          }}
         />
       </div>
     </div>

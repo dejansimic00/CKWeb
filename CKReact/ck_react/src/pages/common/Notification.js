@@ -79,7 +79,11 @@ const Notification = () => {
   const columns = [
     { field: "id", headerName: "ID", width: 0 },
     { field: "content", headerName: "Poruka", flex: 1 },
-    { field: "creationTime", headerName: "Datum", width: 200 },
+    {
+      field: "creationTime",
+      headerName: "Datum",
+      width: 180,
+    },
     { field: "employeeUsername", headerName: "Kreirao", width: 120 },
   ];
 
@@ -111,7 +115,7 @@ const Notification = () => {
         </label>
         <textarea
           id="notification"
-          className="w-full px-3 py-2 mb-4 text-gray-700 border rounded-lg focus:outline-none"
+          className="w-full h-[39rem] px-3 py-2 mb-4 text-gray-700 border rounded-lg focus:outline-none"
           value={newNotification}
           onChange={(e) => setNewNotification(e.target.value)}
         />
@@ -124,7 +128,8 @@ const Notification = () => {
       </div>
 
       <div className="flex flex-col w-2/3 p-4 ">
-        <h2 className="text-xl font-bold mb-4">Najnovija obavještenja</h2>
+        <h2 className="text-xl font-bold mb-11">Najnovija obavještenja</h2>
+
         <DataTable
           columns={columns}
           rows={notifications}

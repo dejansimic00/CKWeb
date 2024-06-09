@@ -6,7 +6,7 @@ import Logo from "../../components/Logo/Logo";
 import Button from "../../components/Button/Button";
 import ResidentModal from "../../components/Modal/ResidentModal";
 import editImg from "../../assets/images/edit.png";
-import deleteImg from "../../assets/images/delete.png";
+import leaveImg from "../../assets/images/leave.png";
 import campImg from "../../assets/images/camp-red.png";
 import DeleteResidentModal from "../../components/Modal/DeleteResidentModal.js";
 import AssignmentModal from "../../components/Modal/AssignmentModal";
@@ -29,39 +29,45 @@ const Residence = () => {
   const [assignments, setAssignments] = useState();
   const [camps, setCamps] = useState([]);
   const { getItem } = useSessionStorage();
-  const [campName, setCampName] = useState();
+  const [campName, setCampName] = useState("Kamp 1");
   const [countries, setCountries] = useState([]);
   const [campId, setCampId] = useState();
   const [residentInfoModal, setResidentInfoModal] = useState(false);
 
   useEffect(() => {
-    // Fetch data from the API
-    fetch(API_URLS.RESIDENCE_PERIOD, {
-      headers: {
-        Authorization: `Bearer ${getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setResidencePeriod(data);
+    if (campId) {
+      fetch(API_URLS.CAMPS + "/" + campId + "/residents", {
+        headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+        },
       })
-      .catch((error) =>
-        console.error(
-          "Greška pri dohvatanju podataka o prisustvima unesrećenih u kampovima:",
-          error
-        )
-      );
+        .then((response) => response.json())
+        .then((data) => setData(data))
+        .catch((error) =>
+          console.error("Greška pri dohvatanju podataka o unesrećenima:", error)
+        );
+    }
+  }, [campId]);
 
-    fetch(API_URLS.RESIDENTS, {
-      headers: {
-        Authorization: `Bearer ${getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setResidents(data))
-      .catch((error) =>
-        console.error("Greška pri dohvatanju podataka o unesrećenima:", error)
-      );
+  useEffect(() => {
+    // // Fetch data from the API
+    // fetch(API_URLS.RESIDENCE_PERIOD, {
+    //   headers: {
+    //     Authorization: `Bearer ${getItem("token")}`,
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setResidencePeriod(data);
+    //   })
+    //   .catch((error) =>
+    //     console.error(
+    //       "Greška pri dohvatanju podataka o prisustvima unesrećenih u kampovima:",
+    //       error
+    //     )
+    //   );
+
+    ///    fetch(API_URLS.EMPLOYEES + "/" + getItem("id") + "/assignment", {
 
     fetch(API_URLS.ASSIGNMENTS, {
       headers: {
@@ -124,12 +130,13 @@ const Residence = () => {
         renderCell: (params) => (
           <div className="flex flex-row justify-center items-center space-x-5 h-full ">
             <button
+              className="w-6 h-6"
               onClick={(event) => {
                 handleDeleteClick(event, params.row);
               }}
             >
               <img
-                src={deleteImg}
+                src={leaveImg}
                 alt="Obrisi volontera"
                 about="Obrisi volontera"
               ></img>
@@ -157,7 +164,7 @@ const Residence = () => {
   }, []);
 
   useEffect(() => {
-    if (assignments) {
+    if (assignments && camps) {
       const ass = assignments.find(
         (ass) => ass.employeeId === Number.parseInt(getItem("id"))
       );
@@ -165,34 +172,40 @@ const Residence = () => {
       if (!ass) {
         setCampName("");
       } else {
-        setCampName(ass.campName);
+        //////SREDITI
+        const temp = ass.campName;
+        console.log("temp", temp);
+        setCampName(temp);
 
-        const camp = camps?.find((c) => c.name === ass.campName);
-        setCampId(camp.id);
+        const camp = camps?.find((c) => c.name === temp);
+        setCampId(camp?.id);
       }
     }
   }, [assignments, camps, getItem]);
 
-  useEffect(() => {
-    if (residents.length > 0 && residencePeriod.length > 0 && campName) {
-      const newResidencePeriod = residencePeriod.filter((resP) => {
-        return resP.campName === campName;
-      });
+  // useEffect(() => {
+  //   console.log(residents, residencePeriod, campName);
+  //   if (residents.length > 0 && residencePeriod.length > 0 && campName) {
+  //     const newResidencePeriod = residencePeriod.filter((resP) => {
+  //       return resP.campName === campName;
+  //     });
 
-      const newData = [];
+  //     const newData = [];
 
-      newResidencePeriod.forEach((resP) => {
-        if (resP.campName === campName) {
-          let x = residents.find((res) => res.jmbg === resP.residentJmbg);
-          if (x) {
-            newData.push(x);
-          }
-        }
-      });
+  //     newResidencePeriod.forEach((resP) => {
+  //       if (resP.campName === campName) {
+  //         let x = residents.find((res) => res.jmbg === resP.residentJmbg);
+  //         if (x) {
+  //           newData.push(x);
+  //         }
+  //       }
+  //     });
 
-      setData(newData); // Update state once with the new data array
-    }
-  }, [residents, residencePeriod, campName]);
+  //     console.log("newData", newData);
+
+  //     setData(newData);
+  //   }
+  // }, [residents, residencePeriod, campName]);
 
   const handleRowSelection = (selected) => {
     const row = data.find((row) => row.id === selected[0]);
@@ -244,11 +257,15 @@ const Residence = () => {
     );
   };
 
-  const filteredData = data?.filter((row) =>
-    Object.values(row).some((value) =>
-      value?.toString().toLowerCase().includes(searchText.toLowerCase())
-    )
-  );
+  // const filteredData = data?.filter((row) =>
+  //   Object.values(row).some((value) =>
+  //     value?.toString().toLowerCase().includes(searchText.toLowerCase())
+  //   )
+  // );
+
+  useEffect(() => {
+    if (data) console.log("data", data);
+  }, [data]);
 
   const newResidentOnClick = () => {
     setNewResidentModal(true);
@@ -319,22 +336,26 @@ const Residence = () => {
             plusSign={true}
           ></Button>
         </div>
-        <DataTable
-          columns={[...columns]}
-          rows={filteredData}
-          onRowClick={(event) => console.log("EE sssssssV", event)}
-          onRowSelectionModelChange={handleRowSelection}
-          initialState={{
-            columns: {
-              columnVisibilityModel: {
-                // Hide columns status and traderName, the other columns will remain visible
-                id: false,
-                jmbg: false,
-                employeeJmbg: false,
+        <div className="overflow-auto min-w-[60.5rem]">
+          <DataTable
+            columns={[...columns]}
+            rows={data}
+            onRowClick={(event) => console.log("EE sssssssV", event)}
+            onRowSelectionModelChange={handleRowSelection}
+            initialState={{
+              columns: {
+                columnVisibilityModel: {
+                  // Hide columns status and traderName, the other columns will remain visible
+                  id: false,
+                  jmbg: false,
+                  employeeJmbg: false,
+                  dateOfBirth: false,
+                  countryName: false,
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </div>
       </div>
     </div>
   );

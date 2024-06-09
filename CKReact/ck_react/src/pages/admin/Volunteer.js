@@ -6,7 +6,7 @@ import Logo from "../../components/Logo/Logo";
 import Button from "../../components/Button/Button";
 import VolunteerModal from "../../components/Modal/VolunteerModal";
 import editImg from "../../assets/images/edit.png";
-import deleteImg from "../../assets/images/delete.png";
+import exchange from "../../assets/images/exchange.png";
 import campImg from "../../assets/images/camp-red.png";
 import DeleteVolunteerModal from "../../components/Modal/DeleteVolunteerModal";
 import AssignmentModal from "../../components/Modal/AssignmentModal";
@@ -30,7 +30,7 @@ const Volunteer = () => {
   const [camps, setCamps] = useState([]);
   const { getItem } = useSessionStorage();
   const [refreshData, setRefreshData] = useState(false);
-  const [volunteerInfoModal, setVolunteerInfoModal] = useState(false)
+  const [volunteerInfoModal, setVolunteerInfoModal] = useState(false);
 
   useEffect(() => {
     fetch(API_URLS.EMPLOYEES, {
@@ -55,8 +55,8 @@ const Volunteer = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-         const x = data.filter((row) => row.endDate === null);
-         setAssignments(x);
+        const x = data.filter((row) => row.endDate === null);
+        setAssignments(x);
         //setAssignments(data)
       })
       .catch((error) =>
@@ -113,15 +113,18 @@ const Volunteer = () => {
         headerName: "Akcije",
         width: 150,
         renderCell: (params) => (
-          <div>
-            <button onClick={(event) =>{
-              handleDeleteClick(event, params.row);
-            }
-             }>
+          <div className="flex flex-row justify-center items-center space-x-5 h-full ">
+            <button
+              className="w-6 h-6"
+              onClick={(event) => {
+                handleDeleteClick(event, params.row);
+              }}
+            >
               <img
-                src={deleteImg}
+                src={exchange}
                 alt="Obrisi volontera"
                 about="Obrisi volontera"
+                title="Promijeni status volontera"
               ></img>
             </button>
             <button
@@ -132,7 +135,7 @@ const Volunteer = () => {
               <img
                 src={editImg}
                 alt="Izmijeni volontera"
-                about="Izmijeni volontera"
+                title="Izmijeni volontera"
               ></img>
             </button>
             <button
@@ -143,6 +146,7 @@ const Volunteer = () => {
               <img
                 className="w-6 h-6"
                 src={campImg}
+                title="Zaduženje na kampu"
                 alt="Izmijeni volontera"
                 about="Izmijeni volontera"
               ></img>
@@ -158,10 +162,10 @@ const Volunteer = () => {
     const row = data.find((row) => row.id === selected[0]);
     setSelectedRow(row);
     selectedRowRef.current = row; // Update the ref
-    setVolunteerInfoModal(true)
+    setVolunteerInfoModal(true);
   };
 
-   const handleDeleteClick = (event, row) => {
+  const handleDeleteClick = (event, row) => {
     event.stopPropagation();
     //setSelectedRow(row, console.log("setSelectedRow Completed"));
     setSelectedRow(row);
@@ -200,8 +204,8 @@ const Volunteer = () => {
   };
 
   useEffect(() => {
-    console.log("DATA", data)
-    console.log("ASSIGNMENTS", assignments)
+    console.log("DATA", data);
+    console.log("ASSIGNMENTS", assignments);
     data.forEach((row) => {
       const campNameX = assignments?.find((ass) => {
         return ass.employeeId === row.id;
@@ -301,14 +305,13 @@ const Volunteer = () => {
         ></DeleteVolunteerModal>
       )}
       {volunteerInfoModal && (
-          <VolunteerInfoModal
-           
-            open={volunteerInfoModal}
-            setOpen={setVolunteerInfoModal}
-            id={selectedRowRef.current.id}
-            selectedRow={selectedRow}
-          />
-        )}
+        <VolunteerInfoModal
+          open={volunteerInfoModal}
+          setOpen={setVolunteerInfoModal}
+          id={selectedRowRef.current.id}
+          selectedRow={selectedRow}
+        />
+      )}
       {editAssignmentModal && (
         <AssignmentModal
           open={editAssignmentModal}
@@ -341,22 +344,18 @@ const Volunteer = () => {
             columns={[...columns]}
             rows={filteredData}
             onRowSelectionModelChange={handleRowSelection}
-
-
-     
             initialState={{
-            columns: {
-              columnVisibilityModel: {
-                // Hide columns status and traderName, the other columns will remain visible
-                id: false,
-                dateOfBirth: false,
-                sex: false,
-                jmbg:false,
-                country: false
-
+              columns: {
+                columnVisibilityModel: {
+                  // Hide columns status and traderName, the other columns will remain visible
+                  id: false,
+                  dateOfBirth: false,
+                  sex: false,
+                  jmbg: false,
+                  countryName: false,
+                },
               },
-            },
-          }}
+            }}
           />
         </div>
       </div>

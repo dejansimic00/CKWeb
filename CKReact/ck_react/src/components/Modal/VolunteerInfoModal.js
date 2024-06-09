@@ -40,7 +40,7 @@ const VolunteerInfoModal = ({
     campName: selectedRow?.campName ?? "",
     username: selectedRow?.username ?? "",
     status: selectedRow?.status ?? "ACTIVE",
-  });   
+  });
 
   const [assignments, setAssignments] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -48,52 +48,46 @@ const VolunteerInfoModal = ({
   const handleClose = () => setOpen(false);
   const { getItem } = useSessionStorage();
 
-
-  useEffect(()=>{
-    console.log("selectedassignmentsRow", assignments)
-  },[assignments])
-
+  useEffect(() => {
+    console.log("selectedassignmentsRow", assignments);
+  }, [assignments]);
 
   useEffect(() => {
-
     ////////////// trenutno dohvata trenutne ass, gdje je endDate null
-    if (selectedRow){
-    fetch(API_URLS.EMPLOYEES + "/" + selectedRow.id + "/assignments", {
-      headers: {
-        Authorization: `Bearer ${getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        
-        // console.log("assigmnetns", data)
-        // const assArray = [data];
-        // setAssignments( assArray);
-        setAssignments(data)
+    if (selectedRow) {
+      fetch(API_URLS.EMPLOYEES + "/" + selectedRow.id + "/assignments", {
+        headers: {
+          Authorization: `Bearer ${getItem("token")}`,
+        },
       })
-      .catch((error) =>
-        console.error(
-          "Greška pri dohvatanju podataka o istoriji volontera:",
-          error
-        )
-      );
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log("assigmnetns", data)
+          // const assArray = [data];
+          // setAssignments( assArray);
+          setAssignments(data);
+        })
+        .catch((error) =>
+          console.error(
+            "Greška pri dohvatanju podataka o istoriji volontera:",
+            error
+          )
+        );
 
-    setColumns([
-      { field: "id", headerName: "ID"},
-      { field: "startDate", headerName: "Pocetak zaduzenja", width: 150 },
-      { field: "endDate", headerName: "Kraj zaduzenja", width: 150 },
-      { field: "campName", headerName: "Kamp", flex:1 },
-      { field: "employeeId", headerName: "Kamp"},
-      
-    ]);}
+      setColumns([
+        { field: "id", headerName: "ID" },
+        { field: "startDate", headerName: "Pocetak zaduzenja", width: 150 },
+        { field: "endDate", headerName: "Kraj zaduzenja", width: 150 },
+        { field: "campName", headerName: "Kamp", flex: 1 },
+        { field: "employeeId", headerName: "Kamp" },
+      ]);
+    }
   }, [selectedRow]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
-
-
 
   const handlePrint = () => {
     window.print();
@@ -122,7 +116,7 @@ const VolunteerInfoModal = ({
           >
             <Logo />
             {/** ---------------------ime---------------------------------- */}
-            <div className="flex flex-col w-full items-center">
+            <div className="flex flex-col  items-center">
               <p className="self-start font-bold">Ime i prezime</p>
               <Input
                 id="firstName"
@@ -134,7 +128,7 @@ const VolunteerInfoModal = ({
             </div>
 
             {/** ---------------------datumrodjenja---------------------------------- */}
-            <div className="flex flex-col w-full   items-center">
+            <div className="flex flex-col   items-center">
               <p className="self-start font-bold">Datum rođenja</p>
               <div className="w-80 self-start">
                 <DatePicker
@@ -147,7 +141,7 @@ const VolunteerInfoModal = ({
               </div>
             </div>
             {/** ---------------------pol---------------------------------- */}
-            <div className="flex flex-col w-full items-center">
+            <div className="flex flex-col items-center">
               <p className="self-start font-bold">Pol</p>
               <Input
                 readOnly={true}
@@ -159,7 +153,7 @@ const VolunteerInfoModal = ({
             </div>
 
             {/** ---------------------drzava---------------------------------- */}
-            <div className="flex flex-col w-full items-start">
+            <div className="flex flex-col items-start">
               <p className="self-start font-bold">Država</p>
               <Input
                 readOnly={true}
@@ -170,7 +164,7 @@ const VolunteerInfoModal = ({
               ></Input>
             </div>
             {/** ---------------------jmbg---------------------------------- */}
-            <div className="flex flex-col w-full items-center">
+            <div className="flex flex-col items-center">
               <p className="self-start font-bold">JMBG</p>
               <Input
                 readOnly={true}
@@ -181,7 +175,7 @@ const VolunteerInfoModal = ({
               ></Input>
             </div>
             {/** ---------------------kamp---------------------------------- */}
-            <div className="flex flex-col w-full items-center">
+            <div className="flex flex-col items-center">
               <p className="self-start font-bold">Kamp</p>
               <Input
                 readOnly={true}
@@ -192,7 +186,7 @@ const VolunteerInfoModal = ({
               ></Input>
             </div>
             {/** ---------------------korisnicko ime---------------------------------- */}
-            <div className="flex flex-col w-full items-center">
+            <div className="flex flex-col items-center">
               <p className="self-start font-bold">Korisničko ime</p>
               <Input
                 readOnly={true}
@@ -203,7 +197,7 @@ const VolunteerInfoModal = ({
               ></Input>
             </div>
             {/** ---------------------status---------------------------------- */}
-            <div className="flex flex-col w-full items-center">
+            <div className="flex flex-col items-center">
               <p className="self-start font-bold">Status</p>
               <Input
                 readOnly={true}
@@ -215,17 +209,17 @@ const VolunteerInfoModal = ({
             </div>
             {assignments && (
               <div className="w-full border-black border-2 rounded-lg">
-                <DataTable 
-                    columns={columns} 
-                    rows={assignments}
-                    initialState={{
-                        columns: {
-                            columnVisibilityModel: {
-                                id: false,
-                                employeeId: false
-                            },
-                        },
-                    }}
+                <DataTable
+                  columns={columns}
+                  rows={assignments}
+                  initialState={{
+                    columns: {
+                      columnVisibilityModel: {
+                        id: false,
+                        employeeId: false,
+                      },
+                    },
+                  }}
                 />
               </div>
             )}

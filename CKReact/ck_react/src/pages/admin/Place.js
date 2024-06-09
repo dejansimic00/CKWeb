@@ -90,7 +90,7 @@ const Place = () => {
         field: "actions",
         headerName: "Akcije",
         renderCell: (params) => (
-          <div>
+          <div className="flex flex-row justify-center items-center space-x-5 h-full ">
             <button onClick={() => handleDeletePlaceClick(params.row)}>
               <img src={deleteImg} alt="Delete place" />
             </button>
@@ -380,7 +380,7 @@ const Place = () => {
                 field: "actions",
                 headerName: "Akcije",
                 renderCell: (params) => (
-                  <div>
+                  <div className="flex flex-row justify-center items-center space-x-5 h-full ">
                     <button
                       onClick={() => handleDeleteMunicipalityClick(params.row)}
                     >
@@ -425,7 +425,7 @@ const Place = () => {
                 field: "actions",
                 headerName: "Akcije",
                 renderCell: (params) => (
-                  <div>
+                  <div className="flex flex-row justify-center items-center space-x-5 h-full ">
                     <button
                       onClick={() => handleDeleteCountryClick(params.row)}
                     >

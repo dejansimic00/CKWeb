@@ -82,30 +82,9 @@ const Dashboard = () => {
       );
     setColumns([
       { field: "id", headerName: "ID", width: 50 },
-      { field: "name", headerName: "Ime", width: 250 },
-      { field: "place", headerName: "Mjesto", width: 200 },
-      { field: "location", headerName: "Lokacija", width: 150 },
-      {
-        field: "actions",
-        headerName: "Akcije",
-        width: 150,
-        renderCell: (params) => (
-          <div>
-            <button
-              className="w-6"
-              onClick={() => {
-                handleDetailsClick(params.row);
-              }}
-            >
-              <img
-                src={detailsImg}
-                alt="Detalji o kampu"
-                about="Detalji o kampu"
-              ></img>
-            </button>
-          </div>
-        ),
-      },
+      { field: "name", headerName: "Ime" },
+      { field: "place", headerName: "Mjesto", flex: 1 },
+      { field: "location", headerName: "Lokacija", flex: 1 },
     ]);
 
     const isAdmin = getItem("isAdmin") === "true";
@@ -168,14 +147,23 @@ const Dashboard = () => {
   return (
     <>
       {isAdmin && !showCampStatistics && (
-        <div className="flex flex-col items-center w-full">
-          <h1 className="text-3xl py-10">Izvještaj</h1>
-          <div className="">
-            <DataTable
-              columns={columns}
-              rows={data}
-              onRowSelectionModelChange={handleRowSelection}
-            />
+        <div className="">
+          <div className="flex flex-col items-center  min-w-[12rem] ">
+            <h1 className="text-3xl py-10">Izvještaj</h1>
+            <div className="w-full max-w-[60rem]  overflow-hidden">
+              <DataTable
+                columns={columns}
+                rows={data}
+                onRowSelectionModelChange={handleRowSelection}
+                initialState={{
+                  columns: {
+                    columnVisibilityModel: {
+                      id: false,
+                    },
+                  },
+                }}
+              />
+            </div>
           </div>
         </div>
       )}

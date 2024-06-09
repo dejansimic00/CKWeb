@@ -48,15 +48,13 @@ const VolunteerModal = ({
 
   // ------------------------------------------------ slanje zahtjeva
   const handleSubmit = async (event) => {
-
     const url =
       mode === "add"
         ? API_URLS.EMPLOYEES
         : `${API_URLS.EMPLOYEES}/${volunteerData.id}`;
     const method = mode === "add" ? "POST" : "PUT"; // or "PATCH" if you prefer partial updates
 
-
-    if (mode !== "add"){
+    if (mode !== "add") {
       delete formData.password;
     }
     try {
@@ -132,8 +130,6 @@ const VolunteerModal = ({
                 <DatePicker
                   value={formData.dateOfBirth}
                   onChange={(selectedDate) => {
-                    console.log(selectedDate);
-                    console.log(formData);
                     setFormData({ ...formData, dateOfBirth: selectedDate });
                   }}
                 />
@@ -198,15 +194,15 @@ const VolunteerModal = ({
                 onChange={handleChange}
               ></Input>
               {/** ---------------------password---------------------------------- */}
-              { mode === "add" &&
-    (
-              <Input
-                id="password"
-                placeholder="lozinka"
-                value={formData.password}
-                onChange={handleChange}
-                type="password"
-              ></Input>)}
+              {mode === "add" && (
+                <Input
+                  id="password"
+                  placeholder="lozinka"
+                  value={formData.password}
+                  onChange={handleChange}
+                  type="password"
+                ></Input>
+              )}
               <Button
                 text={mode === "add" ? "Dodaj" : "Sačuvaj"} // Change button text based on mode
                 type="submit"

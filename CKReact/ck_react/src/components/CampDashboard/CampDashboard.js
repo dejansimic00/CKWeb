@@ -34,7 +34,6 @@ const CampDashboard = ({
   // Step 2: Determine screen size using useMediaQuery
   const isMobile = useMediaQuery("(max-width:600px)");
 
-  
   useEffect(() => {
     if (campId) {
       const URL = API_URLS.CAMPS + "/" + campId + "/residence-periods";
@@ -52,7 +51,7 @@ const CampDashboard = ({
           console.error("Greška pri dohvatanju podataka o kampovima:", error)
         );
 
-      const URL2   = API_URLS.CAMPS + "/" + campId + "/residents";
+      const URL2 = API_URLS.CAMPS + "/" + campId + "/residents";
 
       fetch(URL2, {
         headers: {
@@ -173,7 +172,17 @@ const CampDashboard = ({
         </div> */}
         <hr className="border-t-2 border-gray-300" />
         <div>
-          <CampPyramidChart residents={currentCampResidents} />
+          <CampPyramidChart
+            residents={currentCampResidents}
+            title="Populaciona piramida za trenuto stanje kampa"
+          />
+        </div>
+        <hr className="border-t-2 border-gray-300" />
+        <div>
+          <CampPyramidChart
+            residents={currentCampResidents}
+            title="Populaciona piramida kroz istoriju kampa"
+          />
         </div>
         <hr className="border-t-2 border-gray-300" />
         <div>
