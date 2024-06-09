@@ -30,7 +30,7 @@ const Residence = () => {
   const [assignments, setAssignments] = useState();
   const [camps, setCamps] = useState([]);
   const { getItem } = useSessionStorage();
-  const [campName, setCampName] = useState("Kamp 1");
+  const [campName, setCampName] = useState();
   const [countries, setCountries] = useState([]);
   const [campId, setCampId] = useState();
   const [residentInfoModal, setResidentInfoModal] = useState(false);
@@ -68,9 +68,8 @@ const Residence = () => {
     //     )
     //   );
 
-    ///    fetch(API_URLS.EMPLOYEES + "/" + getItem("id") + "/assignment", {
-
-    fetch(API_URLS.ASSIGNMENTS, {
+    fetch(API_URLS.EMPLOYEES + "/" + getItem("id") + "/assignment", {
+      // fetch(API_URLS.ASSIGNMENTS, {
       headers: {
         Authorization: `Bearer ${getItem("token")}`,
       },
@@ -175,7 +174,7 @@ const Residence = () => {
       } else {
         //////SREDITI
         const temp = ass.campName;
-        console.log("temp", temp);
+        console.log("ass", ass);
         setCampName(temp);
 
         const camp = camps?.find((c) => c.name === temp);

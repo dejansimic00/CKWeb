@@ -129,11 +129,11 @@ const Notification = () => {
           columns={columns}
           rows={notifications}
           getRowClassName={(params) => (!params.row.readAt ? "font-bold " : "")}
-          initialState={{
-            sorting: {
-              sortModel: [{ field: "creationTime", sort: "desc" }],
-            },
-          }}
+          // initialState={{
+          //   sorting: {
+          //     sortModel: [{ field: "creationTime", sort: "desc" }],
+          //   },
+          // }}
           onFilterModelChange={() => {}}
           onRowSelectionModelChange={(newSelection) => {
             handleRowSelection(newSelection);

@@ -138,16 +138,22 @@ const ResidentModal = ({
 
       if (!response2.ok) {
         throw new Error(
-          `Failed to ${mode === "add" ? "register" : "update"} employee`
+          `Nije uspelo ${
+            mode === "add" ? "registrovanje" : "ažuriranje"
+          } zaposlenog`
         );
       }
 
       console.log(
-        `Employee ${mode === "add" ? "registered" : "updated"} successfully`
+        `Zaposleni ${
+          mode === "add" ? "uspešno registrovan" : "uspešno ažuriran"
+        }`
       );
     } catch (error) {
       console.error(
-        `Error ${mode === "add" ? "registering" : "updating"} employee:`,
+        `Greška kod ${
+          mode === "add" ? "dodavanja novog" : "ažuriranja"
+        } zaposlenog:`,
         error.message
       );
     }
